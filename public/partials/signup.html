@@ -1,0 +1,58 @@
+<div class="container center-block">
+    <form name="frm" >
+        <legend>Sign Up!</legend>
+
+
+        <div class="form-group">
+            <input placeholder="First Name" class="form-control" name="fname" ng-model="user.fname" required />
+            <span ng-show="frm.fname.$dirty && frm.fname.$error.required">First Name is required</span>
+        </div>
+        <br />
+
+
+        <div class="form-group">
+            <input placeholder="Last Name" class="form-control" name="lname" ng-model="user.lname" required />
+            <span  ng-show="frm.lname.$dirty && frm.lname.$error.required">Last name is required</span>
+        </div>
+        <br />
+
+
+        <div class="form-group">
+            <input type="email"  placeholder="Email" class="form-control" name="email" ng-model="user.email" required />
+            <span   ng-show="frm.email.$dirty && frm.email.$error.required">Email is required</span>
+            <span  ng-show="frm.email.$dirty && frm.email.$error.email">Not a valid email</span>
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            <input type="password" placeholder="Enter a password between 8 and 25 chars" class="form-control" name="password" ng-model="user.password" ng-pattern="/^[a-zA-Z0-9]*$/" ng-minlength="8" ng-maxlength="25" required />
+            <span ng-show="frm.password.$error.pattern">
+                Please use only alpha numeric characters.
+           </span>
+            <span  ng-show="frm.password.$dirty && frm.password.$error.required">Password is required.</span>
+            <span ng-show="frm.password.$dirty && frm.password.$error.minlength">Too Short!.</span>
+            <span  ng-show="frm.password.$dirty && frm.password.$error.maxlength">Too Long!.</span>
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            <input type="password" placeholder="Enter a password between 8 and 25 chars" class="form-control" ng-model="user.confirmpassword" name="passwordconfirm" compare-to="user.password"  ng-minlength="8" ng-maxlength="25" required />
+            <span  ng-show="frm.password.$dirty && frm.password.$error.require">Password is required.</span>
+            <span ng-show="frm.passwordconfirm.$error.compareTo">
+            Confirmation password is required, and must match.
+            </span>
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            <button ng-disabled="frm.$invalid" ng-click="register(user)" class="btn">Register</button>
+        </div>
+    </form>
+    <h4>Already have an Account?</h4>
+    <a  role="button" class="btn btn-success"  href="#login">Login</a>
+    <br/>
+</div>
+

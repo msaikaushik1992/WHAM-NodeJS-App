@@ -1,0 +1,25 @@
+
+<div class="container center-block">
+    <form name="frm" >
+        <legend>Login</legend>
+
+        <div class="form-group">
+            <input type="email"  placeholder="Email" class="form-control" name="email" ng-model="user.email" required />
+            <span  class="well" ng-show="frm.email.$dirty && frm.email.$error.required">Email is required</span>
+            <span class="well" ng-show="frm.email.$dirty && frm.email.$error.email">Not a valid email</span>
+        </div>
+
+        <br/>
+
+        <div class="form-group">
+            <input type="password" placeholder="Password" class="form-control" name="password" ng-model="user.password"  required />
+        </div>
+
+        <h3 ng-if="invalid">Wrong email and password combination</h3>
+
+        <br />
+        <div class="form-group">
+            <button ng-disabled="frm.$invalid" ng-click="login(user)" class="btn btn-success">Log On</button>
+        </div>
+    </form>
+</div>

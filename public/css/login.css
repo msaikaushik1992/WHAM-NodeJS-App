@@ -1,0 +1,79 @@
+.container {
+
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 10px solid;
+    border-color: darkgray;
+    display: block;
+    /*position: absolute;*/
+    background:#1F2E3D;
+    width:40%;
+    margin-top:10%;
+    padding-top:1%;
+    padding-bottom:1%;
+    position: relative;
+}
+
+
+.well
+{
+    padding:2px;
+    background-color:rgba(219,85,85,0.8);
+
+}
+
+
+.btn
+{
+    width:100%;
+    font-size:large;
+    background:#2CAFBD;
+}
+span
+{
+    padding:2px;
+    margin:4px;
+    font-size: medium;
+    width:95%;
+    background-color:rgba(219,85,85,0.8);
+    -moz-border-radius: 5px;
+    border-radius:5px;
+
+}
+
+span
+{
+
+    background-color:Gray;
+    float:left;
+    border-style:inset;
+    color:Black;
+
+}
+
+h4
+{
+
+    color:White;
+}
+
+.parallelogram {
+    width: 150px;
+    height: 100px;
+    -webkit-transform: skew(20deg);
+    -moz-transform: skew(20deg);
+    -o-transform: skew(20deg);
+    background: red;
+}
+
+body {
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+legend
+{
+    color:White;
+}
