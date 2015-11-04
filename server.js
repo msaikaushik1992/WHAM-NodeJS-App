@@ -1,8 +1,8 @@
 var express = require('express')
 var app = express();
+var mongoose=require('mongoose');
 /*var bodyParser = require('body-parser');
 var multer = require('multer');
-var mongoose=require('mongoose');
 var passport= require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var cookieParser = require('cookie-parser');
@@ -21,7 +21,20 @@ app.use(passport.session());*/
 
 /*var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost/MarvelDB';
 
-mongoose.connect(connectionString);*/
+mongoose.connect(connectionString);
+
+var UserSchema=mongoose.Schema({
+ fname  :  String,
+ lname  :  String,
+ email  :  String,
+ password :  String
+});
+
+var UserModel = mongoose.model('UserModel',UserSchema);
+
+var user = new UserModel({fname:'Donkey',lname:'Monkey',email:'ddaa@gmail.com',password:'Adasda88'})
+
+user.save();*/
 
 /*app.get('/process',function(req,res){
 
