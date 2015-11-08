@@ -1,0 +1,143 @@
+#custom-bootstrap-menu.navbar-default .navbar-brand {
+    color: rgba(247, 230, 230, 1);
+}
+#custom-bootstrap-menu.navbar-default {
+    font-size: 17px;
+    background-color: rgba(31, 46, 61, 1);
+    border-width: 1px;
+    border-radius: 4px;
+}
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a {
+    color: rgba(237, 220, 220, 1);
+    background-color: rgba(248, 248, 248, 0);
+}
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:hover,
+#custom-bootstrap-menu.navbar-default .navbar-nav>li>a:focus {
+    color: rgba(237, 242, 245, 1);
+    background-color: rgba(40, 150, 156, 1);
+}
+#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a,
+#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:hover,
+#custom-bootstrap-menu.navbar-default .navbar-nav>.active>a:focus {
+    color: rgba(237, 23, 66, 1);
+    background-color: rgba(245, 240, 240, 1);
+    background: -webkit-linear-gradient(top, rgba(207, 182, 182, 1) 0%, rgba(245, 240, 240, 1) 100%);
+    background: linear-gradient(to bottom, rgba(207, 182, 182, 1) 0%, rgba(245, 240, 240, 1) 100%);
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle {
+    border-color: #f5f0f0;
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle:hover,
+#custom-bootstrap-menu.navbar-default .navbar-toggle:focus {
+    background-color: #f5f0f0;
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle .icon-bar {
+    background-color: #f5f0f0;
+}
+#custom-bootstrap-menu.navbar-default .navbar-toggle:hover .icon-bar,
+#custom-bootstrap-menu.navbar-default .navbar-toggle:focus .icon-bar {
+    background-color: #1f2e3d;
+}
+
+.panel-default > .panel-heading
+{
+    background-color:#66D269;
+    color:dimgray;
+}
+
+.list-group
+{
+    margin-top: 5px;
+}
+
+h4
+{
+    font-weight: bold;
+
+}
+
+
+body
+{
+    background-color: lavender;
+    height:100%;
+}
+
+.row
+{
+    width:100%;
+
+}
+
+
+.form-container {
+
+    display: block;
+    /*position: absolute;*/
+
+    margin-top: 1%;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    position:relative;
+    width:70%;
+    background-color: white;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    border: 5px solid;
+    border-color: white;
+    height:100%;
+
+}
+
+html
+{
+    height:100%;
+    background-color: lavender;
+}
+
+
+.ng-enter
+{
+    transition:0.25s;
+    opacity:0;
+
+}
+
+.ng-enter-active
+{
+
+    opacity:1;
+}
+.ng-enter-stagger
+{
+    transition-delay:0.1s;
+}
+
+.ng-leave-stagger
+{
+    transition-delay:0.1s;
+}
+
+.ng-leave
+{
+    transition:0.75s;
+    opacity:1;
+}
+
+
+.ng-leave-active
+{
+
+    opacity:0;
+}
+
+.category
+{
+   margin-bottom: 10px;
+}
+
+.alert
+{
+    margin-top: 20px;
+}
+

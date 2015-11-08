@@ -13,6 +13,7 @@ var session = require('express-session');*/
 
 
 var User = require('./public/models/user');
+var Preferences = require('./public/models/preferences');
 
 
 
@@ -35,6 +36,7 @@ mongoose.connect(connectionString);
 
 
 app.post("/signup", User.insertUser);
+app.post("/preferences",Preferences.insertPreferences);
 
 
 /*app.get('/process',function(req,res){

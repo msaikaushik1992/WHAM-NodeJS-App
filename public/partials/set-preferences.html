@@ -1,0 +1,120 @@
+<div class="container-fluid center-block">
+
+    <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand" href="#">Brand</a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse navbar-menubuilder">
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="/">Home</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="form-container container center-block table-responsive ">
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Gender</label>
+                </div>
+
+                <div class="col-md-6">
+                    <select  ng-model="pref.gender" id="gender" required>
+                        <option selected="selected">Male</option>
+                        <option>Female</option>
+                    </select>
+                </div>
+            </div>
+
+    <br/>
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label>City</label>
+                </div>
+
+                <div class="col-md-6">
+                    <select ng-model="pref.city" id="city" required>
+                        <option selected="selected">Boston</option>
+                        <option>New York</option>
+                        <option>San Francisco</option>
+                        <option>Chicago</option>
+                        <option>Seattle</option>
+                    </select>
+                </div>
+            </div>
+
+    <br/>
+
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Add Category Preferences</label>
+                </div>
+
+                <div class="col-md-6">
+                    <select id="category">
+                        <option selected="selected">Business & Networking</option>
+                        <option>Concerts</option>
+                        <option>Conferences</option>
+                        <option>Comedy</option>
+                        <option>Education</option>
+                        <option>Kids</option>
+                        <option>Festivals</option>
+                        <option>Food & Wine</option>
+                        <option>Fundraising</option>
+                        <option>Holiday</option>
+                        <option>Literary & Books</option>
+                        <option>Museums and Attractions</option>
+                        <option>Neighbourhood</option>
+                        <option>Nightlife & Singles</option>
+                        <option>Outdoors & Recreation</option>
+                        <option>Religion and Spirituality</option>
+                        <option>Technology</option>
+                        <option>Other</option>
+                    </select>
+
+                    <button ng-click="addCategory()"><span class="glyphicon glyphicon-plus"></span></button>
+                </div>
+
+            </div>
+
+    <br/>
+
+        <div class="row">
+            <div class="button col-md-3" ng-repeat="item in items">
+                <button ng-click="clearItems(item)" class="btn category btn-danger glpyhicon glyphicon glyphicon-remove">{{item.category}}</button>
+            </div>
+
+        </div>
+
+    <br/>
+
+        <div class="button center-block">
+            <button ng-click="savePreferences(pref)" class="btn btn-success">Save Preferences</button>
+        </div>
+
+        <br/>
+
+
+        <div ng-if="error==false" class="alert alert-success alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Success!</strong>Your preferences have been saved.Redirecting to Login!
+        </div>
+
+        <div ng-if="error==true" class="alert alert-danger alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <strong>Warning!</strong>An Error occured please try again.
+        </div>
+
+
+</div>
+
