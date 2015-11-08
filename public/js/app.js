@@ -1,5 +1,5 @@
 // MODULE
-var angularApp = angular.module('angularApp', ['ngRoute','door3.css']);
+var angularApp = angular.module('angularApp', ['ngRoute','door3.css','ngCookies']);
 
 //7SQMCN7HTY22YXXLFA
 
@@ -8,8 +8,9 @@ angularApp.service('webservice',function($http) {
 
 
 
+
     this.getApiData = function (locationObj) {
-        return $http.jsonp("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location="+locationObj.lat+","+locationObj.long+"&date=Future&within=5&page_size=10&sort_order=popularity&callback=JSON_CALLBACK");
+        return $http.jsonp("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location="+locationObj.lat+","+locationObj.long+"&date=Future&within=5&page_size=10&category=food&sort_order=popularity&callback=JSON_CALLBACK");
 
     }
 
@@ -84,6 +85,11 @@ angularApp.config(function($routeProvider)
             templateUrl: 'partials/login.html',
             css: 'css/login.css',
             controller: 'LoginController'
+        }).
+        when('/set-preferences', {
+            templateUrl: 'partials/set-preferences.html',
+            css: 'css/set-preferences.css',
+            controller: 'SetPreferencesController'
         })
 
 
