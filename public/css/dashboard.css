@@ -41,8 +41,8 @@
 
 .panel-default > .panel-heading
 {
-    background-color:#66D269;
-    color:dimgray;
+    background-color: rgba(31, 46, 61, 1);
+    color:white;
 }
 
 .list-group
@@ -64,5 +64,33 @@ h4
 
 .table
 {
-    background-color:#F6EBEB;
+    background-color:#f5f0f0;
 }
+
+.dropdown-menu
+{
+    color: rgba(245, 233, 233, 1);
+    background-color: rgba(40, 150, 156, 1)
+}
+
+.dropdown-menu>li>a {
+    color: rgba(245, 233, 233, 1);
+    background-color:  rgba(40, 150, 156, 1);
+}
+.dropdown-menu>li>a:hover,
+.dropdown-menu>li>a:focus {
+    color: rgba(245, 233, 233, 1);
+    background-color: #1f2e3d;
+}
+
+.loading
+{
+    margin-top: 100px;
+
+}
+
+.pagination
+{
+    margin-left: 30%;
+}
+

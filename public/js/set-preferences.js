@@ -1,16 +1,17 @@
-angular.module('angularApp').controller('SetPreferencesController', ['$scope', '$rootScope','$http', '$location','$cookies','$timeout',
-    function ($scope, $rootScope, $http, $location,$cookies,$timeout)
+angular.module('angularApp').controller('SetPreferencesController', ['$scope', '$rootScope','$http', '$location','$cookies','$timeout','webservice',
+    function ($scope, $rootScope, $http, $location,$cookies,$timeout,webservice)
 {
 
-    if($cookies.get("email")===undefined)
+    if($cookies.get("id")===undefined)
     {
 
             $location.url('/signup');
     }
     else
     {
-        console.log($cookies.get("email"));
+        console.log($cookies.get("id"));
     }
+
 
     $scope.pref={gender:"Male",city:"Boston"};
 
@@ -25,10 +26,11 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
     $scope.addCategory=function()
     {
         var e = document.getElementById("category");
-        var category = e.options[e.selectedIndex].text;
+        var category = e[e.selectedIndex].id;
+        var categoryText = e.options[e.selectedIndex].text;
         console.log(category);
         if(addedCategories[category]==null || addedCategories[category]==undefined) {
-            $scope.items.push({'category': category})
+            $scope.items.push({'category': category,'categoryText': categoryText})
             console.log($scope.items);
             addedCategories[category]=category;
         }
@@ -38,7 +40,6 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
     {
 
          $scope.items= $scope.items.filter(function (el) {
-
              addedCategories[item.category]=null;
              return el.category !== item.category;
 
@@ -51,7 +52,7 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
     $scope.savePreferences = function(pref)
     {
         var preferences = {};
-        preferences.email=$cookies.get("email");
+        preferences.id=$cookies.get("id");
         preferences.gender=pref.gender;
         preferences.city=pref.city;
         preferences.categories=$scope.items;
@@ -59,12 +60,16 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
         console.log(preferences);
 
         $http.post("/preferences", preferences)
-            .success(function (response) {
+            .success(function (response)
+            {
 
-                if (response === 'success') {
+                if (response === 'success')
+                {
 
                     $scope.error=false;
-                    $cookies.remove("email");
+                    $cookies.remove("id");
+
+
 
                     $timeout(function() {
                         $location.url('/login');

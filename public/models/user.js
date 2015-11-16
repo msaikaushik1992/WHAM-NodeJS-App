@@ -1,5 +1,9 @@
 // grab the things we need
 var mongoose = require('mongoose');
+var passport= require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var Schema = mongoose.Schema;
 
 var UserSchema=mongoose.Schema({
@@ -32,6 +36,93 @@ exports.insertUser=function (req, res)
 
     });
 };
+
+
+exports.getUserInfo=function (req, res)
+{
+
+
+    UserModel.findOne({email:req.params.email},function(err,user)
+    {
+
+        if(err)
+        {
+            console.log('error occured');
+
+        }
+        else
+        {
+            var userInfo={id:user._id,fname:user.fname,lname:user.lname,email:user.email};
+            res.send(userInfo);
+        }
+
+
+    });
+
+};
+
+
+exports.login= function (req, res) {
+
+    var user = req.user
+    console.log(user);
+    res.send(user);
+
+};
+
+exports.loggedin = function(req,res)
+{
+    res.send(req.isAuthenticated() ? req.user : '0');
+
+};
+
+
+passport.serializeUser(function(user,done){
+    done(null,user);
+});
+
+passport.deserializeUser(function(user,done){
+
+    done(null,user);
+
+});
+
+passport.use(new LocalStrategy({
+        usernameField: 'email',
+        passwordField: 'password'
+    },
+    function(email,password,done){
+        UserModel.findOne({email:email},function(err,user)
+        {
+            console.log('aunthenticating');
+            if(err)
+            {
+                console.log('error occured');
+                return done(null,false,{message:'Unable to Login'});
+            }
+            else if(user==null || user=="")
+            {
+                user=null
+                return done(null,user);
+            }
+            else
+            {
+                console.log(user);
+                if(password==user.password) {
+                    var user={id:user._id,fname:user.fname,lname:user.lname,email:user.email};
+                    return done(null, user);
+                }
+                else
+                {
+                    user=null
+                    return done(null,user);
+                }
+            }
+
+
+        });
+
+    }));
 
 
 

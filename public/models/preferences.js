@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PreferencesSchema=mongoose.Schema({
-    email  :  { type: String, required: true, unique: true},
+    id  :  { type: String, required: true, unique: true},
     gender  :  { type: String, required: true},
     city  :  { type: String, required: true},
     categories : { type: Array, required: true}
@@ -30,4 +30,30 @@ exports.insertPreferences=function (req, res)
         }
 
     });
+};
+
+
+
+exports.getUserPreferences=function (req, res)
+{
+
+    PreferencesModel.findOne({id:req.params.id},function(err,pref)
+    {
+
+        if(err)
+        {
+            console.log('error occured');
+            res.send('error');
+
+        }
+        else
+        {
+            var preferences=pref.categories;
+            res.send(preferences);
+        }
+
+
+    });
+
+
 };
