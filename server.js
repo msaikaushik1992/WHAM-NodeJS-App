@@ -42,7 +42,7 @@ app.get("/preferences/:id",Preferences.getUserPreferences);
 app.get("/logout",function(req,res){
 
  req.logout();
- res.send(200);
+ res.sendStatus(200);
 
 
 });

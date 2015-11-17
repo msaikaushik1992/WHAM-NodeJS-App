@@ -2,13 +2,15 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
     function ($scope, $rootScope, $http, $location,$cookies,$timeout,webservice)
 {
 
-    if($cookies.get("id")===undefined)
+    if($cookies.getObject("info")===undefined)
     {
 
             $location.url('/signup');
     }
     else
     {
+
+        console.log($cookies.getObject("info"));
         console.log($cookies.get("id"));
     }
 
@@ -71,8 +73,11 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
 
 
 
-                    $timeout(function() {
-                        $location.url('/login');
+                    $timeout(function()
+                    {
+                        $rootScope.currentUser =  $cookies.getObject("info");
+                        $cookies.remove("info");
+                        $location.url('/');
                     }, 3000);
 
                 }

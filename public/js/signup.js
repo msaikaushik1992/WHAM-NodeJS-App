@@ -10,25 +10,25 @@ angular.module('angularApp').controller('SignupController', ['$scope','$rootScop
 
                    if (response === 'success') {
 
-                        $http.get("/getUserInfo/" + user.email)
-                            .success(function (response) {
+                       $http.post("/login", user)
+                           .success(function (response)
+                           {
+                               if (response == null)
+                               {
+                                   console.log("Response is null");
+                                   $scope.invalid = true;
+                               }
+                               else
+                               {
+                                   $cookies.putObject("info",response);
+                                   $cookies.put("id",response.id);
+                                   $location.url('/set-preferences');
+                               }
+                           })
+                           .error(function (response) {
 
-                                 if (response !== null) {
-
-                                      $cookies.put("id", response.id);
-                                      $location.url('/set-preferences');
-
-                                 }
-                                else
-                                 {
-                                     console.log("Error");
-                                 }
-                            })
-                            .error(function (response) {
-
-                                 $location.url('/signup');
-
-                            });
+                               $scope.invalid = true;
+                           });
                    }
 
               })
