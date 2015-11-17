@@ -9,13 +9,46 @@ angularApp.service('webservice',function($http) {
 
 
 
-    this.getApiData = function (locationObj) {
-        return $http.jsonp("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location="+locationObj.lat+","+locationObj.long+"&date=Future&within=5&page_size=10&category=food&sort_order=popularity&callback=JSON_CALLBACK");
+    self.getApiData = function (locationObj)
+    {
+        return $http.jsonp("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location="+locationObj.lat+","+locationObj.long+"&date=Future&within=5&page_size=20&sort_order=popularity&callback=JSON_CALLBACK");
 
     }
 
+    self.getEventsByPreference = function(locationObj, preferences)
+    {
 
-    this.getLocationCoords = new Promise(function (resolve, reject) {
+        console.log(preferences);
+        var categoryList="";
+        for(var i=0; i<preferences.length;i++)
+        {
+            categoryList+=(preferences[i].category)+",";
+        }
+        categoryList=categoryList.substring(0,categoryList.length-1);
+        console.log(categoryList);
+        return $http.jsonp("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location="+locationObj.lat+","+locationObj.long+"&date=Future&within=5&page_size=100&category="+categoryList +"&sort_order=popularity&callback=JSON_CALLBACK");
+    }
+
+    self.checkLoggedIn = new Promise(function (resolve, reject)
+    {
+        isLoggedIn();
+
+        function isLoggedIn() {
+            $http.get("/loggedin")
+                .success(function (response) {
+                    resolve(response);
+                })
+                .error(function (response) {
+
+                    reject(Error("An Error Occured"));
+                });
+
+        }
+    });
+
+
+    self.getLocationCoords = new Promise(function (resolve, reject)
+    {
         getLocation();
 
         function getLocation() {
@@ -43,6 +76,7 @@ angularApp.service('webservice',function($http) {
 });
 
 
+
 var compareTo = function() {
     return {
         require: "ngModel",
@@ -63,8 +97,6 @@ var compareTo = function() {
 };
 
 angularApp.directive("compareTo", compareTo);
-
-
 
 
 angularApp.config(function($routeProvider)
@@ -91,6 +123,9 @@ angularApp.config(function($routeProvider)
             css: 'css/set-preferences.css',
             controller: 'SetPreferencesController'
         })
+        .otherwise({
+            redirectTo: '/'
+});
 
 
 });

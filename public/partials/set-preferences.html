@@ -62,24 +62,27 @@
 
                 <div class="col-md-6">
                     <select id="category">
-                        <option selected="selected">Business & Networking</option>
-                        <option>Concerts</option>
-                        <option>Conferences</option>
-                        <option>Comedy</option>
-                        <option>Education</option>
-                        <option>Kids</option>
-                        <option>Festivals</option>
-                        <option>Food & Wine</option>
-                        <option>Fundraising</option>
-                        <option>Holiday</option>
-                        <option>Literary & Books</option>
-                        <option>Museums and Attractions</option>
-                        <option>Neighbourhood</option>
-                        <option>Nightlife & Singles</option>
-                        <option>Outdoors & Recreation</option>
-                        <option>Religion and Spirituality</option>
-                        <option>Technology</option>
-                        <option>Other</option>
+                        <option id="art" selected="selected">Art Galleries</option>
+                        <option id="business" selected="selected">Business & Networking</option>
+                        <option id="music">Concerts</option>
+                        <option id="conference">Conferences</option>
+                        <option id="comedy">Comedy</option>
+                        <option id="learning_education">Education</option>
+                        <option id="movies_film">Films</option>
+                        <option id="family_fun_kids">Kids</option>
+                        <option id="festivals_parades">Festivals</option>
+                        <option id="food">Food & Wine</option>
+                        <option id="fundraisers">Fundraising</option>
+                        <option id="holiday">Holiday</option>
+                        <option id="books">Literary & Books</option>
+                        <option id="attractions">Museums and Attractions</option>
+                        <option id="community">Neighbourhood</option>
+                        <option id="singles_social">Nightlife & Singles</option>
+                        <option id="outdoors_recreation">Outdoors & Recreation</option>
+                        <option id="animals">Pets</option>
+                        <option id="religion_spirituality">Religion and Spirituality</option>
+                        <option id="technology">Technology</option>
+                        <option id="">Other</option>
                     </select>
 
                     <button ng-click="addCategory()"><span class="glyphicon glyphicon-plus"></span></button>
@@ -91,7 +94,7 @@
 
         <div class="row">
             <div class="button col-md-3" ng-repeat="item in items">
-                <button ng-click="clearItems(item)" class="btn category btn-danger glpyhicon glyphicon glyphicon-remove">{{item.category}}</button>
+                <button ng-click="clearItems(item)" class="btn category btn-danger glpyhicon glyphicon glyphicon-remove">{{item.categoryText}}</button>
             </div>
 
         </div>
@@ -107,7 +110,7 @@
 
         <div ng-if="error==false" class="alert alert-success alert-dismissible" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <strong>Success!</strong>Your preferences have been saved.Redirecting to Login!
+            <strong>Success!</strong>Your preferences have been saved.Redirecting to Home!
         </div>
 
         <div ng-if="error==true" class="alert alert-danger alert-dismissible" role="alert">
