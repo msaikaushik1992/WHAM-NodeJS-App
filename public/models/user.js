@@ -48,12 +48,21 @@ exports.getUserInfo=function (req, res)
         if(err)
         {
             console.log('error occured');
+            res.send('error');
 
         }
         else
         {
-            var userInfo={id:user._id,fname:user.fname,lname:user.lname,email:user.email};
-            res.send(userInfo);
+            if(user==null || user=="")
+            {
+                user=null
+                res.send(null);
+            }
+            else
+            {
+                var userInfo = {id: user._id, fname: user.fname, lname: user.lname, email: user.email};
+                res.send(userInfo);
+            }
         }
 
 
