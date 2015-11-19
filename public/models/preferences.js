@@ -50,8 +50,7 @@ exports.getUserPreferences=function (req, res)
         {
             if(pref==null || pref=="")
             {
-                pref=null
-                res.send(pref);
+                res.send('empty');
             }
             else
             {

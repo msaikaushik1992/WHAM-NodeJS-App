@@ -2,7 +2,8 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
 
 
-    $(document).ready(function () {
+    $(document).ready(function ()
+    {
 
         //this will attach the class to every target
         $("li").on('click', function (event) {
@@ -27,9 +28,9 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
                 {
                     console.log("Error Occured");
                 }
-                else if(response==null)
+                else if(response=='empty')
                 {
-                    console.log("Error 2 Occured ");
+                    $location.url('/set-preferences');
                 }
                 else
                 {
@@ -57,7 +58,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
                     console.log(response);
                     $scope.$apply();
                     $scope.prefs=null;
-                    populate.resolve();
+                  populate.resolve();
 
 
                 }
@@ -73,9 +74,9 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
                             {
                                 console.log("Error Occured");
                             }
-                            else if(response==null)
+                            else if(response=='empty')
                             {
-                                console.log("Error Occured");
+                                $location.url('/set-preferences');
                             }
                             else
                             {
@@ -143,11 +144,12 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
                   p.then(
                       function (payload) {
                           $scope.eventData = payload.data.events.event;
+                          console.log( $scope.eventData.length);
                           requestDone.resolve();
                       },
                       function (errorPayload) {
                           $log.error('failure loading movie', errorPayload);
-                          console.log("Did not get coordinates");
+                          console.log("Error retrieving events");
 
                       });
 
@@ -159,11 +161,14 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
                   var p = webservice.getApiData($scope.location);
                   p.then(
                       function (payload) {
+                          console.log(payload);
                           $scope.eventData = payload.data.events.event;
+                          console.log($scope.eventData.length);
                           requestDone.resolve();
                       },
                       function (errorPayload) {
                           $log.error('failure loading movie', errorPayload);
+                          console.log("Did not get coordinates");
 
                       });
 

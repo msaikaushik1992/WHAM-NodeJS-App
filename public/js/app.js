@@ -1,19 +1,16 @@
 // MODULE
 var angularApp = angular.module('angularApp', ['ngRoute','door3.css','ngCookies']);
 
-//7SQMCN7HTY22YXXLFA
 
-angularApp.service('webservice',function($http) {
+angularApp.service('webservice',function($http)
+{
     var self = this;
-
-
-
-
     self.getApiData = function (locationObj)
     {
-        return $http.jsonp("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location="+locationObj.lat+","+locationObj.long+"&date=Future&within=5&page_size=20&sort_order=popularity&callback=JSON_CALLBACK");
+       return $http.get("/eventsByLocation/"+ JSON.stringify(locationObj));
 
     }
+
 
     self.getEventsByPreference = function(locationObj, preferences)
     {
@@ -25,8 +22,8 @@ angularApp.service('webservice',function($http) {
             categoryList+=(preferences[i].category)+",";
         }
         categoryList=categoryList.substring(0,categoryList.length-1);
-        console.log(categoryList);
-        return $http.jsonp("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location="+locationObj.lat+","+locationObj.long+"&date=Future&within=5&page_size=100&category="+categoryList +"&sort_order=popularity&callback=JSON_CALLBACK");
+        var locationAndPreferences={location:locationObj,categories:categoryList};
+        return $http.get("/eventsByLocationAndPreference/"+ JSON.stringify(locationAndPreferences));
     }
 
     self.checkLoggedIn = new Promise(function (resolve, reject)
