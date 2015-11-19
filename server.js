@@ -8,6 +8,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var logout = require('express-passport-logout');
+var requestify = require('requestify');
 
 
 var User = require('./public/models/user');
@@ -43,11 +44,58 @@ app.get("/logout",function(req,res){
 });
 
 
-/*app.get('/process',function(req,res){
 
- res.json(process.env);
+//Retrieves events close to the guest User
+app.get("/eventsByLocation/:locationObj",function(req,res)
+{
+   var locationObj=JSON.parse(req.params.locationObj);
+   requestify.get('http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location='
+       + locationObj.lat + "," + locationObj.long + '&date=Future&within=5&page_size=20&sort_order=popularity')
+       .then(function(response)
+   {
 
- });*/
+      if(response!==null)
+      {
+       res.send(response.body);
+      }
+      else
+      {
+       res.send('error');
+      }
+
+
+   });
+
+});
+
+
+//Retrieves events close to the user if the user is logged in and has set preferences
+
+app.get("/eventsByLocationAndPreference/:locationPrefObj",function(req,res)
+{
+    var locPrefObj=JSON.parse(req.params.locationPrefObj);
+    requestify.get("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L" +
+        "&location="+locPrefObj.location.lat+","+locPrefObj.location.long+"&date=Future&within=5&page_size=100" +
+        "&category="+locPrefObj.categories +"&sort_order=popularity")
+        .then(function(response)
+        {
+
+            if(response!==null)
+            {
+                res.send(response.body);
+            }
+            else
+            {
+                res.send('error');
+            }
+
+
+        });
+
+});
+
+
+
 
 var ip =  '127.0.0.1';
 var port = 8080;
