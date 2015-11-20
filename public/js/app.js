@@ -15,6 +15,11 @@ angularApp.service('webservice',function($http) {
 
     }
 
+    // event data call
+    this.getEventDatafromApi = function (eventId) {
+        return $http.jsonp("http://api.eventful.com/json/events/get?app_key=MTbVVjGdhvvx5r5L&id="+eventId+"&callback=JSON_CALLBACK");
+
+    }
     self.getEventsByPreference = function(locationObj, preferences)
     {
 
@@ -122,8 +127,13 @@ angularApp.config(function($routeProvider)
             templateUrl: 'partials/set-preferences.html',
             css: 'css/set-preferences.css',
             controller: 'SetPreferencesController'
-        })
-        .otherwise({
+        }).
+        when('/event/:id', {
+            templateUrl: 'partials/event.html',
+            css: 'css/dashboard.css',
+            controller: 'EventController'
+        }).
+        otherwise({
             redirectTo: '/'
 });
 

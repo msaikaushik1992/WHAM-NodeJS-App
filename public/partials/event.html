@@ -1,0 +1,58 @@
+<div class="container center-block">
+
+    <div class="container">
+        <div class="panel-heading">
+            <h4 class="panel-title">{{eventTitle}}</h4>
+        </div>
+        <table class="table">
+            <tr>
+                <td ng-if="eventImageUrl==null">
+                    <img src="../images/no-image.jpg" height="70" width="100"/>
+                </td>
+
+                <td ng-if="eventImageUrl!=null">
+                    <img src="{{eventImageUrl}}" height="{{eventImageHeight}}" width="{{eventImageWidth}}"/>
+                </td>
+
+                <td>
+                    <div class="panel-body">
+                        <div class="media">
+                            <div class="media-body">
+                                <h5 class="media-heading">{{eventVenue}}</h5>
+                                <h5>{{eventDescription}}</h5>
+
+                                <h5 ng-if="eventCost==null">
+                                    Sorry, information about the cost of this event is not available.
+                                </h5>
+                                <h5 ng-if="eventCost!=null">
+                                    This event costs {{eventCost}}.
+                                </h5>
+
+                                <h5 ng-if="eventTimingInformation==null">
+                                    We are not sure when this event is going to happen.
+                                </h5>
+                                <h5 ng-if="eventTimingInformation!=null">
+                                    {{eventTimingInformation}}
+                                </h5>
+
+                                <div ng-repeat = "l in eventLinks">
+
+                                    <h5 ng-if="l.type=='Official Site'"> <a href="l.url"> {{l.type}} </a> </h5>
+                                    <h5 ng-if="l.type=='Tickets'"> <a href={{l.url}}> {{l.type}}</a> </h5>
+                                </div>
+
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="panel-body">
+                        <div id="googleMap" style="width:250px;height:190px;"></div>
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+
+    </div>
+
+</div>
