@@ -48,8 +48,15 @@ exports.getUserPreferences=function (req, res)
         }
         else
         {
-            var preferences=pref.categories;
-            res.send(preferences);
+            if(pref==null || pref=="")
+            {
+                res.send('empty');
+            }
+            else
+            {
+                var preferences = pref.categories;
+                res.send(preferences);
+            }
         }
 
 
