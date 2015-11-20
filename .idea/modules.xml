@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$USER_HOME$/WebstormProjects/Project/.idea/Project.iml" filepath="$USER_HOME$/WebstormProjects/Project/.idea/Project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/WamConsole.iml" filepath="$PROJECT_DIR$/.idea/WamConsole.iml" />
     </modules>
   </component>
 </project>
