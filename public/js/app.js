@@ -125,7 +125,7 @@ angularApp.config(function($routeProvider)
             css: 'css/set-preferences.css',
             controller: 'SetPreferencesController'
         }).
-        when('/event/:id', {
+        when('/event/:id/:lat/:lon', {
             templateUrl: 'partials/event.html',
             css: 'css/dashboard.css',
             controller: 'EventController'

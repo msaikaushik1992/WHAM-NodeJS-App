@@ -5,6 +5,23 @@ angular.module('angularApp')
         $scope.eventDetails = "TEST EVENT";
 
         var requestDone=$q.defer();
+    
+
+        var initializaMap = function initialize() {
+            var mapProp = {
+                center:new google.maps.LatLng($routeParams.lat, $routeParams.lon),
+                zoom:10,
+                mapTypeId:google.maps.MapTypeId.ROADMAP
+            };
+
+            var map=new google.maps.Map(document.getElementById("googleMap"), mapProp);
+
+            var marker = new google.maps.Marker({
+                position: new google.maps.LatLng($routeParams.lat, $routeParams.lon),
+                map: map
+            });    
+        }
+        initializaMap();
 
         var eventData = webservice.getEventDatafromApi($routeParams.id);
         console.log(eventData);
@@ -89,10 +106,6 @@ angular.module('angularApp')
                 $scope.eventLocationLat = payload.data.latitude;
                 $scope.eventLocationLng = payload.data.longitude;
 
-                //latitude
-                //longitude
-
-
 
                 requestDone.resolve();
             },
@@ -106,21 +119,7 @@ angular.module('angularApp')
 
 
         requestDone.promise.then(function(){
-            function initialize() {
-                var mapProp = {
-                    center:new google.maps.LatLng($scope.eventLocationLat,$scope.eventLocationLng),
-                    zoom:10,
-                    mapTypeId:google.maps.MapTypeId.ROADMAP
-                };
-
-                var map=new google.maps.Map(document.getElementById("googleMap"), mapProp);
-
-                var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng($scope.eventLocationLat,$scope.eventLocationLng),
-                    map: map
-                });    
-            }
-            google.maps.event.addDomListener(window, 'load', initialize);
+            console.log("Success");
         });
 
 
