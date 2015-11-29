@@ -1,0 +1,124 @@
+<div class="container-fluid center-block">
+
+    <div id="custom-bootstrap-menu" class="navbar navbar-default " role="navigation">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand" href="#">Brand</a>
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-menubuilder"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse navbar-menubuilder">
+                <ul class="nav navbar-nav navbar-left">
+                    <li><a href="#/">Home</a>
+                    </li>
+                    <li><a ng-if="!loggedin" href="/#signup">Sign Up</a>
+                    </li>
+                    <li><a ng-if="!loggedin" href="/#login">Login</a>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right" ng-if="loggedin">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{name}}<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="#/profile" style="padding-left: 40%">Profile</a></li>
+                            <li><a ng-click="logout()" style="padding-left: 40%">Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container profile-form center-block">
+    <form name="frm" >
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Gender</label>
+                </div>
+                <div class="col-md-6">
+                    <select ng-options="o.name for o in options" ng-model="pref.selectedOption" id="gender" required>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>City</label>
+                </div>
+                <div class="col-md-6">
+                  <input type="text" ng-value="city" ng-model="pref.city" name="loc"  class="textbox city" id="location" required>
+                  <span class="span-error" ng-show="frm.loc.$dirty && frm.loc.$error.required">City is required</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+        <div class="row">
+            <div class="col-md-6">
+                <label>Add Category Preferences</label>
+            </div>
+
+            <div class="col-md-6">
+                <select id="category" class="pref" required>
+                    <option id="art" selected="selected">Art Galleries</option>
+                    <option id="business" selected="selected">Business & Networking</option>
+                    <option id="music">Concerts</option>
+                    <option id="conference">Conferences</option>
+                    <option id="comedy">Comedy</option>
+                    <option id="learning_education">Education</option>
+                    <option id="movies_film">Films</option>
+                    <option id="family_fun_kids">Kids</option>
+                    <option id="festivals_parades">Festivals</option>
+                    <option id="food">Food & Wine</option>
+                    <option id="fundraisers">Fundraising</option>
+                    <option id="holiday">Holiday</option>
+                    <option id="books">Literary & Books</option>
+                    <option id="attractions">Museums and Attractions</option>
+                    <option id="community">Neighbourhood</option>
+                    <option id="singles_social">Nightlife & Singles</option>
+                    <option id="outdoors_recreation">Outdoors & Recreation</option>
+                    <option id="animals">Pets</option>
+                    <option id="religion_spirituality">Religion and Spirituality</option>
+                    <option id="technology">Technology</option>
+                    <option id="">Other</option>
+                </select>
+                <button ng-click="addCategory()"><span class="glyphicon glyphicon-plus"></span></button>
+            </div>
+            </div>
+
+        </div>
+
+        <br/>
+
+        <div class="row">
+            <div class="button col-md-3" ng-repeat="item in items">
+                <button ng-click="clearItems(item)" class="btn category btn-danger glpyhicon glyphicon glyphicon-remove">{{item.categoryText}}</button>
+            </div>
+        </div>
+
+        <br/>
+
+        <div class="form-group">
+            <button ng-disabled="frm.$invalid" ng-click="update(pref)" class="btn btn-primary">Update Profile</button>
+        </div>
+    </form>
+
+
+
+    <div ng-if="error==false" class="alert alert-success alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Success!</strong>Your preferences have been updated.
+    </div>
+
+    <div ng-if="error==true" class="alert alert-danger alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <strong>Warning!</strong>An error occured.Please try again.
+    </div>
+
+
+</div>

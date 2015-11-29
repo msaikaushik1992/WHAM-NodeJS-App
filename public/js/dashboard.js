@@ -176,7 +176,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
                requestDone.promise.then(function () {
                    $scope.loading = false;
-                   $scope.array = new Array($scope.eventData.length / 10);
+                   $scope.array = new Array(Math.round($scope.eventData.length / 10));
                    for (var i = 0; i < $scope.array.length; i++) {
                        $scope.array[i] = i + 1;
                    }
