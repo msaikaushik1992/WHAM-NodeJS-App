@@ -37,23 +37,18 @@ exports.insertPreferences=function (req, res)
 exports.getUserPreferences=function (req, res)
 {
 
-    PreferencesModel.findOne({id:req.params.id},function(err,pref)
-    {
+    PreferencesModel.findOne({id: req.params.id}, function (err, pref) {
 
-        if(err)
-        {
+        if (err) {
             console.log('error occured');
             res.send('error');
 
         }
-        else
-        {
-            if(pref==null || pref=="")
-            {
+        else {
+            if (pref == null || pref == "") {
                 res.send('empty');
             }
-            else
-            {
+            else {
                 var preferences = pref.categories;
                 res.send(preferences);
             }
@@ -61,6 +56,82 @@ exports.getUserPreferences=function (req, res)
 
 
     });
+}
+
+exports.getUserProfile=function (req, res)
+{
+
+    PreferencesModel.findOne({id: req.params.id}, function (err, pref)
+    {
+
+        if (err) {
+            console.log('error occured');
+            res.send('error');
+
+        }
+        else {
+            if (pref == null || pref == "") {
+                res.send('empty');
+            }
+            else {
+                var preferences = pref;
+                res.send(preferences);
+            }
+        }
 
 
-};
+    });
+}
+
+
+exports.updateProfile=function (req, res)
+{
+    console.log(req.params.id);
+
+    PreferencesModel.findOne({id: req.params.id}, function (err, pref)
+    {
+
+        if (err)
+        {
+            console.log('error occured');
+            res.send('error');
+
+        }
+        else {
+            if (pref == null || pref == "") {
+                console.log('No record found');
+                res.send('empty');
+
+            }
+            else
+            {
+                pref.gender=req.body.gender;
+                pref.city=req.body.city;
+                pref.categories=req.body.categories;
+                pref.save(function (err)
+                {
+                    if (!err) {
+                        console.log("updated");
+                        PreferencesModel.findOne({id: req.params.id}, function (err, record) {
+                            console.log(" Updated Record:" + record);
+                            if (record == "" || record == null) {
+                                res.send('error');
+                            }
+                            else
+                            {
+
+                                res.send('success');
+                            }
+
+                        });
+                    }
+                });
+            }
+        }
+
+
+    });
+}
+
+
+

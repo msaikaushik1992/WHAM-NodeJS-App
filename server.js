@@ -9,6 +9,7 @@ var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var logout = require('express-passport-logout');
 var requestify = require('requestify');
+var apicache = require('apicache').options({ debug: true }).middleware;
 
 
 var User = require('./public/models/user');
@@ -33,6 +34,8 @@ app.post("/preferences",Preferences.insertPreferences);
 app.post("/login",passport.authenticate('local'), User.login);
 app.get("/loggedin",User.loggedin);
 app.get("/preferences/:id",Preferences.getUserPreferences);
+app.get("/profileinfo/:id",Preferences.getUserProfile);
+app.put("/updatePreferences/:id",Preferences.updateProfile);
 
 
 app.get("/logout",function(req,res){
@@ -46,7 +49,7 @@ app.get("/logout",function(req,res){
 
 
 //Retrieves events close to the guest User
-app.get("/eventsByLocation/:locationObj",function(req,res)
+app.get("/eventsByLocation/:locationObj",apicache('5 minutes'),function(req,res)
 {
    var locationObj=JSON.parse(req.params.locationObj);
    requestify.get('http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location='
@@ -71,7 +74,7 @@ app.get("/eventsByLocation/:locationObj",function(req,res)
 
 //Retrieves events close to the user if the user is logged in and has set preferences
 
-app.get("/eventsByLocationAndPreference/:locationPrefObj",function(req,res)
+app.get("/eventsByLocationAndPreference/:locationPrefObj",apicache('5 minutes'),function(req,res)
 {
     var locPrefObj=JSON.parse(req.params.locationPrefObj);
     requestify.get("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L" +

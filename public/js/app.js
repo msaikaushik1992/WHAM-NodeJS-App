@@ -125,6 +125,11 @@ angularApp.config(function($routeProvider)
             css: 'css/set-preferences.css',
             controller: 'SetPreferencesController'
         }).
+        when('/profile', {
+            templateUrl: 'partials/profile.html',
+            css: 'css/profile.css',
+            controller: 'ProfileController'
+        }).
         when('/event/:id/:lat/:lon', {
             templateUrl: 'partials/event.html',
             css: 'css/dashboard.css',
