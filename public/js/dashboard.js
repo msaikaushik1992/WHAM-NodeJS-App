@@ -289,12 +289,12 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
                     shadow: shadow,
                     url: "#event/"+obj.id+"/"+Number(obj.latitude)+"/"+obj.longitude
                 });
-                marker.desc = obj.title;
+                marker.desc = '<a href="#event/'+obj.id+'/'+obj.latitude+'/'+obj.latitude+'">'+obj.title+'<a>';
                 oms.addMarker(marker);
                 $scope.markers.push(marker);
-                gm.event.addListener(marker, 'click', function() {
-                    window.location.href = this.url;
-                });
+                // gm.event.addListener(marker, 'click', function() {
+                //     window.location.href = this.url;
+                // });
 
             }
       $scope.map = map;
