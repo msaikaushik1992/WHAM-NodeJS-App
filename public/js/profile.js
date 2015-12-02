@@ -81,23 +81,6 @@ angular.module('angularApp').controller('ProfileController', ['$scope', '$rootSc
         }
 
 
-
-        var input = document.getElementById('location');
-        var searchform = document.getElementById('form1');
-        var place;
-        var autocomplete = new google.maps.places.Autocomplete(input);
-
-        //Google Map variables
-        var map;
-        var marker;
-
-        //Add listener to detect autocomplete selection
-        google.maps.event.addListener(autocomplete, 'place_changed', function () {
-            place = autocomplete.getPlace();
-            //console.log(place);
-        });
-
-
         var initializeProfileInfo = function()
         {
             $scope.pref={};
@@ -225,6 +208,23 @@ angular.module('angularApp').controller('ProfileController', ['$scope', '$rootSc
                     }
                 });
         }
+
+        var input = document.getElementById('location');
+        var searchform = document.getElementById('form1');
+        var place;
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        //Google Map variables
+        var map;
+        var marker;
+
+        //Add listener to detect autocomplete selection
+        google.maps.event.addListener(autocomplete, 'place_changed', function () {
+            place = autocomplete.getPlace();
+            //console.log(place);
+        });
+
+
 
 
     } ]);
