@@ -176,11 +176,12 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
                requestDone.promise.then(function () {
                    $scope.loading = false;
-                   $scope.array = new Array(Math.round($scope.eventData.length / 10));
+                   $scope.array = new Array(Math.round($scope.eventData.length / 9));
                    for (var i = 0; i < $scope.array.length; i++) {
                        $scope.array[i] = i + 1;
                    }
-                   $scope.dataPerPage=$scope.eventData.slice(0,10);
+                   $scope.dataPerPage=$scope.eventData.slice(0,9);
+                   generateMap($scope);
                    $scope.isSelected=1;
                });
 
@@ -190,11 +191,21 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
       $scope.paginate = function(event,i)
       {
-          $scope.dataPerPage=$scope.eventData.slice((i-1)*10,(i-1)*10+10);
+          $scope.dataPerPage=$scope.eventData.slice((i-1)*9,(i-1)*9+9);
+          console.log($scope.dataPerPage);
+          var averageLatitude = 0,averageLongitude = 0;
+          var dpp = $scope.dataPerPage;
+          for(var i = 0; i<dpp.length; i++){
+              averageLatitude+=dpp[i].latitude;
+              averageLongitude+=dpp[i].longitude;
+          }
+          averageLatitude/=dpp.length;
+          averageLongitude/=dpp.length;
           $scope.isSelected=i;
           $target = $(event.target);
           $target.addClass('active');
           $("html, body").animate({ scrollTop: 0 }, "slow");
+          generateMap($scope);
       }
 
 
@@ -216,8 +227,80 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
             });
     }
 
+    function generateMap($scope){
+      $scope.markers = [];
+
+      var labels= "123456789";
+      labelIndex=0;
+      var gm = google.maps;
+      var map = new gm.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng($scope.location.lat,$scope.location.long),
+        zoom: 11
+      });
+
+      var iw = new gm.InfoWindow();
+      var oms = new OverlappingMarkerSpiderfier(map,
+        {markersWontMove: true, markersWontHide: true});
+      
+      var usualColor = '3385ff';
+      var spiderfiedColor = 'b3d1ff';
+      
+      var iconWithColor = function(color) {
+        return 'http://chart.googleapis.com/chart?chst=d_map_xpin_letter&chld=pin|+|' +
+          color + '|000000|ffff00';
+      }
+      
+      var shadow = new gm.MarkerImage(
+        'https://www.google.com/intl/en_ALL/mapfiles/shadow50.png',
+        new gm.Size(37, 34),  // size   - for sprite clipping
+        new gm.Point(0, 0),   // origin - ditto
+        new gm.Point(10, 34)  // anchor - where to meet map location
+      );
+      
+      oms.addListener('click', function(marker) {
+        iw.setContent(marker.desc);
+        iw.open(map, marker);
+      });
+      oms.addListener('spiderfy', function(markers) {
+        for(var i = 0; i < markers.length; i ++) {
+          markers[i].setIcon(iconWithColor(spiderfiedColor));
+          markers[i].setShadow(null);
+        } 
+        iw.close();
+      });
+
+      oms.addListener('unspiderfy', function(markers) {
+        for(var i = 0; i < markers.length; i ++) {
+          markers[i].setIcon(iconWithColor(usualColor));
+          markers[i].setShadow(shadow);
+        }
+      });
+      var bounds = new gm.LatLngBounds();
+
+      for(var i = 0; i<$scope.dataPerPage.length; i++) {
+                var obj = $scope.dataPerPage[i];
+                var loc = {lat : Number(obj.latitude), lng: Number(obj.longitude)};
+                var marker = new gm.Marker({
+                    position: loc,
+                    map: map,
+                    title: obj.title,
+                    label: labels[labelIndex++ % labels.length],
+                    icon: iconWithColor(usualColor),
+                    shadow: shadow,
+                    url: "#event/"+obj.id+"/"+Number(obj.latitude)+"/"+obj.longitude
+                });
+                marker.desc = obj.title;
+                oms.addMarker(marker);
+                $scope.markers.push(marker);
+                gm.event.addListener(marker, 'click', function() {
+                    window.location.href = this.url;
+                });
+
+            }
+      $scope.map = map;
+      }
 
 
-
+      
 
     } ]);

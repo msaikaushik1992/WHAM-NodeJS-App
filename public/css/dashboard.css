@@ -94,3 +94,14 @@ h4
     margin-left: 30%;
 }
 
+.pos{
+    position: fixed;
+}
+
+.map{
+    height: 300px;
+    width: 1050px;
+    overflow: auto;
+    white-space: nowrap;
+    position: fixed;
+}

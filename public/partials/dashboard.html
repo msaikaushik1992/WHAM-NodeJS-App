@@ -29,41 +29,47 @@
     </div>
 
     <div class="first-row container">
-        <div  ng-repeat = "e in dataPerPage"class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title"><a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}">{{e.title}}</a></h2>
-                </div>
-                <table class="table">
-                    <tr>
-                        <td ng-if="e.image==null">
-                            <img src="../images/no-image.jpg" height="70" width="100"/>
 
-                                    <h4>{{e.city_name}}</h4>
-                                    <h5><strong>{{e.start_time}}</strong></h5>
+        <div class="col-sm-12 col-md-12 col-lg-12 ">
+            <div id="map" class="map"></div>
+        </div>
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            <div  ng-repeat = "e in dataPerPage" class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="panel-title"><a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}">{{e.title}}</a></h2>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <td ng-if="e.image==null">
+                                <img src="../images/no-image.jpg" height="70" width="100"/>
 
-                        </td>
+                                        <h4>{{e.city_name}}</h4>
+                                        <h5><strong>{{e.start_time}}</strong></h5>
 
-                        <td ng-if="e.image!==null">
-                            <img src="{{e.image.medium.url}}"/>
+                            </td>
 
-                                    <h4>{{e.city_name}}</h4>
-                                    <h5><strong>{{e.start_time}}</strong></h5>
-                        </td>
+                            <td ng-if="e.image!==null">
+                                <img src="{{e.image.medium.url}}"/>
 
-                        <td>
-                            <div class="panel-body">
-                                <div class="media">
-                                    <div class="media-body">
-                                        <h4 class="media-heading">{{e.venue_name}}</h4>
-                                        <h5>{{e.description}}</h5>
+                                        <h4>{{e.city_name}}</h4>
+                                        <h5><strong>{{e.start_time}}</strong></h5>
+                            </td>
+
+                            <td>
+                                <div class="panel-body">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <h4 class="media-heading">{{e.venue_name}}</h4>
+                                            <h5>{{e.description}}</h5>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                            </td>
+                        </tr>
+                    </table>
 
+                </div>
             </div>
         </div>
     </div>
@@ -74,5 +80,5 @@
         </ul>
     </div>
 
-    <img class="loading center-block" ng-if="loading"src="../images/gears.GIF" height="150" width="150"/>
+    <img class="loading center-block" ng-if="loading" src="../images/gears.gif" height="150" width="150"/>
 </div>
