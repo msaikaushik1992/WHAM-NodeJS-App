@@ -15,6 +15,42 @@ var UserSchema=mongoose.Schema({
 
 UserModel = mongoose.model('User',UserSchema);
 
+exports.updatePassword=function (req, res) {
+
+    UserModel.findOne({_id: req.params.id}, function (err, user) {
+
+        if (err) {
+            console.log('error occured');
+            res.send('error');
+
+        }
+        else {
+            if (user == null || user == "") {
+                console.log('No record found');
+                res.send('empty');
+
+            }
+            else if (user.password == req.body.oldPassword) {
+                user.password = req.body.newPassword;
+                user.save(function (err) {
+                    if (!err) {
+                        console.log("updated Password");
+                        res.send('success');
+                    }
+                    else {
+                        console.log("Error Occured in Updating Password");
+                        res.send('error');
+                    }
+
+                });
+            }
+            else {
+                console.log("Error");
+                res.send('error');
+            }
+        }
+    });
+}
 
 exports.insertUser=function (req, res)
 {

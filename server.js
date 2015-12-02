@@ -36,6 +36,7 @@ app.get("/loggedin",User.loggedin);
 app.get("/preferences/:id",Preferences.getUserPreferences);
 app.get("/profileinfo/:id",Preferences.getUserProfile);
 app.put("/updatePreferences/:id",Preferences.updateProfile);
+app.put("/updatePassword/:id",User.updatePassword);
 
 
 app.get("/logout",function(req,res){
@@ -120,5 +121,8 @@ mongoose.connect(config.mongoURI[app.settings.env], function(err, res) {
  }
 });
 
+
+/*
+ }*/
 
 module.exports = app;

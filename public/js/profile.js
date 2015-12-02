@@ -202,5 +202,29 @@ angular.module('angularApp').controller('ProfileController', ['$scope', '$rootSc
                 });
         }
 
+        $scope.updatePassword=function(password)
+        {
+            $http.put("/updatePassword/" + $scope.id, password)
+                .success(function (response)
+                {
+
+                    if (response === 'success')
+                    {
+
+                        $scope.errorResetPassword=false;
+                    }
+                    else if(response=='empty')
+                    {
+                        console.log(response);
+                        $scope.errorResetPassword=true;
+                    }
+                    else
+                    {
+                        console.log(response);
+                        $scope.errorResetPassword=true;
+                    }
+                });
+        }
+
 
     } ]);
