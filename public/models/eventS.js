@@ -41,7 +41,6 @@ exports.insertComment = function (req, res) {
                     res.send('error');
                 }
                 else {
-                    console.log(savedevent);
                     res.json(savedEvent);
                 }
             });
