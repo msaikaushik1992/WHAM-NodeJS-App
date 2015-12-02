@@ -1,5 +1,5 @@
-process.env.NODE_ENV = 'test';
 
+process.env.NODE_ENV = 'test';
 var chai = require('chai');
 var chaiHttp = require('chai-http');
 var server = require('../server');
@@ -9,11 +9,15 @@ var mongoose=require('mongoose');
 var User = require('../public/models/user');
 var Preferences = require('../public/models/preferences');
 
+var profile = require('./profile-tests');
+var login = require('./login-tests');
+
 
 chai.use(chaiHttp);
 
 var signup=false;
 var user=null;
+
 //This is our Sign Up Module Test Suite
 var x=describe('Sign Up Test Suite', function()
 {
@@ -68,66 +72,18 @@ var x=describe('Sign Up Test Suite', function()
                 signup=true;
                 done();
             });
+
+        login.runLoginTests(signup);
     });
+
 
 
 });
 
 
-    //This is our Login Test Suite Test Suite
-describe('Login Test Suite', function()
-{
-
-    it('Should authenticate a user with correct email-password combination /signup POST', function(done)
-    {
-
-        expect(signup).to.eql(true);
-
-        chai.request(server)
-            .post('/login')
-            .send({'email':'test@gmail.com','password':'Hello123'})
-            .end(function(err, res)
-            {
-                expect(err).to.eql(null)
-                //expect(signup).to.eql(true);
-                res.should.have.status(200);
-                res.body.should.have.property('fname');
-                res.body.should.have.property('lname');
-                res.body.should.have.property('email');
-                res.body.fname.should.equal('Test');
-                res.body.email.should.equal('test@gmail.com');
-                done();
-            });
-    });
 
 
-    it('should not not authenticate an unauthorized user /signup POST', function(done)
-    {
-
-        expect(signup).to.eql(true);
-
-        afterEach(function(done)
-        {
-            mongoose.connection.db.collection('users').drop();
-            done();
-        });
-
-
-        chai.request(server)
-            .post('/login')
-            .send({'email':'test@gmail.com','password':'Hello'})
-            .end(function(err, res)
-            {
-                expect(err).to.eql(null)
-                res.should.have.status(401);
-                done();
-            });
-    });
-
-
-});
-
-
+//The preferences Test Suite
 describe('Preferences Test Suite', function()
 {
 
@@ -170,7 +126,7 @@ describe('Preferences Test Suite', function()
 
 
 
-    it('Should be able to retrieve preferenes when user id is provided', function (done)
+    it('Should be able to retrieve preferences when user id is provided', function (done)
     {
         expect(signup).to.eql(true);
 
@@ -191,15 +147,10 @@ describe('Preferences Test Suite', function()
 
 
 
-    it('Should be return null when no matching user id is found', function (done)
+    it('Should be able return null when no matching user id is found', function (done)
     {
         expect(signup).to.eql(true);
 
-        afterEach(function(done)
-        {
-            mongoose.connection.db.collection('preferences').drop();
-            done();
-        });
 
         chai.request(server)
             .get('/preferences/'+ user.id+"10394")
@@ -210,7 +161,11 @@ describe('Preferences Test Suite', function()
                 expect(res.body).to.eql({});
                 done();
             });
+
+        profile.runProfileTests(user.id)
     });
+
+
 
 });
 
