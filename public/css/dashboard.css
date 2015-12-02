@@ -105,3 +105,46 @@ h4
     white-space: nowrap;
     position: fixed;
 }
+.icon-myStyle{
+    height : 30px;
+    width : 30px;
+}
+
+.sameLine{
+    border: 1px solid black;
+    width: 70px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.sameline {
+    width:100%;
+    height:auto;
+    padding:1%;
+}
+
+
+.iconDetails {
+ margin-left:2%;
+float:left; 
+height:40px;
+width:40px; 
+} 
+
+.left {
+  float: left;
+  text-align: right;
+  margin: 2px 10px;
+  display: inline
+}
+.right {
+  float: left;
+  text-align: left;
+  margin: 2px 10px;
+  display: inline
+}
+
+#close{
+    
+    margin-left: 90%;
+}

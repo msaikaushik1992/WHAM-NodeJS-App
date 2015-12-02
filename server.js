@@ -14,6 +14,7 @@ var apicache = require('apicache').options({ debug: true }).middleware;
 
 var User = require('./public/models/user');
 var Preferences = require('./public/models/preferences');
+var Event = require('./public/models/eventS');
 
 
 
@@ -37,6 +38,11 @@ app.get("/preferences/:id",Preferences.getUserPreferences);
 app.get("/profileinfo/:id",Preferences.getUserProfile);
 app.put("/updatePreferences/:id",Preferences.updateProfile);
 app.put("/updatePassword/:id",User.updatePassword);
+app.post("/addComment/:eventid", Event.insertComment);
+app.get("/getEvent/:eventid", Event.getEvent);
+app.post("/increaseLikeEvent/:eventid/:email", Event.increaseLikeCount);
+app.post("/increaseDislikeEvent/:eventid/:email", Event.increasedisLikeCount);
+app.delete("/deleteComment/:eventid/:commentid", Event.deleteComment);
 
 
 app.get("/logout",function(req,res){
