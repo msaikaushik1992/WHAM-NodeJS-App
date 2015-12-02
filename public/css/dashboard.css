@@ -99,8 +99,7 @@ h4
 }
 
 .map{
-    height: 300px;
-    width: 1050px;
+    height: 350px;
     overflow: auto;
     white-space: nowrap;
     position: fixed;
