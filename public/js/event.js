@@ -36,7 +36,7 @@ angular.module('angularApp')
         var initializaMap = function initialize() {
             var mapProp = {
                 center: new google.maps.LatLng($routeParams.lat, $routeParams.lon),
-                zoom: 10,
+                zoom: 13,
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
 
