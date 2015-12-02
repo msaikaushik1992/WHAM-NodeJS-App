@@ -31,8 +31,13 @@
 
 
 <div class="container profile-form center-block">
-    <form name="frm" >
 
+
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Profile Information</div>
+        <div class="panel-body">
+    <form name="frm" >
         <div class="form-group">
             <div class="row">
                 <div class="col-md-6">
@@ -107,8 +112,8 @@
             <button ng-disabled="frm.$invalid" ng-click="update(pref)" class="btn btn-primary">Update Profile</button>
         </div>
     </form>
-
-
+            </div>
+        </div>
 
     <div ng-if="error==false" class="alert alert-success alert-dismissible" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -119,6 +124,70 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <strong>Warning!</strong>An error occured.Please try again.
     </div>
+
+    <br/>
+    <br/>
+
+
+    <div class="panel panel-default">
+    <div class="panel-heading">Reset Password</div>
+    <div class="panel-body">
+        <form name="forgot">
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Current Password</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="password" placeholder="Enter your old password" class="form-control" name="password1" ng-model="resetPass.oldPassword"  required />
+                        <span class="span-error" ng-show="forgot.password1.$dirty && forgot.password1.$error.required">This Field is Required</span>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>New Password</label>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="password" placeholder="Enter your new password" class="form-control" name="newpassword" ng-model="resetPass.newPassword"  required />
+                        <span class="span-error" ng-show="forgot.newpassword.$dirty && forgot.newpassword.$error.required">This Field is Required</span>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+
+            <div class="form-group">
+                <button ng-disabled="forgot.$invalid" ng-click="updatePassword(resetPass)" class="btn btn-primary">Change Password</button>
+            </div>
+
+            <div ng-if="errorResetPassword==false" class="alert alert-success alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Success!</strong>Your Password has been updated.
+            </div>
+
+            <div ng-if="errorResetPassword==true" class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <strong>Warning!</strong>An error occured during password update OR Incorrect Password Entered.
+            </div>
+
+        </form>
+        </div>
+       </div>
+
+
+
+</div>
+
+
+
+
+
 
 
 </div>
