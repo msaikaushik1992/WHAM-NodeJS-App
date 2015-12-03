@@ -45,12 +45,30 @@ app.post("/increaseDislikeEvent/:eventid/:email", Event.increasedisLikeCount);
 app.delete("/deleteComment/:eventid/:commentid", Event.deleteComment);
 
 
-app.get("/logout",function(req,res){
+app.get("/logout",function(req,res)
+{
 
  req.logout();
- res.sendStatus(200);
+ res.send(200);
 
 
+});
+
+locationObj={'lat':undefined,'long':undefined}
+
+
+app.post("/location",function(req,res)
+{
+    location=req.body;
+    locationObj.lat=location.lat;
+    locationObj.long=location.long;
+    res.send('sucess');
+});
+
+
+app.get("/getLocation", function(req,res)
+{
+    res.send(locationObj);
 });
 
 
@@ -60,7 +78,7 @@ app.get("/eventsByLocation/:locationObj",apicache('5 minutes'),function(req,res)
 {
    var locationObj=JSON.parse(req.params.locationObj);
    requestify.get('http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location='
-       + locationObj.lat + "," + locationObj.long + '&date=Future&within=5&page_size=20&sort_order=popularity')
+       + locationObj.lat + "," + locationObj.long + '&date=Future&within=5&page_size=100&sort_order=popularity')
        .then(function(response)
    {
 
@@ -85,7 +103,7 @@ app.get("/eventsByLocationAndPreference/:locationPrefObj",apicache('5 minutes'),
 {
     var locPrefObj=JSON.parse(req.params.locationPrefObj);
     requestify.get("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L" +
-        "&location="+locPrefObj.location.lat+","+locPrefObj.location.long+"&date=Future&within=5&page_size=100" +
+        "&location="+locPrefObj.location.lat+","+ locPrefObj.location.long + "&date=Future&within=5&page_size=100" +
         "&category="+locPrefObj.categories +"&sort_order=popularity")
         .then(function(response)
         {
