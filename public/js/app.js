@@ -2,6 +2,7 @@
 var angularApp = angular.module('angularApp', ['ngRoute','door3.css','ngCookies']);
 
 
+
 angularApp.service('webservice',function($http)
 {
     var self = this;
@@ -70,8 +71,31 @@ angularApp.service('webservice',function($http)
                 lat: position.coords.latitude,
                 long: position.coords.longitude
             }
-            console.log(positionObj.lat);
-            resolve(positionObj);
+            $http.get("getLocation").success(function(response) {
+                if (response.lat == undefined) {
+
+                    $http.post("location", positionObj).success(function (response) {
+                        resolve(positionObj);
+                    });
+                }
+                else{
+                    if (((response.lat - positionObj.lat ) > 0.01 || (positionObj.lat - response.lat) > 0.01)
+                        || ((response.long - positionObj.long) > 0.01 || (positionObj.long - response.long) > 0.01)) {
+
+                        console.log("Changing co-ords");
+                        console.log(positionObj.lat);
+                        resolve(positionObj);
+                    }
+                    else {
+
+                        console.log('Keeping Old co-ords');
+                        console.log(response.lat);
+                        resolve(response);
+                    }
+                }
+            });
+
+
         }
     });
 

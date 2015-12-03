@@ -7,6 +7,8 @@ angular.module('angularApp')
         $scope.numLike = 0;
         $scope.numDislike = 0;
 
+        $scope.loggedin=false;
+
         var requestDone = $q.defer();
 
         function findEventData() {
@@ -28,9 +30,20 @@ angular.module('angularApp')
         }
 
         var user = checkLoggedinUser().
-            then(function (loggedInUser) {
-                $scope.user = loggedInUser;
-                console.log($scope.user);
+            then(function (loggedInUser)
+            {
+                if(loggedInUser==='0')
+                {
+                    $scope.loggedin=false;
+                }
+                else
+                {
+
+                    $scope.user = loggedInUser;
+                    console.log($scope.user);
+                    $scope.loggedin = true;
+                    $scope.name = loggedInUser.fname;
+                }
             });
 
         var initializaMap = function initialize() {
@@ -55,10 +68,12 @@ angular.module('angularApp')
             function (payload) {
                 console.log(payload);
                 var comments = payload.comments;
-                $scope.commentSection = comments.length + ' comments';
-                $scope.comments = payload.comments;
-                $scope.numLike = payload.likes.length;
-                $scope.numDislike = payload.dislikes.length;
+                if(comments!==undefined) {
+                    $scope.commentSection = comments.length + ' comments';
+                    $scope.comments = payload.comments;
+                    $scope.numLike = payload.likes.length;
+                    $scope.numDislike = payload.dislikes.length;
+                }
             });
         eventData.then(
              function (payload) {
@@ -258,5 +273,18 @@ angular.module('angularApp')
                 $scope.commentSection = commentCount + " comments";
             })
         };
+
+
+        //Implement the logout function
+
+        $scope.logout = function ()
+        {
+            $http.get("/logout")
+                .success(function (response) {
+
+                    window.location.reload();
+                    $scope.loggedin=false;
+                });
+        }
 
     }]);

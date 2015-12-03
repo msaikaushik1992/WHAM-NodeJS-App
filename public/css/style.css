@@ -91,3 +91,7 @@ footer {
         height: 70%;
     }
 }
+
+a:hover {
+    cursor:pointer;
+}
