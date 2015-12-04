@@ -86,6 +86,9 @@ angular.module('angularApp')
 
                  // description
                  $scope.eventDescription = payload.data.description;
+                 if(payload.data.categories){
+                     $scope.eventCategories = payload.data.categories.category;
+                 }
 
                  // image
                  if (payload.data.images) {
