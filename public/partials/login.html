@@ -1,6 +1,6 @@
 <div ng-include="'partials/navbar.html'"></div>
 
-<div class="container center-block">
+<div class="container col-md-6 center-block">
     <form name="frm" >
         <legend>Login</legend>
 
@@ -16,7 +16,8 @@
             <input type="password" placeholder="Password" class="form-control" name="password" ng-model="user.password"  required />
         </div>
 
-        <h3 ng-if="invalid">Wrong email and password combination</h3>
+        <h4 ng-if="error">Wrong email and password combination</h4>
+        <h4 ng-if="invalid">Can't find this account.Please Sign Up First</h4>
 
         <br />
         <div class="form-group">

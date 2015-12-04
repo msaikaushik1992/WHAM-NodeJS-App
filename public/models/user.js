@@ -160,7 +160,7 @@ passport.use(new LocalStrategy({
                 else
                 {
                     user=null
-                    return done(null,user);
+                    return done(null,'error');
                 }
             }
 

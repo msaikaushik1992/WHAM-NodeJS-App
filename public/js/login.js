@@ -14,6 +14,13 @@ angular.module('angularApp').controller('LoginController', ['$scope', '$http', '
                 {
                     console.log("Response is null");
                     $scope.invalid = true;
+                    $scope.error=false;
+                }
+                else if (response=='error')
+                {
+                    console.log(response);
+                    $scope.error=true;
+                    $scope.invalid=false;
                 }
                 else
                 {
