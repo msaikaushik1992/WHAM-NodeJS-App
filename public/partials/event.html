@@ -4,7 +4,7 @@
     <div class="container">
         <div class="col-sm-12" style="" contenteditable="false">
             <div class="panel panel-primary target">
-                <div class="panel-heading" contenteditable="false">{{eventTitle}}</div>
+                <div class="panel-heading" contenteditable="false">{{eventTitle}} @ {{eventVenue}}</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-3">
@@ -19,9 +19,21 @@
                             <div class="thumbnail">
                                 <div class="caption">
                                     <h5 class="media-heading">{{eventVenue}}</h5>
-                                    <h5>{{eventDescription}}</h5>
+
+                                    <h5 ng-if="eventDescription==null && eventCategories==null">
+                                        Currently, we do not have much information about {{eventTitle}}.
+                                    </h5>
+                                    <h5 ng-if="eventDescription==null && eventCategories!==null">
+                                        {{eventTitle}} belongs to the following categories:
+                                        <span ng-repeat="c1 in eventCategories"> {{c1.name}}</span>
+                                    </h5>
+                                    <h5 ng-if="eventDescription!==null">
+                                        {{eventDescription}}
+                                    </h5>
+
                                     <h5 ng-if="eventCost==null">
-                                        Sorry, information about the cost of this event is not available.
+                                        Sorry, information about the cost of this event is not available. Please view the
+                                        description or visit their website.
                                     </h5>
                                     <h5 ng-if="eventCost!=null">
                                         This event costs {{eventCost}}.
@@ -54,6 +66,7 @@
                                         <h5 ng-if="l.type=='Official Site'"> <a href="l.url" target="_blank"> {{l.type}} </a> </h5>
                                         <h5 ng-if="l.type=='Tickets'"> <a href={{l.url}} target="_blank"> {{l.type}}</a> </h5>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
