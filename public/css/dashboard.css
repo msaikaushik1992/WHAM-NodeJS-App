@@ -143,6 +143,11 @@ width:40px;
   display: inline
 }
 
+.loading-sentence
+{
+    margin-left: 30%;
+}
+
 #close{
     
     margin-left: 90%;
