@@ -44,6 +44,13 @@
                                     <h5 ng-if="eventTimingInformation!=null">
                                         {{eventTimingInformation}}
                                     </h5>
+
+                                    <div ng-repeat="l in eventLinks">
+                                        <h5 ng-if="l.type=='Official Site'"> <a href="l.url" target="_blank"> {{l.type}} </a> </h5>
+                                        <h5 ng-if="l.type=='Tickets'"> <a href={{l.url}} target="_blank"> {{l.type}}</a> </h5>
+                                    </div>
+                                    <br />
+
                                     <div class="left">
                                         <a ng-click="incrementLikeCount()">
                                             <img src="../images/Like.jpg" class="icon-myStyle iconDetails" />
@@ -60,18 +67,14 @@
                                             <h4>{{numDislike}}</h4>
                                         </div>
                                     </div>
-                                    <br />
-                                    <br />
-                                    <div ng-repeat="l in eventLinks">
-                                        <h5 ng-if="l.type=='Official Site'"> <a href="l.url" target="_blank"> {{l.type}} </a> </h5>
-                                        <h5 ng-if="l.type=='Tickets'"> <a href={{l.url}} target="_blank"> {{l.type}}</a> </h5>
+                                    <div class="right">
+                                        <span class='st_facebook_large' displayText='Facebook'></span>
+                                        <span class='st_twitter_large' displayText='Tweet'></span>
+                                        <span class='st_googleplus_large' displayText='Google +'></span>
+                                        <span class='st_email_large' displayText='Email'></span>
                                     </div>
-
-                                    <span class='st_facebook_large' displayText='Facebook'></span>
-                                    <span class='st_twitter_large' displayText='Tweet'></span>
-                                    <span class='st_googleplus_large' displayText='Google +'></span>
-                                    <span class='st_email_large' displayText='Email'></span>
-
+                                    <br />
+                                    <br />
                                 </div>
                             </div>
                         </div>
