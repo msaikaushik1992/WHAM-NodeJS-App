@@ -176,11 +176,11 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
                requestDone.promise.then(function () {
                    $scope.loading = false;
-                   $scope.array = new Array(Math.round($scope.eventData.length / 9));
+                   $scope.array = new Array(Math.round($scope.eventData.length / 12));
                    for (var i = 0; i < $scope.array.length; i++) {
                        $scope.array[i] = i + 1;
                    }
-                   $scope.dataPerPage=$scope.eventData.slice(0,9);
+                   $scope.dataPerPage=$scope.eventData.slice(0,12);
                    generateMap($scope);
                    $scope.isSelected=1;
                });
@@ -191,7 +191,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
       $scope.paginate = function(event,i)
       {
-          $scope.dataPerPage=$scope.eventData.slice((i-1)*9,(i-1)*9+9);
+          $scope.dataPerPage=$scope.eventData.slice((i-1)*12,(i-1)*12+12);
           console.log($scope.dataPerPage);
           var averageLatitude = 0,averageLongitude = 0;
           var dpp = $scope.dataPerPage;

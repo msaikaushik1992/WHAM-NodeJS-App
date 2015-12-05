@@ -15,25 +15,27 @@
             <h1 class="page-header">
                 Welcome to Social Compass!
             </h1>
-            <div  ng-repeat = "e in dataPerPage" class="col-md-4">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h2 class="panel-title"><a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}">{{e.title}}</a></h2>
-                    </div>
-                    <div class="panel-body">
-                        <div class="image-body" ng-if="e.image==null">
-                            <img src="../images/no-image.jpg" height="70" width="100"/>
-                        </div>
-
-                        <div class="image-body" ng-if="e.image!==null">
-                           <img src="{{e.image.medium.url}}"/>
-                        </div>
-                        <div class="event-info">
-                            <p>{{e.title}} is going to held at {{e.venue_name}} in {{e.city_name}} </p>
-                            <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}"  class="btn btn-default">Learn More</a>
-                        </div>
+            <div ng-repeat = "e in dataPerPage"  class="col-sm-3">
+                <div class="card">
+                    <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
+                    <div class="avatar" ng-if="e.image==null">
+                        <img src="../images/no-image.jpg"/>
                     </div>
 
+                    <div class="avatar" ng-if="e.image!==null">
+                       <img src="{{e.image.medium.url}}"/>
+                    </div>
+                    <div class="content">
+                        <h4>
+                            <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}" alt="{{e.title}}">
+                                {{e.title | limitTo: 40}} {{e.title.length > 40 ? '...' : ''}}
+                            </a>
+                        </h4>
+                        <p class="details">Location: {{e.venue_name}}, {{e.city_name}} </p>
+                        <p>
+                            <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}"  class="btn btn-default">Go to the Event</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
