@@ -13,7 +13,17 @@ var Preferences = require('../public/models/preferences');
 
 exports.runProfileTests=function(id)
 {
-    describe('Profile Test Suite', function () {
+    describe('Profile Test Suite', function ()
+    {
+
+        after(function(done)
+        {
+            mongoose.connection.db.collection('users').drop();
+            mongoose.connection.db.collection('preferences').drop();
+            console.log("Dropped All Test Collections");
+            done();
+        });
+
 
         it('It should retrieve the correct information of the user /profile GET', function (done) {
 
@@ -85,14 +95,6 @@ exports.runProfileTests=function(id)
 
 
         it('It should return error when no record is found', function (done) {
-
-            afterEach(function(done)
-            {
-                mongoose.connection.db.collection('users').drop();
-                mongoose.connection.db.collection('preferences').drop();
-                console.log("Dropped All Test Collections");
-                done();
-            });
 
             chai.request(server)
                 .put('/updatePassword/'+ null)
