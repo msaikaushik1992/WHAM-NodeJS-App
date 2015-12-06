@@ -50,8 +50,9 @@ exports.runLoginTests=function(signup)
                 .send({'email':'test@gmail.com','password':'Hello'})
                 .end(function(err, res)
                 {
-                    expect(err).to.eql(null)
-                    res.should.have.status(401);
+                    expect(err).to.eql(null);
+                    res.text.should.equal('error');
+                    res.should.have.status(200);
                     done();
                 });
         });
