@@ -1,10 +1,10 @@
-﻿<div ng-include="'partials/navbar.html'"></div>
+﻿﻿<div ng-include="'partials/navbar.html'"></div>
 <div class="container center-block">
     <br /><br />
     <div class="container">
         <div class="col-sm-12" style="" contenteditable="false">
             <div class="panel panel-primary target">
-                <div class="panel-heading" contenteditable="false">{{eventTitle}} @ {{eventVenue}}</div>
+                <div class="panel-heading" contenteditable="false">{{eventTitle}}</div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-md-3">
@@ -14,26 +14,40 @@
                             <span ng-if="eventImageUrl!=null">
                                 <img src="{{eventImageUrl}}" height="200" width="200" />
                             </span>
+                            <div class="container">
+                                <div class="left col-md-1">
+                                    <div class="row">
+                                        <a ng-click="like()">
+                                            <img src="../images/Like.jpg" class="icon-myStyle iconDetails" />
+                                        </a>
+                                        <div style='margin-left:60px;'>
+                                            <h4>{{numLike}}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <a  style='margin-right:50px;'ng-if="unlike==true" ng-click="unlikeEvent()">Unlike</a>
+                                    </div>
+
+                                </div>
+                                <div class="right col-md-1">
+                                    <div class="row">
+                                        <a ng-click="displayAlert()">
+                                            <img src="../images/Dislike.jpg" class="icon-myStyle iconDetails" />
+                                        </a>
+                                        <div style='margin-left:60px;'>
+                                            <h4>{{numDislike}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-5">
                             <div class="thumbnail">
                                 <div class="caption">
                                     <h5 class="media-heading">{{eventVenue}}</h5>
-
-                                    <h5 ng-if="eventDescription==null && eventCategories==null">
-                                        Currently, we do not have much information about {{eventTitle}}.
-                                    </h5>
-                                    <h5 ng-if="eventDescription==null && eventCategories!==null">
-                                        {{eventTitle}} belongs to the following categories:
-                                        <span ng-repeat="c1 in eventCategories"> {{c1.name}}</span>
-                                    </h5>
-                                    <h5 ng-if="eventDescription!==null">
-                                        {{eventDescription}}
-                                    </h5>
-
+                                    <h5>{{eventDescription}}</h5>
                                     <h5 ng-if="eventCost==null">
-                                        Sorry, information about the cost of this event is not available. Please view the
-                                        description or visit their website.
+                                        Sorry, information about the cost of this event is not available.
                                     </h5>
                                     <h5 ng-if="eventCost!=null">
                                         This event costs {{eventCost}}.
@@ -45,36 +59,12 @@
                                         {{eventTimingInformation}}
                                     </h5>
 
+                                    <br />
+                                    <br />
                                     <div ng-repeat="l in eventLinks">
                                         <h5 ng-if="l.type=='Official Site'"> <a href="l.url" target="_blank"> {{l.type}} </a> </h5>
                                         <h5 ng-if="l.type=='Tickets'"> <a href={{l.url}} target="_blank"> {{l.type}}</a> </h5>
                                     </div>
-                                    <br />
-
-                                    <div class="left">
-                                        <a ng-click="incrementLikeCount()">
-                                            <img src="../images/Like.jpg" class="icon-myStyle iconDetails" />
-                                        </a>
-                                        <div style='margin-left:60px;'>
-                                            <h4>{{numLike}}</h4>
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <a ng-click="incrementDisLikeCount()">
-                                            <img src="../images/Dislike.jpg" class="icon-myStyle iconDetails" />
-                                        </a>
-                                        <div style='margin-left:60px;'>
-                                            <h4>{{numDislike}}</h4>
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <span class='st_facebook_large' displayText='Facebook'></span>
-                                        <span class='st_twitter_large' displayText='Tweet'></span>
-                                        <span class='st_googleplus_large' displayText='Google +'></span>
-                                        <span class='st_email_large' displayText='Email'></span>
-                                    </div>
-                                    <br />
-                                    <br />
                                 </div>
                             </div>
                         </div>
@@ -130,6 +120,14 @@
                     <hr class="col-md-9" />
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="overlay-for-contacts2" >
+        <div class="alert alert-danger" id="overlay-for-contacts-inside2">
+            <p><h4>This event would be blacklisted and would appear
+                   no more on your profile.Do you want to continue?</h4></p>
+            <button type="button" class="btn closebutton2 btn-default"   ng-click="dislike()">Continue</button>
+            <button type="button"  class="btn  btn-default closebutton2"  value="Close">Close</button>
         </div>
     </div>
 </div>

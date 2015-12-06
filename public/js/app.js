@@ -147,12 +147,54 @@ angularApp.config(function($routeProvider)
         when('/set-preferences', {
             templateUrl: 'partials/set-preferences.html',
             css: 'css/set-preferences.css',
-            controller: 'SetPreferencesController'
+            controller: 'SetPreferencesController',
+            resolve: {
+                loggedin: function ($q, $timeout, $http, $location, $rootScope) {
+
+
+                    var deferred = $q.defer();
+                    $http.get('/loggedin').success(function (user) {
+
+                        $rootScope.errorMessage = null;
+                        if (user !== '0') {
+                            $rootScope.currentUser = user;
+                            deferred.resolve();
+                        }
+                        else {
+
+                            $rootScope.errorMessage = 'You need to log in';
+                            deferred.reject();
+                            $location.url('/login');
+                        }
+                    });
+                },
+            }
         }).
-        when('/profile', {
+        when('/profile',{
             templateUrl: 'partials/profile.html',
             css: 'css/profile.css',
-            controller: 'ProfileController'
+            controller: 'ProfileController',
+        resolve: {
+            loggedin: function ($q, $timeout, $http, $location, $rootScope) {
+
+
+                var deferred = $q.defer();
+                $http.get('/loggedin').success(function (user) {
+
+                    $rootScope.errorMessage = null;
+                    if (user !== '0') {
+                        $rootScope.currentUser = user;
+                        deferred.resolve();
+                    }
+                    else {
+
+                        $rootScope.errorMessage = 'You need to log in';
+                        deferred.reject();
+                        $location.url('/login');
+                    }
+                });
+            },
+        }
         }).
         when('/event/:id/:lat/:lon', {
             templateUrl: 'partials/event.html',

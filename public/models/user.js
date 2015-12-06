@@ -5,15 +5,37 @@ var LocalStrategy = require('passport-local').Strategy;
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var Schema = mongoose.Schema;
+var q = require('q');
 
 var UserSchema=mongoose.Schema({
     fname  :  { type: String, required: true},
     lname  :  { type: String, required: true},
     email  :  { type: String, required: true, unique: true},
-    password : { type: String, required: true}
+    password : { type: String}
 });
 
 UserModel = mongoose.model('User',UserSchema);
+
+
+exports.FindUserByEmail = function (emailid)
+{
+    var deferred = q.defer();
+    UserModel.findOne({ email: emailid }, function (err, user)
+    {
+        if(!err)
+        {
+            console.log(user);
+            deferred.resolve(user);
+        }
+        else
+        {
+            console.log('error occured');
+        }
+
+    });
+    return deferred.promise;
+}
+
 
 exports.updatePassword=function (req, res) {
 
@@ -72,6 +94,41 @@ exports.insertUser=function (req, res)
 
     });
 };
+
+
+exports.createUser = function (user)
+{
+    var deferred = q.defer();
+    var newUser = new UserModel(user);
+    console.log(newUser);
+    newUser.save(function(err)
+    {
+
+        if(err)
+        {
+            console.log("Error Occured");
+            res.send('error');
+        }
+        else
+        {
+            UserModel.findOne({ email: user.email }, function (err, user)
+            {
+                if(!err)
+                {
+                    console.log(user);
+                    deferred.resolve(user);
+                }
+                else
+                {
+                    console.log('error occured during auth');
+                }
+
+            });
+        }
+
+    });
+    return deferred.promise;
+}
 
 
 exports.getUserInfo=function (req, res)

@@ -6,8 +6,8 @@
 
         <div class="form-group">
             <input type="email"  placeholder="Email" class="form-control" name="email" ng-model="user.email" required />
-            <span  class="well" ng-show="frm.email.$dirty && frm.email.$error.required">Email is required</span>
-            <span class="well" ng-show="frm.email.$dirty && frm.email.$error.email">Not a valid email</span>
+            <span  class="well errors" ng-show="frm.email.$dirty && frm.email.$error.required">Email is required</span>
+            <span class="well errors" ng-show="frm.email.$dirty && frm.email.$error.email">Not a valid email</span>
         </div>
 
         <br/>
@@ -17,11 +17,17 @@
         </div>
 
         <h4 ng-if="error">Wrong email and password combination</h4>
-        <h4 ng-if="invalid">Can't find this account.Please Sign Up First</h4>
+        <h4 ng-if="invalid ">Can't find this account.Please Sign Up First</h4>
 
         <br />
         <div class="form-group">
             <button ng-disabled="frm.$invalid" ng-click="login(user)" class="btn btn-success">Log On</button>
+        </div>
+        <div class="form-group">
+            <a class="btn btn-block btn-social btn-facebook btn-lg" href="/auth/facebook">
+                <span class="fa fa-facebook-square"></span> Sign in with Facebook
+                <br/>
+            </a>
         </div>
     </form>
 </div>
