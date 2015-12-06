@@ -1,16 +1,36 @@
 <div ng-include="'partials/navbar.html'"></div>
 <div class="container center-block">
-
         <div class="col-sm-12 col-md-12 col-lg-12 row">
             <div id="map" class="map col-sm-12 col-md-12 col-lg-12"></div>
         </div>
-
-
 </div>
 
 <div class="container center-block">
+    <div class="col-sm-12 col-md-12 col-lg-12 row">
+        <br/>
+        <div class="col-md-2">
+            <span class="search-label">Search Events:</span>
+        </div>
+       
+        <div class="col-md-3">
+            <input id="searchText" name="searchText" type="text" placeholder="Search Event" class="form-control input-md" ng-model="search.query">
+        </div>
+       
+        <div class="col-md-3">
+            <input id="searchCategory" name="searchCategory" type="text" placeholder="Search by category" class="form-control input-md" ng-model="search.cat">
+        </div>
+        <!-- Text input-->
+        <div class="col-md-3">
+            <input id="searchLocation" name="searchLocation" type="text" placeholder="Search by location" class="form-control input-md" ng-model="search.loc">
+        </div>
 
-
+        <!-- Button -->
+        <div class="col-md-1">
+            <button id="singlebutton" ng-click="searchEvents(search)" name="singlebutton" class="btn btn-primary">Search</button>
+        </div>
+    </div>
+</div>
+<div class="container center-block">
         <div class="col-sm-12 col-md-12 col-lg-12 row">
             <h1 class="page-header">
                 Welcome to Social Compass!

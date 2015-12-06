@@ -1,123 +1,98 @@
-angular.module('angularApp').controller('DashboardController', ['$scope', '$http', '$location','webservice','$q','$log','$route','$rootScope', function ($scope, $http, $location,webservice,$q,$log,$route,$rootScope) {
-
-
-
-    $(document).ready(function ()
-    {
-
+angular.module('angularApp').controller('DashboardController', 
+  ['$scope', '$http', '$location','webservice','$q','$log','$route','$rootScope', 
+  function ($scope, $http, $location,webservice,$q,$log,$route,$rootScope) {
+    
+    $(document).ready(function () {
         //this will attach the class to every target
         $("li").on('click', function (event) {
             $target = $(event.target);
             $target.addClass('active');
             console.log("Clicked");
         });
-
-    })
-
+    });
 
     $scope.loading=true;
-    if($rootScope.currentUser)
-    {
+
+    $scope.searchEvents= function(search) {
+        // body...
+        var searchByQuery = ((typeof search.query != "undefined") ? search.query : "");
+        var searchByCategory = ((typeof search.cat != "undefined") ? search.cat : "");
+        var searchByLocatioin = ((typeof search.loc != "undefined") ? search.loc : "");
+        console.log("Query:" +searchByQuery+ " Category:" +searchByCategory+ " Location:" + searchByLocatioin);
+
+
+    }
+
+    if($rootScope.currentUser) {
+
         console.log($rootScope.currentUser);
         $scope.loggedin = true;
         $scope.name = $rootScope.currentUser.fname;
         $scope.id= $rootScope.currentUser.id;
         $http.get("/preferences/"+ $rootScope.currentUser.id)
-            .success(function (response)
-            {
-                if (response == 'error')
-                {
+            .success(function (response) {
+                if (response == 'error') {
                     console.log("Error Occured");
-                }
-                else if(response=='empty')
-                {
+                } else if(response=='empty') {
                     $location.url('/set-preferences');
-                }
-                else
-                {
+                } else {
                     console.log(response);
-                     populateDashboard(response);
+                    populateDashboard(response);
                 }
             })
-            .error(function (response)
-            {
-
+            .error(function (response) {
                 console.log("Error Occured");
-
             });
-    }
-    else
-    {
-
-
+    } else {
         var loggedInStatus = webservice.checkLoggedIn;
         var populate = $q.defer();
+
+
         loggedInStatus.then(
-            function (response) {
+            function (response) 
+            {
                 if (response == '0') {
                     $scope.loggedin = false;
                     console.log(response);
                     $scope.$apply();
                     $scope.prefs=null;
-                  populate.resolve();
-
-
-                }
-                else {
+                    populate.resolve();
+                } else {
                     $scope.loggedin = true;
                     $scope.name = response.fname;
                     $scope.id = response.id;
                     console.log($scope.name);
                     $scope.$apply();
                     $http.get("/preferences/"+ response.id)
-                        .success(function (response)
-                        {
-                            if (response == 'error')
-                            {
+                        .success(function (response) {
+                            if (response == 'error') {
                                 console.log("Error Occured");
-                            }
-                            else if(response=='empty')
-                            {
+                            } else if(response=='empty') {
                                 $location.url('/set-preferences');
-                            }
-                            else
-                            {
+                            } else {
                                 console.log(response);
                                 $scope.prefs=response;
                                 populate.resolve();
                             }
-                        })
-                        .error(function (response)
-                        {
-
+                        }).error(function (response) {
                             console.log("Error Occured");
-
                         });
-
                 }
             },
             function (errorPayload) {
                 $log.error('Error checking Log In Status', errorPayload);
             });
 
-
-        populate.promise.then(function ()
-        {
+        // complete promise
+        populate.promise.then(function () {
             populateDashboard($scope.prefs);
         });
     }
 
-
-
-
-
-
-
     /*Function to populate the dashboard with events.
      Called only when the promise resolves.*/
 
-
-      function populateDashboard(userPrefs) {
+    function populateDashboard(userPrefs) {
 
           console.log("User Preferences:" + userPrefs);
           var requestFinished = $q.defer();
@@ -263,7 +238,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
     function generateMap($scope){
       $scope.markers = [];
 
-      var labels= "123456789";
+      var labels= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
       labelIndex=0;
       var gm = google.maps;
       var map = new gm.Map(document.getElementById('map'), {
