@@ -11,7 +11,7 @@ var Preferences = require('../public/models/preferences');
 
 var profile = require('./profile-tests');
 var login = require('./login-tests');
-
+var event=require('./event-tests');
 
 chai.use(chaiHttp);
 
@@ -162,7 +162,8 @@ describe('Preferences Test Suite', function()
                 done();
             });
 
-        profile.runProfileTests(user.id)
+        profile.runProfileTests(user.id);
+        event.runEventTests(user.id);
     });
 
 
