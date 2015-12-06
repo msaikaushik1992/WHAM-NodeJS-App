@@ -14,6 +14,32 @@
                             <span ng-if="eventImageUrl!=null">
                                 <img src="{{eventImageUrl}}" height="200" width="200" />
                             </span>
+                            <div class="container">
+                                <div class="left col-md-1">
+                                    <div class="row">
+                                        <a ng-click="like()">
+                                            <img src="../images/Like.jpg" class="icon-myStyle iconDetails" />
+                                        </a>
+                                        <div style='margin-left:60px;'>
+                                            <h4>{{numLike}}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <a  style='margin-right:50px;'ng-if="unlike==true" ng-click="unlikeEvent()">Unlike</a>
+                                    </div>
+
+                                </div>
+                                <div class="right col-md-1">
+                                    <div class="row">
+                                        <a ng-click="displayAlert()">
+                                            <img src="../images/Dislike.jpg" class="icon-myStyle iconDetails" />
+                                        </a>
+                                        <div style='margin-left:60px;'>
+                                            <h4>{{numDislike}}</h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-md-5">
                             <div class="thumbnail">
@@ -32,22 +58,7 @@
                                     <h5 ng-if="eventTimingInformation!=null">
                                         {{eventTimingInformation}}
                                     </h5>
-                                    <div class="left">
-                                        <a ng-click="incrementLikeCount()">
-                                            <img src="../images/Like.jpg" class="icon-myStyle iconDetails" />
-                                        </a>
-                                        <div style='margin-left:60px;'>
-                                            <h4>{{numLike}}</h4>
-                                        </div>
-                                    </div>
-                                    <div class="right">
-                                        <a ng-click="incrementDisLikeCount()">
-                                            <img src="../images/Dislike.jpg" class="icon-myStyle iconDetails" />
-                                        </a>
-                                        <div style='margin-left:60px;'>
-                                            <h4>{{numDislike}}</h4>
-                                        </div>
-                                    </div>
+
                                     <br />
                                     <br />
                                     <div ng-repeat="l in eventLinks">
@@ -109,6 +120,14 @@
                     <hr class="col-md-9" />
                 </div>
             </div>
+        </div>
+    </div>
+    <div id="overlay-for-contacts2" >
+        <div class="alert alert-danger" id="overlay-for-contacts-inside2">
+            <p><h4>This event would be blacklisted and would appear
+                   no more on your profile.Do you want to continue?</h4></p>
+            <button type="button" class="btn closebutton2 btn-default"   ng-click="dislike()">Continue</button>
+            <button type="button"  class="btn  btn-default closebutton2"  value="Close">Close</button>
         </div>
     </div>
 </div>

@@ -21,6 +21,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
         console.log($rootScope.currentUser);
         $scope.loggedin = true;
         $scope.name = $rootScope.currentUser.fname;
+        $scope.id=$rootScope.currentUser.id;
         $http.get("/preferences/"+ $rootScope.currentUser.id)
             .success(function (response)
             {
@@ -52,7 +53,9 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
         var loggedInStatus = webservice.checkLoggedIn;
         var populate = $q.defer();
         loggedInStatus.then(
-            function (response) {
+            function (response)
+            {
+                console.log(response);
                 if (response == '0') {
                     $scope.loggedin = false;
                     console.log(response);
@@ -65,6 +68,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
                 else {
                     $scope.loggedin = true;
                     $scope.name = response.fname;
+                    $scope.id = response.id;
                     console.log($scope.name);
                     $scope.$apply();
                     $http.get("/preferences/"+ response.id)
@@ -174,15 +178,52 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
               }
 
-               requestDone.promise.then(function () {
-                   $scope.loading = false;
-                   $scope.array = new Array(Math.round($scope.eventData.length / 9));
-                   for (var i = 0; i < $scope.array.length; i++) {
-                       $scope.array[i] = i + 1;
+               requestDone.promise.then(function ()
+               {
+                   if($scope.loggedin)
+                   {
+                       var data=$scope.eventData;
+                       $http.get('/getDislikedEvents/' + $scope.id)
+                           .success(function (res)
+                           {
+
+                               if(res!==null)
+                               {
+                                   for (var i = 0; i < data.length; i++)
+                                   {
+
+                                       if (res.hasOwnProperty(data[i].id))
+                                       {
+                                           data.splice(i, 1);
+                                           console.log('deleted');
+                                           i--;
+                                       }
+                                   }
+                               }
+
+                                   $scope.eventData = data;
+                                   $scope.loading = false;
+                                   $scope.array = new Array(Math.round($scope.eventData.length / 9));
+                                   for (var i = 0; i < $scope.array.length; i++) {
+                                       $scope.array[i] = i + 1;
+                                   }
+                                   $scope.dataPerPage = $scope.eventData.slice(0, 9);
+                                   generateMap($scope);
+                                   $scope.isSelected = 1;
+
+
+                           });
                    }
-                   $scope.dataPerPage=$scope.eventData.slice(0,9);
-                   generateMap($scope);
-                   $scope.isSelected=1;
+                   else {
+                       $scope.loading = false;
+                       $scope.array = new Array(Math.round($scope.eventData.length / 9));
+                       for (var i = 0; i < $scope.array.length; i++) {
+                           $scope.array[i] = i + 1;
+                       }
+                       $scope.dataPerPage = $scope.eventData.slice(0, 9);
+                       generateMap($scope);
+                       $scope.isSelected = 1;
+                   }
                });
 
 
@@ -220,7 +261,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
     $scope.logout = function ()
     {
-        $http.get("/logout")
+        $http.post("/logout")
             .success(function (response) {
 
                 window.location.reload();

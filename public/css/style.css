@@ -95,3 +95,33 @@ footer {
 a:hover {
     cursor:pointer;
 }
+
+#overlay-for-contacts2
+{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width:100%;
+    height:300%;
+    text-align:center;
+    z-index: 1000;
+    background-color: rgba(0, 0, 0, 0.95);
+    opacity: 0.95;
+    filter:alpha(opacity=95);
+    -moz-opacity: 0.95;
+}
+
+#overlay-for-contacts-inside2
+{
+    width:50%;
+    margin: 140px auto;
+    /*border-right:#000 thin groove;
+    border-bottom:#000 thin groove;*/
+    background-color:white;
+
+    padding:15px;
+    text-align:center;
+    -moz-box-shadow: 0 0 5px #888;
+    -webkit-box-shadow: 0 0 5px #888;
+    box-shadow: 0 0 5px #888;
+}

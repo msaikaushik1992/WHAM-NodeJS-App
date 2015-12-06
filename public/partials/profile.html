@@ -41,7 +41,7 @@
             <div class="col-md-6">
                 <select id="category" class="pref" required>
                     <option id="art" selected="selected">Art Galleries</option>
-                    <option id="business" selected="selected">Business & Networking</option>
+                    <option id="business" selected="selected">Business/Networking</option>
                     <option id="music">Concerts</option>
                     <option id="conference">Conferences</option>
                     <option id="comedy">Comedy</option>
@@ -52,14 +52,20 @@
                     <option id="food">Food & Wine</option>
                     <option id="fundraisers">Fundraising</option>
                     <option id="holiday">Holiday</option>
-                    <option id="books">Literary & Books</option>
+                    <option id="books">Literary/Books</option>
                     <option id="attractions">Museums and Attractions</option>
                     <option id="community">Neighbourhood</option>
-                    <option id="singles_social">Nightlife & Singles</option>
-                    <option id="outdoors_recreation">Outdoors & Recreation</option>
+                    <option id="singles_social">Nightlife/Singles</option>
+                    <option id="outdoors_recreation">Outdoors/Recreation</option>
                     <option id="animals">Pets</option>
-                    <option id="religion_spirituality">Religion and Spirituality</option>
+                    <option id="religion_spirituality">Religion/Spirituality</option>
                     <option id="technology">Technology</option>
+                    <option id="sales">Sales</option>
+                    <option id="support">Health/Wellness</option>
+                    <option id="clubs_associations">Organizations</option>
+                    <option id="science">Science</option>
+                    <option id="schools_alumni">University/Alumni</option>
+                    <option id="performing_arts">Performing Arts</option>
                     <option id="">Other</option>
                 </select>
                 <button ng-click="addCategory()"><span class="glyphicon glyphicon-plus"></span></button>
@@ -151,13 +157,27 @@
        </div>
 
 
+       <br/>
+       <br/>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Events You Recently Liked</div>
+        <div class="panel-body">
+            <div  ng-repeat = "e in likedEvents" class="col-md-3">
+                <h4>{{e.title}}</h4>
+                <div class="panel panel-default">
+                        <div class="image-body" ng-if="e.img==null">
+                            <img src="../images/no-image.jpg" height="70" width="100"/>
+                        </div>
+
+                        <div class="image-body" ng-if="e.img!==null">
+                            <img src="{{e.img}}"/>
+                        </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
 
 </div>
 
-
-
-
-
-
-
-</div>

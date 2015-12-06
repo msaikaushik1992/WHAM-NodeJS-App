@@ -10,12 +10,12 @@ var session = require('express-session');
 var logout = require('express-passport-logout');
 var requestify = require('requestify');
 var apicache = require('apicache').options({ debug: true }).middleware;
-
+var FacebookStrategy = require('passport-facebook').Strategy;
 
 var User = require('./public/models/user');
 var Preferences = require('./public/models/preferences');
 var Event = require('./public/models/eventS');
-
+var Rating = require('./public/models/eventrating');
 
 
 // for parsing application/json
@@ -43,16 +43,76 @@ app.get("/getEvent/:eventid", Event.getEvent);
 app.post("/increaseLikeEvent/:eventid/:email", Event.increaseLikeCount);
 app.post("/increaseDislikeEvent/:eventid/:email", Event.increasedisLikeCount);
 app.delete("/deleteComment/:eventid/:commentid", Event.deleteComment);
+app.post("/likeEvent", Rating.like);
+app.post("/dislikeEvent", Rating.dislike);
+app.put("/updateCategories", Preferences.updateCategories);
+app.get("/getLikedEvents/:id", Rating.getLikedEvents);
+app.get("/getDislikedEvents/:id", Rating.getDislikedEvents);
+app.get("/getlikes/:eventid", Rating.getlikes);
+app.delete("/unlike/:evid/:id", Rating.unlike);
+app.get("/getdislikes/:eventid", Rating.getdislikes);
+app.get("/checklike/:evid/:id", Rating.checkLike);
+app.get("/getUserByEmail/:emailid",User.FindUserByEmail)
 
-
-app.get("/logout",function(req,res)
-{
-
- req.logout();
- res.send(200);
-
+app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }), function (req, res) {
 
 });
+
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', {
+        successRedirect: '/#/',
+        failureRedirect: '/#/login'
+    }),
+    function (req, res) {
+        res.json(user);
+    });
+
+
+passport.use(new FacebookStrategy({
+    clientID: '795408297235627',
+    clientSecret: 'e0f17bd9a78608e65cf29582897113f2',
+    callbackURL:'http://localhost:8080/auth/facebook/callback',profileFields:["displayName","email"],
+    enableProof: false
+}, function (accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+        console.log(profile);
+        var email = String(profile._json.email);
+        console.log(email);
+        User.FindUserByEmail(email).then(function (user) {
+            if (user) {
+                console.log(user);
+                var userInfo = {id: user._id, fname: user.fname, lname: user.lname, email: user.email};
+                return done(null, userInfo);
+            } else
+            {
+                console.log('In Else');
+                var fullname=profile._json.name.split(" ");
+                var newUser =
+                {
+                    fname: fullname[0],
+                    lname: fullname[1],
+                    email: profile._json.email
+                }
+                console.log(newUser);
+                User.createUser(newUser).then(function (user)
+                {
+                    var userInfo = {id: user._id, fname: user.fname, lname: user.lname, email: user.email};
+                    return done(null, userInfo);
+                });
+            }
+        });
+    });
+}));
+
+
+
+app.post("/logout",function(req,res){
+
+    req.logout();
+    res.send(200);
+
+});
+
 
 locationObj={'lat':undefined,'long':undefined}
 
@@ -74,7 +134,7 @@ app.get("/getLocation", function(req,res)
 
 
 //Retrieves events close to the guest User
-app.get("/eventsByLocation/:locationObj",apicache('5 minutes'),function(req,res)
+app.get("/eventsByLocation/:locationObj",apicache('15 minutes'),function(req,res)
 {
    var locationObj=JSON.parse(req.params.locationObj);
    requestify.get('http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L&location='
@@ -99,7 +159,7 @@ app.get("/eventsByLocation/:locationObj",apicache('5 minutes'),function(req,res)
 
 //Retrieves events close to the user if the user is logged in and has set preferences
 
-app.get("/eventsByLocationAndPreference/:locationPrefObj",apicache('5 minutes'),function(req,res)
+app.get("/eventsByLocationAndPreference/:locationPrefObj",apicache('15 minutes'),function(req,res)
 {
     var locPrefObj=JSON.parse(req.params.locationPrefObj);
     requestify.get("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L" +

@@ -2,17 +2,9 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
     function ($scope, $rootScope, $http, $location,$cookies,$timeout,webservice)
 {
 
-    if($cookies.getObject("info")===undefined)
-    {
-
-            $location.url('/signup');
-    }
-    else
-    {
-
-        console.log($cookies.getObject("info"));
-        console.log($cookies.get("id"));
-    }
+    $scope.loggedin = true;
+    $scope.name = $rootScope.currentUser.fname;
+    $scope.id=$rootScope.currentUser.id;
 
 
     $scope.pref={gender:"Male",city:"Boston"};
@@ -51,10 +43,19 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
 
     }
 
+    $scope.logout = function ()
+    {
+        $http.post("/logout")
+            .success(function (response) {
+
+                window.location.reload();
+            });
+    }
+
     $scope.savePreferences = function(pref)
     {
         var preferences = {};
-        preferences.id=$cookies.get("id");
+        preferences.id=$scope.id;
         preferences.gender=pref.gender;
         preferences.city=pref.city;
         preferences.categories=$scope.items;
@@ -69,14 +70,12 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
                 {
 
                     $scope.error=false;
-                    $cookies.remove("id");
 
 
 
                     $timeout(function()
                     {
-                        $rootScope.currentUser =  $cookies.getObject("info");
-                        $cookies.remove("info");
+                        $rootScope.currentUser =  $rootScope.currentUser;
                         $location.url('/');
                     }, 3000);
 

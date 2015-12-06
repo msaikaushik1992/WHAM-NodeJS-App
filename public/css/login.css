@@ -38,7 +38,7 @@ body {
     font-size:large;
     background:#2CAFBD;
 }
-span
+span.errors
 {
     padding:2px;
     margin:4px;

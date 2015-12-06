@@ -1,6 +1,20 @@
 angular.module('angularApp')
     .controller('EventController', ['$scope', '$http', 'webservice', '$routeParams', '$q', '$log', '$rootScope', function ($scope, $http, webservice, $routeParams, $q, $log, $rootScope) {
 
+
+        $(document).ready(function () {
+
+            $("#overlay-for-contacts2").hide();
+
+        });
+
+
+        $(".closebutton2").click(function (e) {
+            e.preventDefault();
+            $("#overlay-for-contacts2").fadeOut("slow");
+        });
+
+
         console.log("In Event Page");
         $scope.eventDetails = "TEST EVENT";
         $scope.comments = [];
@@ -71,8 +85,8 @@ angular.module('angularApp')
                 if(comments!==undefined) {
                     $scope.commentSection = comments.length + ' comments';
                     $scope.comments = payload.comments;
-                    $scope.numLike = payload.likes.length;
-                    $scope.numDislike = payload.dislikes.length;
+                    //$scope.numLike = payload.likes.length;
+                    //$scope.numDislike = payload.dislikes.length;
                 }
             });
         eventData.then(
@@ -82,6 +96,7 @@ angular.module('angularApp')
                  //5. Event types/categories
 
                  // title
+                 $scope.eventCategory=payload.data.categories.category;
                  $scope.eventTitle = payload.data.title;
 
                  // description
@@ -165,7 +180,12 @@ angular.module('angularApp')
 
         requestDone.promise.then(function () {
             console.log("Success");
+            checklike();
+            getlikes();
+            getdislikes();
         });
+
+
 
         $scope.addComment = function () {
             comment = $scope.comment;
@@ -208,61 +228,139 @@ angular.module('angularApp')
                 });
             }
         }
-        $scope.incrementLikeCount = function () {
-            var user = checkLoggedinUser();
-            user.then(function (users) {
-                if (users != 0) {
-                    var defer = $q.defer();
-                    var eventid = $routeParams.id;
-                    var url = '/increaseLikeEvent/' + eventid + '/' + users.email;
-                    console.log(url);
-                    $http.post(url)
-                        .success(function (response) {
-                            console.log(response);
-                            if (response == 'successincrementlike') {
-                                $scope.numLike += 1;
-                            }
-                            else if (response == 'incrementLikeDecrementDislike') {
-                                $scope.numLike += 1;
-                                $scope.numDislike -= 1;
-                            }
-                            else if (response == 'incrementLike') {
-                                $scope.numLike += 1;
-                            }
-                            defer.resolve(response);
-                        })
-                    return defer.promise;
-                }
-            });
-        };
 
-        $scope.incrementDisLikeCount = function () {
+        var checklike = function()
+        {
             var user = checkLoggedinUser();
             user.then(function (users) {
                 if (users != 0) {
-                    var defer = $q.defer();
-                    var eventid = $routeParams.id;
-                    var url = '/increaseDislikeEvent/' + eventid + '/' + users.email;
-                    console.log(url);
-                    $http.post(url)
-                        .success(function (response) {
+                    var url = '/checklike/'+ $routeParams.id +'/' + users.id;
+                    $http.get(url)
+                        .success(function (response)
+                        {
                             console.log(response);
-                            if (response == 'successincrementdislike') {
-                                $scope.numDislike += 1;
+                            if(response=='duplicate')
+                            {
+
+                               $scope.unlike=true;
+
                             }
-                            else if (response == 'incrementdisLikeDecrementlike') {
-                                $scope.numLike -= 1;
-                                $scope.numDislike += 1;
-                            }
-                            else if (response == 'incrementdisLike') {
-                                $scope.numDislike += 1;
-                            }
-                            defer.resolve(response);
-                        })
-                    return defer.promise;
+                        });
                 }
             });
-        };
+
+
+        }
+
+
+        var getlikes = function()
+        {
+                    var url = '/getlikes/';
+                    $http.get(url+ $routeParams.id)
+                        .success(function (response)
+                        {
+                            $scope.numLike=response;
+
+                        });
+        }
+
+        var getdislikes = function()
+        {
+            var url = '/getdislikes/';
+            $http.get(url+ $routeParams.id)
+                .success(function (response)
+                {
+                    $scope.numDislike=response;
+                    console.log(response);
+                });
+        }
+
+        $scope.unlikeEvent=function()
+        {
+            var user = checkLoggedinUser();
+            user.then(function (users) {
+                    var data={'id':users.id};
+                    $http.delete("/unlike/"+ $routeParams.id +'/' + users.id)
+                        .success(function (response) {
+                            console.log(response);
+                            if (response == 'success')
+                            {
+                                      $scope.unlike=false;
+                                      getlikes();
+
+
+                            }
+                        });
+                });
+        }
+
+
+        $scope.like=function()
+        {
+            var user = checkLoggedinUser();
+            user.then(function (users) {
+                if (users != 0) {
+                    var url = '/likeEvent';
+                    var data={'userid':users.id, 'eventid':$routeParams.id,
+                        'categories':$scope.eventCategory,type:'like','title': $scope.eventTitle,'img':$scope.eventImageUrl}
+                    console.log(url);
+                    $http.post(url,data)
+                        .success(function (response)
+                        {
+                             console.log(response);
+                            if(response=='success')
+                            {
+                                getlikes();
+                                getdislikes();
+                                $scope.unlike=true;
+                                $http.put('/updateCategories',data)
+                                    .success(function(response)
+                                    {
+
+                                        console.log(response);
+
+                                    });
+
+                            }
+                        });
+                }
+            });
+
+        }
+
+        $scope.displayAlert=function()
+        {
+            $("#overlay-for-contacts2").fadeIn("slow");
+        }
+
+        $scope.dislike=function()
+        {
+
+            var user = checkLoggedinUser();
+            user.then(function (users) {
+                if (users != 0) {
+                    var url = '/dislikeEvent';
+                    var data={'userid':users.id, 'eventid':$routeParams.id,
+                        'categories':$scope.eventCategory,type:'dislike','title': $scope.eventTitle,'img':$scope.eventImageUrl}
+                    console.log(url);
+                    $http.post(url,data)
+                        .success(function (response)
+                        {
+                            console.log(response);
+                            if(response=='success')
+                            {
+                                $scope.unlike=false;
+                                getdislikes();
+                                getlikes();
+                            }
+                        });
+                }
+            });
+
+
+        }
+
+
 
         $scope.deleteComment = function (commentid) {
             var url = "/deleteComment/" + $routeParams.id + "/" + commentid;

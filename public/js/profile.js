@@ -1,13 +1,8 @@
 
 angular.module('angularApp').controller('ProfileController', ['$scope', '$rootScope','$http', '$location','$cookies','$timeout','webservice',
     function ($scope, $rootScope, $http, $location,$cookies,$timeout,webservice)
-
     {
 
-        $scope.loading=true;
-        if($rootScope.currentUser)
-        {
-            console.log($rootScope.currentUser);
             $scope.loggedin = true;
             $scope.name = $rootScope.currentUser.fname;
             $scope.id=$rootScope.currentUser.id;
@@ -24,6 +19,7 @@ angular.module('angularApp').controller('ProfileController', ['$scope', '$rootSc
                         console.log(response);
                         $scope.profile = response;
                         initializeProfileInfo();
+                        getLikedEvents();
                     }
                 })
                 .error(function (response)
@@ -32,52 +28,18 @@ angular.module('angularApp').controller('ProfileController', ['$scope', '$rootSc
                     console.log("Error Occured");
 
                 });
-        }
-        else {
 
-            var loggedInStatus = webservice.checkLoggedIn;
-            loggedInStatus.then(
-                function (response) {
-                    if (response === '0')
-                    {
-                        console.log(response);
-                        $timeout(function(){
-                            $location.url('/');
-                        },1);
 
-                    }
-                    else {
-                        $scope.loggedin = true;
-                        $scope.name = response.fname;
-                        console.log($scope.name);
-                        $scope.lname = response.lname;
-                        $scope.$apply();
-                        $scope.id=response.id;
-                        $http.get("/profileinfo/" + response.id)
-                            .success(function (response) {
-                                if (response == 'error') {
-                                    console.log("Error Occured");
-                                }
-                                else if (response == 'empty') {
-                                    $location.url('/set-preferences');
-                                }
-                                else {
-                                    console.log(response);
-                                    $scope.profile = response;
-                                    initializeProfileInfo();
-                                }
-                            })
-                            .error(function (response) {
 
-                                console.log("Error Occured");
+        var getLikedEvents=function()
+        {
+            $http.get("/getLikedEvents/"+ $scope.id)
+                .success(function (response) {
 
-                            });
-
-                    }
-                },
-                function (errorPayload) {
-                    $log.error('Error checking Log In Status', errorPayload);
+                    console.log(response);
+                    $scope.likedEvents=response;
                 });
+
         }
 
 
@@ -145,10 +107,10 @@ angular.module('angularApp').controller('ProfileController', ['$scope', '$rootSc
 
         $scope.logout = function ()
         {
-            $http.get("/logout")
-                .success(function (response) {
-                    $rootScope.currentUser=null;
-                    $location.url("/");
+            $http.post("/logout")
+                .success(function (response)
+                {
+                    window.location.reload();
                 });
         }
 
