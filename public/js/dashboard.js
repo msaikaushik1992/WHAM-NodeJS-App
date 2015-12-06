@@ -21,6 +21,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
         console.log($rootScope.currentUser);
         $scope.loggedin = true;
         $scope.name = $rootScope.currentUser.fname;
+        $scope.id= $rootScope.currentUser.id;
         $http.get("/preferences/"+ $rootScope.currentUser.id)
             .success(function (response)
             {
@@ -65,6 +66,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
                 else {
                     $scope.loggedin = true;
                     $scope.name = response.fname;
+                    $scope.id = response.id;
                     console.log($scope.name);
                     $scope.$apply();
                     $http.get("/preferences/"+ response.id)
@@ -115,36 +117,33 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
      Called only when the promise resolves.*/
 
 
-      function populateDashboard(userPrefs)
-      {
+      function populateDashboard(userPrefs) {
 
-           console.log("User Preferences:"+ userPrefs);
-           var requestFinished = $q.defer();
+          console.log("User Preferences:" + userPrefs);
+          var requestFinished = $q.defer();
 
-           var prom = webservice.getLocationCoords;
-           prom.then(
-               function (payload) {
-                   $scope.location = payload;
-                   requestFinished.resolve();
-               },
-               function (errorPayload) {
-                   $log.error('failure getting location', errorPayload);
-               });
+          var prom = webservice.getLocationCoords;
+          prom.then(
+              function (payload) {
+                  $scope.location = payload;
+                  requestFinished.resolve();
+              },
+              function (errorPayload) {
+                  $log.error('failure getting location', errorPayload);
+              });
 
 
-           requestFinished.promise.then(function ()
-           {
-               var requestDone = $q.defer();
+          requestFinished.promise.then(function () {
+              var requestDone = $q.defer();
 
-              if(userPrefs!==null)
-              {
+              if (userPrefs !== null) {
 
                   console.log($scope.location);
-                  var p = webservice.getEventsByPreference($scope.location,userPrefs);
+                  var p = webservice.getEventsByPreference($scope.location, userPrefs);
                   p.then(
                       function (payload) {
                           $scope.eventData = payload.data.events.event;
-                          console.log( $scope.eventData.length);
+                          console.log($scope.eventData.length);
                           requestDone.resolve();
                       },
                       function (errorPayload) {
@@ -154,8 +153,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
                       });
 
               }
-              else
-              {
+              else {
 
                   console.log($scope.location);
                   var p = webservice.getApiData($scope.location);
@@ -174,39 +172,74 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
               }
 
-               requestDone.promise.then(function () {
-                   $scope.loading = false;
-                   $scope.array = new Array(Math.round($scope.eventData.length / 12));
-                   for (var i = 0; i < $scope.array.length; i++) {
-                       $scope.array[i] = i + 1;
-                   }
-                   $scope.dataPerPage=$scope.eventData.slice(0,12);
-                   generateMap($scope);
-                   $scope.isSelected=1;
-               });
+              requestDone.promise.then(function () {
+                  if ($scope.loggedin) {
+                      var data = $scope.eventData;
+                      $http.get('/getDislikedEvents/' + $scope.id)
+                          .success(function (res) {
+
+                              if (res !== null) {
+                                  for (var i = 0; i < data.length; i++) {
+
+                                      if (res.hasOwnProperty(data[i].id)) {
+                                          data.splice(i, 1);
+                                          console.log('deleted');
+                                          i--;
+                                      }
+                                  }
+                              }
+
+                              $scope.eventData = data;
+                              $scope.loading = false;
+                              $scope.array = new Array(Math.round($scope.eventData.length / 9));
+                              for (var i = 0; i < $scope.array.length; i++) {
+                                  $scope.array[i] = i + 1;
+                              }
+                              $scope.dataPerPage = $scope.eventData.slice(0, 9);
+                              generateMap($scope);
+                              $scope.isSelected = 1;
 
 
-           });
-       }
+                          });
+                  }
+                      $scope.loading = false;
+                      $scope.array = new Array(Math.round($scope.eventData.length / 12));
+                      for (var i = 0; i < $scope.array.length; i++) {
+                          $scope.array[i] = i + 1;
+                      }
+                      $scope.dataPerPage=$scope.eventData.slice(0,12);
+                      generateMap($scope);
+                      $scope.isSelected=1;
+              });
 
-      $scope.paginate = function(event,i)
-      {
-          $scope.dataPerPage=$scope.eventData.slice((i-1)*12,(i-1)*12+12);
-          console.log($scope.dataPerPage);
-          var averageLatitude = 0,averageLongitude = 0;
-          var dpp = $scope.dataPerPage;
-          for(var i = 0; i<dpp.length; i++){
-              averageLatitude+=dpp[i].latitude;
-              averageLongitude+=dpp[i].longitude;
-          }
-          averageLatitude/=dpp.length;
-          averageLongitude/=dpp.length;
-          $scope.isSelected=i;
-          $target = $(event.target);
-          $target.addClass('active');
-          $("html, body").animate({ scrollTop: 0 }, "slow");
-          generateMap($scope);
+
+          });
+
+
       }
+
+
+
+
+
+    $scope.paginate = function(event,i)
+    {
+        $scope.dataPerPage=$scope.eventData.slice((i-1)*12,(i-1)*12+12);
+        console.log($scope.dataPerPage);
+        var averageLatitude = 0,averageLongitude = 0;
+        var dpp = $scope.dataPerPage;
+        for(var i = 0; i<dpp.length; i++){
+            averageLatitude+=dpp[i].latitude;
+            averageLongitude+=dpp[i].longitude;
+        }
+        averageLatitude/=dpp.length;
+        averageLongitude/=dpp.length;
+        $scope.isSelected=i;
+        $target = $(event.target);
+        $target.addClass('active');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+        generateMap($scope);
+    }
 
 
       $scope.isActive = function(item)
@@ -220,7 +253,7 @@ angular.module('angularApp').controller('DashboardController', ['$scope', '$http
 
     $scope.logout = function ()
     {
-        $http.get("/logout")
+        $http.post("/logout")
             .success(function (response) {
 
                 window.location.reload();
