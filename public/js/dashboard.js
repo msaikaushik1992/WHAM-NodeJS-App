@@ -10,25 +10,162 @@ angular.module('angularApp').controller('DashboardController',
             console.log("Clicked");
         });
     });
-
+    $scope.loadDash = function () {
+      // body...
+      window.location.reload();
+    }
+    $scope.showdashboard=true;
     $scope.loading=true;
+    $scope.searchresult=false;
+    $scope.searchloading=false;
 
     $scope.searchEvents= function(search) {
         // body...
+
+        $scope.searchloading=true;
+        $scope.showdashboard=false;
+        $scope.loading=false;
+
         var searchByQuery = ((typeof search.query != "undefined") ? search.query : "");
         var searchByCategory = ((typeof search.cat != "undefined") ? search.cat : "");
         var searchByLocatioin = ((typeof search.loc != "undefined") ? search.loc : "");
         console.log("Query:" +searchByQuery+ " Category:" +searchByCategory+ " Location:" + searchByLocatioin);
 
+        if (searchByQuery != "" && searchByLocatioin != "" && searchByCategory != "") {
+            console.log("searchByAll");
+        } else if (searchByQuery != "" && searchByLocatioin != "" && searchByCategory == "") {
+            console.log("searchByPreference");
+        } else if (searchByQuery != "" && searchByLocatioin == "" && searchByCategory != "") {
+            console.log("searchByDefaultLocation");
+        } else if (searchByQuery == "" && searchByLocatioin != "" && searchByCategory != "") {
+            console.log("searchByDefaultLocationPreference");
+        } else if (searchByQuery != "" && searchByLocatioin == "" && searchByCategory == "") {
+            console.log("searchByDefaultLocationAndPreference");
+            $scope.search.query = searchByQuery;
+        }       
 
     }
 
-    if($rootScope.currentUser) {
+    function getSearchResult () {
+        // body...
+        if($rootScope.currentUser) {
+            console.log($rootScope.currentUser);
+            $scope.loggedin = true;
+            $scope.name = $rootScope.currentUser.fname;
+            $scope.id= $rootScope.currentUser.id;
+            var userPref = loadPreferences($rootScope.currentUser.id);
+            populateSearch(userPref, $scope.search); 
+        } else {
+          console.log("I am there");
+            var loggedInStatus = webservice.checkLoggedIn;
+            var populate = $q.defer();
 
-        console.log($rootScope.currentUser);
-        $scope.loggedin = true;
-        $scope.name = $rootScope.currentUser.fname;
-        $scope.id= $rootScope.currentUser.id;
+            loggedInStatus.then(
+                function (response) 
+                {
+                    if (response == '0') {
+                        $scope.loggedin = false;
+                        console.log(response);
+                        $scope.$apply();
+                        $scope.prefs=null;
+                        populate.resolve();
+                    } else {
+                        $scope.loggedin = true;
+                        $scope.name = response.fname;
+                        $scope.id = response.id;
+                        console.log($scope.name);
+                        console.log(response.id);
+                        $scope.$apply();
+                        $http.get("/preferences/"+ response.id)
+                            .success(function (response) {
+                                if (response == 'error') {
+                                    console.log("Error Occured");
+                                } else if(response=='empty') {
+                                    $location.url('/set-preferences');
+                                } else {
+                                    console.log(response);
+                                    $scope.prefs=response;
+                                    populate.resolve();
+                                }
+                            }).error(function (response) {
+                                console.log("Error Occured");
+                            });
+                    }
+                },
+                function (errorPayload) {
+                    $log.error('Error checking Log In Status', errorPayload);
+                });
+
+            // complete promise
+            populate.promise.then(function () {
+                populateSearch($scope.prefs, $scope.search);
+            });
+        }
+    }
+
+
+    getDashboard();
+
+    function getDashboard () {
+      // body...
+        if($rootScope.currentUser) {
+            console.log("I am here");
+            console.log($rootScope.currentUser);
+            $scope.loggedin = true;
+            $scope.name = $rootScope.currentUser.fname;
+            $scope.id= $rootScope.currentUser.id;
+            var userPref = loadPreferences($rootScope.currentUser.id);
+            populateDashboard(userPref, $scope.search);
+        } else {
+            console.log("I am there");
+            var loggedInStatus = webservice.checkLoggedIn;
+            var populate = $q.defer();
+
+            loggedInStatus.then(
+                function (response) 
+                {
+                    if (response == '0') {
+                        $scope.loggedin = false;
+                        console.log(response);
+                        $scope.$apply();
+                        $scope.prefs=null;
+                        populate.resolve();
+                    } else {
+                        $scope.loggedin = true;
+                        $scope.name = response.fname;
+                        $scope.id = response.id;
+                        console.log($scope.name);
+                        console.log(response.id);
+                        $scope.$apply();
+                        $http.get("/preferences/"+ response.id)
+                            .success(function (response) {
+                                if (response == 'error') {
+                                    console.log("Error Occured");
+                                } else if(response=='empty') {
+                                    $location.url('/set-preferences');
+                                } else {
+                                    console.log(response);
+                                    $scope.prefs=response;
+                                    populate.resolve();
+                                }
+                            }).error(function (response) {
+                                console.log("Error Occured");
+                            });
+                    }
+                },
+                function (errorPayload) {
+                    $log.error('Error checking Log In Status', errorPayload);
+                });
+
+            // complete promise
+            populate.promise.then(function () {
+                populateDashboard($scope.prefs);
+            });
+        }
+   
+    }
+
+    function loadPreferences() {
         $http.get("/preferences/"+ $rootScope.currentUser.id)
             .success(function (response) {
                 if (response == 'error') {
@@ -37,64 +174,21 @@ angular.module('angularApp').controller('DashboardController',
                     $location.url('/set-preferences');
                 } else {
                     console.log(response);
-                    populateDashboard(response);
+                    return response;
+                    //populateDashboard(response, $scope.search);
                 }
             })
             .error(function (response) {
                 console.log("Error Occured");
             });
-    } else {
-        var loggedInStatus = webservice.checkLoggedIn;
-        var populate = $q.defer();
-
-
-        loggedInStatus.then(
-            function (response) 
-            {
-                if (response == '0') {
-                    $scope.loggedin = false;
-                    console.log(response);
-                    $scope.$apply();
-                    $scope.prefs=null;
-                    populate.resolve();
-                } else {
-                    $scope.loggedin = true;
-                    $scope.name = response.fname;
-                    $scope.id = response.id;
-                    console.log($scope.name);
-                    $scope.$apply();
-                    $http.get("/preferences/"+ response.id)
-                        .success(function (response) {
-                            if (response == 'error') {
-                                console.log("Error Occured");
-                            } else if(response=='empty') {
-                                $location.url('/set-preferences');
-                            } else {
-                                console.log(response);
-                                $scope.prefs=response;
-                                populate.resolve();
-                            }
-                        }).error(function (response) {
-                            console.log("Error Occured");
-                        });
-                }
-            },
-            function (errorPayload) {
-                $log.error('Error checking Log In Status', errorPayload);
-            });
-
-        // complete promise
-        populate.promise.then(function () {
-            populateDashboard($scope.prefs);
-        });
     }
-
     /*Function to populate the dashboard with events.
      Called only when the promise resolves.*/
 
-    function populateDashboard(userPrefs) {
+    function populateDashboard(userPrefs, searchParams) {
 
           console.log("User Preferences:" + userPrefs);
+          console.log("Search: " + searchParams);
           var requestFinished = $q.defer();
 
           var prom = webservice.getLocationCoords;
@@ -113,20 +207,37 @@ angular.module('angularApp').controller('DashboardController',
 
               if (userPrefs !== null) {
 
-                  console.log($scope.location);
-                  var p = webservice.getEventsByPreference($scope.location, userPrefs);
-                  p.then(
-                      function (payload) {
-                          $scope.eventData = payload.data.events.event;
-                          console.log($scope.eventData.length);
-                          requestDone.resolve();
-                      },
-                      function (errorPayload) {
-                          $log.error('failure loading movie', errorPayload);
-                          console.log("Error retrieving events");
+                  if (searchParams) {
+                      console.log($scope.location);
+                      var p = webservice.getEventsByPreferenceAndQuery($scope.location, userPrefs, searchParams);
+                      p.then(
+                          function (payload) {
+                              $scope.eventData = payload.data.events.event;
+                              console.log($scope.eventData.length);
+                              requestDone.resolve();
+                          },
+                          function (errorPayload) {
+                              $log.error('failure loading movie', errorPayload);
+                              console.log("Error retrieving events");
 
-                      });
+                          });
 
+                  } else {
+                      console.log($scope.location);
+                      var p = webservice.getEventsByPreference($scope.location, userPrefs);
+                      p.then(
+                          function (payload) {
+                              $scope.eventData = payload.data.events.event;
+                              console.log($scope.eventData.length);
+                              requestDone.resolve();
+                          },
+                          function (errorPayload) {
+                              $log.error('failure loading movie', errorPayload);
+                              console.log("Error retrieving events");
+
+                          });
+
+                  }
               }
               else {
 
@@ -166,11 +277,11 @@ angular.module('angularApp').controller('DashboardController',
 
                               $scope.eventData = data;
                               $scope.loading = false;
-                              $scope.array = new Array(Math.round($scope.eventData.length / 9));
+                              $scope.array = new Array(Math.round($scope.eventData.length / 12));
                               for (var i = 0; i < $scope.array.length; i++) {
                                   $scope.array[i] = i + 1;
                               }
-                              $scope.dataPerPage = $scope.eventData.slice(0, 9);
+                              $scope.dataPerPage = $scope.eventData.slice(0, 12);
                               generateMap($scope);
                               $scope.isSelected = 1;
 
@@ -190,12 +301,99 @@ angular.module('angularApp').controller('DashboardController',
 
           });
 
+      }
+    /*Function to populate the dashboard with events.
+     Called only when the promise resolves.*/
+
+    function populateSearch(userPrefs, searchParams) {
+
+          console.log("User Preferences:" + userPrefs);
+          console.log("Search: " + searchParams);
+          var requestFinished = $q.defer();
+
+          var prom = webservice.getLocationCoords;
+          prom.then(
+              function (payload) {
+                  $scope.location = payload;
+                  requestFinished.resolve();
+              },
+              function (errorPayload) {
+                  $log.error('failure getting location', errorPayload);
+              });
+
+
+          requestFinished.promise.then(function () {
+              var requestDone = $q.defer();
+
+              if (userPrefs !== null) {
+
+                  if (searchParams) {
+                      console.log($scope.location);
+                      var p = webservice.getEventsByPreferenceAndQuery($scope.location, userPrefs, searchParams);
+                      p.then(
+                          function (payload) {
+                              $scope.searchData = payload.data.events.event;
+                              console.log($scope.searchData.length);
+                              requestDone.resolve();
+                          },
+                          function (errorPayload) {
+                              $log.error('failure loading movie', errorPayload);
+                              console.log("Error retrieving events");
+
+                          });
+
+                  } else {
+                      console.log($scope.location);
+                      var p = webservice.getEventsByPreference($scope.location, userPrefs);
+                      p.then(
+                          function (payload) {
+                              $scope.searchData = payload.data.events.event;
+                              console.log($scope.searchData.length);
+                              requestDone.resolve();
+                          },
+                          function (errorPayload) {
+                              $log.error('failure loading movie', errorPayload);
+                              console.log("Error retrieving events");
+
+                          });
+
+                  }
+              }
+              else {
+
+                  console.log($scope.location);
+                  var p = webservice.getApiData($scope.location);
+                  p.then(
+                      function (payload) {
+                          console.log(payload);
+                          $scope.searchData = payload.data.events.event;
+                          console.log($scope.searchData.length);
+                          requestDone.resolve();
+                      },
+                      function (errorPayload) {
+                          $log.error('failure loading movie', errorPayload);
+                          console.log("Did not get coordinates");
+
+                      });
+
+              }
+
+              requestDone.promise.then(function () {
+                  
+                      $scope.loading = false;
+                      $scope.array = new Array(Math.round($scope.searchData.length / 12));
+                      for (var i = 0; i < $scope.array.length; i++) {
+                          $scope.array[i] = i + 1;
+                      }
+                      $scope.searchDataPerPage=$scope.searchData.slice(0,12);
+                      generateMap($scope);
+                      $scope.isSelected=1;
+              });
+
+
+          });
 
       }
-
-
-
-
 
     $scope.paginate = function(event,i)
     {
@@ -222,7 +420,6 @@ angular.module('angularApp').controller('DashboardController',
         return $scope.isSelected === item;
 
       };
-
 
     //Implement the logout function
 
@@ -307,8 +504,5 @@ angular.module('angularApp').controller('DashboardController',
             }
       $scope.map = map;
       }
-
-
-      
 
     } ]);

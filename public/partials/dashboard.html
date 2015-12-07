@@ -6,7 +6,7 @@
 </div>
 
 <div class="container center-block">
-    <div class="col-sm-12 col-md-12 col-lg-12 row">
+    <div class="col-sm-12 col-md-12 col-lg-12 row form-group">
         <br/>
         <div class="col-md-2">
             <span class="search-label">Search Events:</span>
@@ -17,7 +17,35 @@
         </div>
        
         <div class="col-md-3">
-            <input id="searchCategory" name="searchCategory" type="text" placeholder="Search by category" class="form-control input-md" ng-model="search.cat">
+            <select id="searchCategory" name="searchCategory" class="form-control input-md" ng-model="search.cat">
+                        <option id="art" selected="selected">Art Galleries</option>
+                        <option id="business" selected="selected">Business/Networking</option>
+                        <option id="music">Concerts</option>
+                        <option id="conference">Conferences</option>
+                        <option id="comedy">Comedy</option>
+                        <option id="learning_education">Education</option>
+                        <option id="movies_film">Films</option>
+                        <option id="family_fun_kids">Kids</option>
+                        <option id="festivals_parades">Festivals</option>
+                        <option id="food">Food & Wine</option>
+                        <option id="fundraisers">Fundraising</option>
+                        <option id="holiday">Holiday</option>
+                        <option id="books">Literary/Books</option>
+                        <option id="attractions">Museums and Attractions</option>
+                        <option id="community">Neighbourhood</option>
+                        <option id="singles_social">Nightlife/Singles</option>
+                        <option id="outdoors_recreation">Outdoors/Recreation</option>
+                        <option id="animals">Pets</option>
+                        <option id="religion_spirituality">Religion/Spirituality</option>
+                        <option id="technology">Technology</option>
+                        <option id="sales">Sales</option>
+                        <option id="support">Health/Wellness</option>
+                        <option id="clubs_associations">Organizations</option>
+                        <option id="science">Science</option>
+                        <option id="schools_alumni">University/Alumni</option>
+                        <option id="performing_arts">Performing Arts</option>
+                        <option id="">Other</option>
+                    </select>
         </div>
         <!-- Text input-->
         <div class="col-md-3">
@@ -30,45 +58,80 @@
         </div>
     </div>
 </div>
-<div class="container center-block">
-        <div class="col-sm-12 col-md-12 col-lg-12 row">
-            <h1 class="page-header">
-                Welcome to Social Compass!
-            </h1>
-            <div ng-repeat = "e in dataPerPage"  class="col-sm-3">
-                <div class="card">
-                    <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
-                    <div class="avatar" ng-if="e.image==null">
-                        <img src="../images/no-image.jpg"/>
-                    </div>
+<div class="container center-block" ng-show="searchresult">
+    <div class="col-sm-12 col-md-12 col-lg-12 row">
+        <div ng-repeat = "e in searchDataPerPage"  class="col-sm-3">
+            <div class="card">
+                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
+                <div class="avatar" ng-if="e.image==null">
+                    <img src="../images/no-image.jpg"/>
+                </div>
 
-                    <div class="avatar" ng-if="e.image!==null">
-                       <img src="{{e.image.medium.url}}"/>
-                    </div>
-                    <div class="content">
-                        <h4>
-                            <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}" alt="{{e.title}}">
-                                {{e.title | limitTo: 40}} {{e.title.length > 40 ? '...' : ''}}
-                            </a>
-                        </h4>
-                        <p class="details">Location: {{e.venue_name}}, {{e.city_name}} </p>
-                        <p>
-                            <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}"  class="btn btn-default">Go to the Event</a>
-                        </p>
-                    </div>
+                <div class="avatar" ng-if="e.image!==null">
+                   <img src="{{e.image.medium.url}}"/>
+                </div>
+                <div class="content">
+                    <h4>
+                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}" alt="{{e.title}}">
+                            {{e.title | limitTo: 40}} {{e.title.length > 40 ? '...' : ''}}
+                        </a>
+                    </h4>
+                    <p class="details">Location: {{e.venue_name}}, {{e.city_name}} </p>
+                    <p>
+                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}"  class="btn btn-default">Go to the Event</a>
+                    </p>
                 </div>
             </div>
         </div>
-
-    </div>        
-
-    <div class="container center-block">
-        <ul class="pagination">
-            <li ng-repeat="i in array" ng-click="paginate($event,i)"  ng-class="{'active': isActive(i)}"><a>{{i}}</a></li>
-        </ul>
     </div>
+</div>        
+
+<div class="container center-block" ng-show="showdashboard">
+    <div class="col-sm-12 col-md-12 col-lg-12 row">
+        <h1 class="page-header">
+            Welcome to Social Compass!
+        </h1>
+        <div ng-repeat = "e in dataPerPage"  class="col-sm-3">
+            <div class="card">
+                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
+                <div class="avatar" ng-if="e.image==null">
+                    <img src="../images/no-image.jpg"/>
+                </div>
+
+                <div class="avatar" ng-if="e.image!==null">
+                   <img src="{{e.image.medium.url}}"/>
+                </div>
+                <div class="content">
+                    <h4>
+                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}" alt="{{e.title}}">
+                            {{e.title | limitTo: 40}} {{e.title.length > 40 ? '...' : ''}}
+                        </a>
+                    </h4>
+                    <p class="details">Location: {{e.venue_name}}, {{e.city_name}} </p>
+                    <p>
+                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}"  class="btn btn-default">Go to the Event</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>        
+
 <div class="container center-block">
+    <ul class="pagination">
+        <li ng-repeat="i in array" ng-click="paginate($event,i)"  ng-class="{'active': isActive(i)}"><a>{{i}}</a></li>
+    </ul>
+</div>
+<div class="container center-block" ng-show="showdashboard">
     
     <img class="loading center-block" ng-if="loading" src="../images/gears.gif" height="150" width="150"/>
     <h3 class="loading-sentence center-block" ng-if="loading">Please wait.Retreiving events close to you....</h3>
+</div>
+<div class="container center-block" ng-show="searchresult">
+    <img class="loading center-block" ng-if="searchloading" src="../images/gears.gif" height="150" width="150"/>
+    <h3 class="loading-sentence center-block" ng-if="loading">Loading search result....</h3>
+</div>
+<div class="container center-block" ng-show="searchloading">
+    <button ng-click="loadDash()" class="btn btn-default">Load Dashboard</button> 
 </div>

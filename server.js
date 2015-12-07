@@ -176,13 +176,33 @@ app.get("/eventsByLocationAndPreference/:locationPrefObj",apicache('15 minutes')
             {
                 res.send('error');
             }
-
-
         });
 
 });
 
 
+//Retrieves events close to the user if the user is logged in and has set preferences and based on search term
+
+app.get("/eventsByLocationPreferenceAndQuery/:locationPrefQueryObj",apicache('15 minutes'),function(req,res)
+{
+    var locPrefQueryObj=JSON.parse(req.params.locationPrefQueryObj);
+    requestify.get("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L" +
+        "&location="+locPrefQueryObj.location.lat+","+ locPrefQueryObj.location.long + "&date=Future&within=5&page_size=100" +
+        "&category="+locPrefQueryObj.categories +"&q="+locPrefQueryObj.query+"&sort_order=popularity")
+        .then(function(response)
+        {
+
+            if(response!==null)
+            {
+                res.send(response.body);
+            }
+            else
+            {
+                res.send('error');
+            }
+        });
+
+});
 
 
 var ip =  '127.0.0.1';

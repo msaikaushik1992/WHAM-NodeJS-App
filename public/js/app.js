@@ -8,8 +8,8 @@ angularApp.service('webservice',function($http)
     var self = this;
     self.getApiData = function (locationObj)
     {
+        console.log("/eventsByLocation/"+ JSON.stringify(locationObj));
        return $http.get("/eventsByLocation/"+ JSON.stringify(locationObj));
-
     }
 
     // event data call
@@ -30,6 +30,20 @@ angularApp.service('webservice',function($http)
         categoryList=categoryList.substring(0,categoryList.length-1);
         var locationAndPreferences={location:locationObj,categories:categoryList};
         return $http.get("/eventsByLocationAndPreference/"+ JSON.stringify(locationAndPreferences));
+    }
+
+    self.getEventsByPreferenceAndQuery = function(locationObj, preferences, searchParams)
+    {
+        console.log(preferences);
+        console.log(searchParams);
+        var categoryList="";
+        for(var i=0; i<preferences.length;i++)
+        {
+            categoryList+=(preferences[i].category)+",";
+        }
+        categoryList=categoryList.substring(0,categoryList.length-1);
+        var locationPreferencesAndQuery={location:locationObj,categories:categoryList,query:searchParams.query};
+        return $http.get("/eventsByLocationPreferenceAndQuery/"+ JSON.stringify(locationPreferencesAndQuery));
     }
 
     self.checkLoggedIn = new Promise(function (resolve, reject)
@@ -143,6 +157,11 @@ angularApp.config(function($routeProvider)
             templateUrl: 'partials/login.html',
             css: 'css/login.css',
             controller: 'LoginController'
+        }).
+        when('/search', {
+            templateUrl: 'partials/search.html',
+            css: 'css/dashboard.css',
+            controller: 'SearchController'
         }).
         when('/set-preferences', {
             templateUrl: 'partials/set-preferences.html',
