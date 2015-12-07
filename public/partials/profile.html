@@ -167,11 +167,15 @@
                 <h4>{{e.title}}</h4>
                 <div class="panel panel-default">
                         <div class="image-body" ng-if="e.img==null">
+                            <a href="#event/{{e.eventid}}/{{e.lat}}/{{e.lon}}">
                             <img src="../images/no-image.jpg" height="70" width="100"/>
+                            </a>
                         </div>
 
                         <div class="image-body" ng-if="e.img!==null">
+                            <a href="#event/{{e.eventid}}/{{e.lat}}/{{e.lon}}">
                             <img src="{{e.img}}"/>
+                            </a>
                         </div>
                 </div>
 
