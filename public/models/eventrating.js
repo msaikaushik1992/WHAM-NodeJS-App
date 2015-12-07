@@ -10,7 +10,9 @@ var RatingSchema=mongoose.Schema({
     categories : { type: Array, required: true},
     type:{ type: String, required: true},
     title:{type:String},
-    img:{type:String,}
+    img:{type:String,},
+    lat:{type:String,},
+    lon:{type:String,}
 });
 
 RatingModel = mongoose.model('Rating',RatingSchema);

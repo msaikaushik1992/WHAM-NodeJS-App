@@ -305,7 +305,8 @@ angular.module('angularApp')
                 if (users != 0) {
                     var url = '/likeEvent';
                     var data={'userid':users.id, 'eventid':$routeParams.id,
-                        'categories':$scope.eventCategory,type:'like','title': $scope.eventTitle,'img':$scope.eventImageUrl}
+                        'categories':$scope.eventCategory,type:'like','title': $scope.eventTitle,
+                        'img':$scope.eventImageUrl,'lat':$routeParams.lat,'lon':$routeParams.lon}
                     console.log(url);
                     $http.post(url,data)
                         .success(function (response)
@@ -344,7 +345,8 @@ angular.module('angularApp')
                 if (users != 0) {
                     var url = '/dislikeEvent';
                     var data={'userid':users.id, 'eventid':$routeParams.id,
-                        'categories':$scope.eventCategory,type:'dislike','title': $scope.eventTitle,'img':$scope.eventImageUrl}
+                        'categories':$scope.eventCategory,type:'dislike','title': $scope.eventTitle,
+                        'img':$scope.eventImageUrl,'lat':$routeParams.lat,'lon':$routeParams.lon}
                     console.log(url);
                     $http.post(url,data)
                         .success(function (response)
