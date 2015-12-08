@@ -178,6 +178,8 @@ angular.module('angularApp').controller('DashboardController',
 
 
           requestFinished.promise.then(function () {
+
+              generateInitialMap();
               var requestDone = $q.defer();
 
               if (userPrefs !== null) {
@@ -445,11 +447,7 @@ angular.module('angularApp').controller('DashboardController',
             });
     }
 
-    function generateMap($scope, search){
-      $scope.markers = [];
-
-      var labels= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      labelIndex=0;
+    function generateInitialMap() {
       var gm = google.maps;
       var map = new gm.Map(document.getElementById('map'), {
         center: new google.maps.LatLng($scope.location.lat,$scope.location.long),
@@ -461,6 +459,25 @@ angular.module('angularApp').controller('DashboardController',
           title: 'I am here!'
       });
 
+      $scope.map = map;
+    }
+
+    function generateMap($scope, search){
+      $scope.markers = [];
+
+      var labels= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      labelIndex=0;
+      
+      var gm = google.maps;
+      var map = new gm.Map(document.getElementById('map'), {
+        center: new google.maps.LatLng($scope.location.lat,$scope.location.long),
+        zoom: 11
+      });
+      var marker = new google.maps.Marker({
+          position: new google.maps.LatLng($scope.location.lat,$scope.location.long),
+          map: map,
+          title: 'I am here!'
+      });
       var iw = new gm.InfoWindow();
       var oms = new OverlappingMarkerSpiderfier(map,
         {markersWontMove: true, markersWontHide: true});
