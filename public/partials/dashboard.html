@@ -9,7 +9,7 @@
     <div class="col-sm-12 col-md-12 col-lg-12 row form-group">
         <br/>
         <div class="col-md-2">
-            <span class="search-label">Search Events:</span>
+            <label class="pull-right search-label label label-default form-contol">Search Events:</label>
         </div>
        
         <div class="col-md-3">
@@ -60,15 +60,14 @@
         <div class="col-md-1">
             <button id="singlebutton" ng-click="searchEvents(search)" name="singlebutton" class="btn btn-primary">Search</button>
         </div>
+        <div class="col-md-1" ng-show="searchresult">
+            <button ng-click="loadDash()" class="btn btn-success">Load Dashboard</button> 
+        </div>
     </div>
-</div>
-
-<div class="container center-block" ng-show="searchresult">
-    <button ng-click="loadDash()" class="btn btn-default">Load Dashboard</button> 
 </div>
 <div class="container center-block" ng-show="searchresult">
     <img class="loading center-block" ng-if="searchloading" src="../images/gears.gif" height="150" width="150"/>
-    <h3 class="loading-sentence center-block" ng-if="loading">Loading search result....</h3>
+    <h3 class="loading-sentence center-block" ng-if="searchloading">Loading search result....</h3>
 </div>
 <div class="container center-block" ng-show="searchresult">
     <div class="col-sm-12 col-md-12 col-lg-12 row">
@@ -101,8 +100,8 @@
 </div>        
 
 <div class="container center-block" ng-show="searchresult">
-    <ul class="pagination">
-        <li ng-repeat="i in array" ng-click="paginateSearch($event,i)"  ng-class="{'active': isActive(i)}"><a>{{i}}</a></li>
+    <ul class="pagination psrch">
+        <li ng-repeat="i in searchArray" ng-click="paginateSearch($event,i)"  ng-class="{'active': isSearchActive(i)}"><a>{{i}}</a></li>
     </ul>
 </div>
 <div class="container center-block" ng-show="showdashboard">
@@ -138,8 +137,8 @@
 </div>        
 
 <div class="container center-block" ng-show="showdashboard">
-    <ul class="pagination">
-        <li ng-repeat="i in array" ng-click="paginate($event,i)"  ng-class="{'active': isActive(i)}"><a>{{i}}</a></li>
+    <ul class="pagination pevent">
+        <li ng-repeat="i in array" ng-click="paginate($event,i)"  ng-class="isActive(i) ? 'active' : ''"><a>{{i}}</a></li>
     </ul>
 </div>
 <div class="container center-block" ng-show="showdashboard">

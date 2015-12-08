@@ -385,6 +385,7 @@ angular.module('angularApp').controller('DashboardController',
 
     $scope.paginate = function(event,i)
     {
+        $('ul.pevent>li').removeClass('active');
         $scope.dataPerPage=$scope.eventData.slice((i-1)*12,(i-1)*12+12);
         console.log($scope.dataPerPage);
         var averageLatitude = 0,averageLongitude = 0;
@@ -396,7 +397,7 @@ angular.module('angularApp').controller('DashboardController',
         averageLatitude/=dpp.length;
         averageLongitude/=dpp.length;
         $scope.isSelected=i;
-        $target = $(event.target);
+        $target = $(event.target).parent();
         $target.addClass('active');
         $("html, body").animate({ scrollTop: 0 }, "slow");
         generateMap($scope);
@@ -404,6 +405,7 @@ angular.module('angularApp').controller('DashboardController',
 
     $scope.paginateSearch = function(event,i)
     {
+        $('ul.psrch>li').removeClass('active');
         $scope.searchDataPerPage=$scope.searchData.slice((i-1)*12,(i-1)*12+12);
         console.log($scope.searchDataPerPage);
         var averageLatitude = 0,averageLongitude = 0;
@@ -414,8 +416,8 @@ angular.module('angularApp').controller('DashboardController',
         }
         averageLatitude/=dpp.length;
         averageLongitude/=dpp.length;
-        $scope.isSelected=i;
-        $target = $(event.target);
+        $scope.isEventSelected=i;
+        $target = $(event.target).parent();
         $target.addClass('active');
         $("html, body").animate({ scrollTop: 0 }, "slow");
         
@@ -425,9 +427,13 @@ angular.module('angularApp').controller('DashboardController',
       $scope.isActive = function(item)
       {
         return $scope.isSelected === item;
-
       };
 
+
+      $scope.isSearchActive = function(item)
+      {
+        return $scope.isEventSelected === item;
+      };
     //Implement the logout function
 
     $scope.logout = function ()
@@ -449,7 +455,7 @@ angular.module('angularApp').controller('DashboardController',
         center: new google.maps.LatLng($scope.location.lat,$scope.location.long),
         zoom: 11
       });
-      var marker1 = new google.maps.Marker({
+      var marker = new google.maps.Marker({
           position: new google.maps.LatLng($scope.location.lat,$scope.location.long),
           map: map,
           title: 'I am here!'

@@ -271,3 +271,21 @@ a:hover {
 .cat-label{
     margin-right: 5px;
 }
+
+.search-label {
+    font-weight: normal;
+    margin-top: 1px;
+    font-size: 1.2em;
+    padding: 6px;
+}
+.paginate{position: relative;}
+.pagination>li>a, .pagination>li>span {
+  padding: 6px 16px;
+  line-height: 1.42857143;
+  color: #337ab7;
+  background-color: #ECF0F1;
+  border: 0px;
+  font-size: 20px;
+  border-radius: 50% !important;
+  margin: 0 5px;
+}
