@@ -1,6 +1,9 @@
 angular.module('angularApp')
     .controller('EventController', ['$scope', '$http', 'webservice', '$routeParams', '$q', '$log', '$rootScope', function ($scope, $http, webservice, $routeParams, $q, $log, $rootScope) {
 
+        if(window.stButtons){
+            stButtons.locateElements();
+        }
 
         $(document).ready(function () {
 
