@@ -102,12 +102,7 @@ angular.module('angularApp')
                  // description
                  $scope.eventDescription = payload.data.description;
 
-                 if($scope.eventDescription == null){
-                     $scope.eventAlternativeDescription = $scope.eventTitle + " is being held at " + $scope.eventVenue + ". You will love this event if you like ";
-
-
-
-                 }
+                 $scope.eventMapAddr = "https://google.com/maps/place/"+payload.data.address+" "+payload.data.city+" "+payload.data.country_abbr;
 
                  if(payload.data.categories){
                      $scope.eventCategories = payload.data.categories.category;
