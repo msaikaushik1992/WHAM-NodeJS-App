@@ -1,133 +1,186 @@
 ﻿﻿<div ng-include="'partials/navbar.html'"></div>
-<div class="container center-block">
-    <br /><br />
-    <div class="container">
-        <div class="col-sm-12" style="" contenteditable="false">
-            <div class="panel panel-primary target">
-                <div class="panel-heading" contenteditable="false">{{eventTitle}}</div>
-                <div class="panel-body">
+<div class="container">
+    <!--title @ location-->
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">{{eventTitle}}
+                <small>at <a href="#">{{eventVenue}}</a>
+                </small>
+            </h1>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Content Column -->
+        <div class="col-lg-6">
+
+            <!-- Preview Image -->
+            <div class="center-block">
+                <span ng-if="eventImageUrl==null">
+                    <img src="../images/no-image.jpg" height="300" width="350" />
+                </span>
+                <span ng-if="eventImageUrl!=null">
+                    <img src="{{eventImageUrl}}" height="{{eventImageWidth}}px" width="{{eventImageWidth}}px"/>
+                </span>
+            </div>
+            <br/>
+            <br/>
+            <!--like dislike share-->
+            <div class="container">
+                <div class="left col-md-1">
+                    <a ng-click="like()">
+                        <img src="../images/Like.jpg" class="icon-myStyle iconDetails" />
+                    </a>
+                    <div style='margin-left:60px;'>
+                        <h4>{{numLike}}</h4>
+                    </div>
                     <div class="row">
-                        <div class="col-md-3">
-                            <span ng-if="eventImageUrl==null">
-                                <img src="../images/no-image.jpg" height="200" width="200" />
-                            </span>
-                            <span ng-if="eventImageUrl!=null">
-                                <img src="{{eventImageUrl}}" height="200" width="200" />
-                            </span>
-                            <div class="container">
-                                <div class="left col-md-1">
-                                    <div class="row">
-                                        <a ng-click="like()">
-                                            <img src="../images/Like.jpg" class="icon-myStyle iconDetails" />
-                                        </a>
-                                        <div style='margin-left:60px;'>
-                                            <h4>{{numLike}}</h4>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <a  style='margin-right:50px;'ng-if="unlike==true" ng-click="unlikeEvent()">Unlike</a>
-                                    </div>
+                        <a  style='margin-right:50px;'ng-if="unlike==true" ng-click="unlikeEvent()">Unlike</a>
+                    </div>
 
-                                </div>
-                                <div class="right col-md-1">
-                                    <div class="row">
-                                        <a ng-click="displayAlert()">
-                                            <img src="../images/Dislike.jpg" class="icon-myStyle iconDetails" />
-                                        </a>
-                                        <div style='margin-left:60px;'>
-                                            <h4>{{numDislike}}</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="thumbnail">
-                                <div class="caption">
-                                    <h5 class="media-heading">{{eventVenue}}</h5>
-                                    <h5>{{eventDescription}}</h5>
-                                    <h5 ng-if="eventCost==null">
-                                        Sorry, information about the cost of this event is not available.
-                                    </h5>
-                                    <h5 ng-if="eventCost!=null">
-                                        This event costs {{eventCost}}.
-                                    </h5>
-                                    <h5 ng-if="eventTimingInformation==null">
-                                        We are not sure when this event is going to happen.
-                                    </h5>
-                                    <h5 ng-if="eventTimingInformation!=null">
-                                        {{eventTimingInformation}}
-                                    </h5>
-
-                                    <br />
-                                    <br />
-                                    <div ng-repeat="l in eventLinks">
-                                        <h5 ng-if="l.type=='Official Site'"> <a href="l.url" target="_blank"> {{l.type}} </a> </h5>
-                                        <h5 ng-if="l.type=='Tickets'"> <a href={{l.url}} target="_blank"> {{l.type}}</a> </h5>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div id="googleMap" style="width:100%;height:300px;"></div>
-                        </div>
+                </div>
+                <div class="right col-md-1">
+                    <a ng-click="displayAlert()">
+                        <img src="../images/Dislike.jpg" class="icon-myStyle iconDetails" />
+                    </a>
+                    <div style='margin-left:60px;'>
+                        <h4>{{numDislike}}</h4>
                     </div>
                 </div>
-            </div>
-            <div class="container">
-                <h4>Leave a comment</h4>
-                <div class="row">
-                    <img src="../images/Avatar_empty_x1.png" class="col-md-1">
-                    <textarea placeHolder="Write a Comment" class="col-md-8" ng-model="comment"></textarea>
+
+                <div>
+                    <span class="right">
+                        <span class='st_facebook_large' displayText='Facebook'></span>
+                        <span class='st_twitter_large' displayText='Tweet'></span>
+                        <span class='st_googleplus_large' displayText='Google +'></span>
+                        <span class='st_email_large' displayText='Email'></span>
+                    </span>
                 </div>
-                <br />
-                <div align="right" class="col-md-9">
-                    <button class="btn-primary" value="Post"
-                            ng-click="addComment()">
-                        Post
-                    </button>
-                </div>
+
+
             </div>
 
-            <div class="container">
+            <hr>
 
-                <h4>{{commentSection}}</h4>
-                <hr class="col-md-9" />
-                <div class="col-md-9" ng-repeat="comment in comments">
-                    <div class="col-md-1">
-                        <div>
-                            <img src="../images/Avatar_empty_x1.png" />
-                        </div>
-                    </div>
-                    <div class="col-md-8">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4>
-                                    {{comment.username}}
-                                    <span  ng-if="user.email == comment.email">
-                                        <a ng-click="deleteComment(comment._id)">
-                                            <span class="glyphicon glyphicon-remove" id="close" aria-hidden="true">
-                                            </span>
-                                        </a>
-                                    </span>
-                                </h4>
-                            </div>
-                            <div class="panel-body">
-                                {{comment.commentText}}
-                            </div>
-                        </div>
-                    </div>
-                    <hr class="col-md-9" />
+            <h3>
+                <span class="label label-primary cat-label" ng-repeat="c in eventCategories">
+                    {{c.id}}
+                </span>
+            </h3>
+
+            <!-- Event Content -->
+
+            <!-- Event description -->
+            <p class="lead" ng-if="eventDescription!==null">{{eventDescription}}</p>
+            <p class="lead" ng-if="eventDescription==null">
+                {{eventTitle}} is being held at {{eventVenue}}.<br/>
+            </p>
+
+            <hr>
+
+
+        </div>
+
+        <!-- Sidebar Widgets Column -->
+        <div class="col-md-6">
+
+            <!-- Map -->
+            <div>
+                <div id="googleMap" style="width:100%;height:300px;"></div>
+            </div>
+
+            <div class="well btn-group btn-group-justified">
+                <a href="{{eventMapAddr}}" target="_blank"><button type="button" class="btn btn-default"> Get directions </button></a>
+            </div>
+
+
+
+            <br>
+
+            <!-- Side Widget Well -->
+            <div class="well" ng-if="eventTimingInformation==null">
+                <h4>We have no information about the timing of this event</h4>
+            </div>
+
+            <div class="well" ng-if="eventTimingInformation!=null">
+                <h4>Event Timing information</h4>
+                <p>{{eventTimingInformation}}</p>
+            </div>
+
+            <div class="well" ng-if="eventCost==null">
+                <h4>We have no information about the cost of attending this event</h4>
+            </div>
+
+            <div class="well" ng-if="eventCost!=null">
+                <h4>Cost of attending this event</h4>
+                <p>{{eventCost}}</p>
+            </div>
+
+            <div class="well" ng-if="eventLinks==null">
+                <h4 ng-if="eventLinks==null">We do not have any links for this event</h4>
+            </div>
+
+            <div class="well" ng-if="eventLinks!=null">
+                <h4>Here are the links we found for this event</h4>
+                <div ng-repeat="l in eventLinks">
+                    <h5 ng-if="l.type=='Official Site'"> <a href="{{l.url}}" target="_blank"> {{l.description}} </a> </h5>
+                    <h5 ng-if="l.type=='Tickets'"> <a href={{l.url}} target="_blank"> {{l.description}}</a> </h5>
                 </div>
+            </div>
+
+        </div>
+
+        <div class="col-lg-12">
+            <!-- Comments -->
+
+            <!-- Comments Form -->
+            <div class="well">
+                <h4>Leave a Comment:</h4>
+                <div class="form-group">
+                    <textarea placeholder="Write a comment..." ng-model="comment" class="form-control" rows="3"></textarea>
+                </div>
+                <button class="btn btn-primary" ng-click="addComment()">Submit</button>
+            </div>
+
+            <hr>
+
+            <!-- Posted Comments -->
+            <!-- Comment -->
+            <div class="media" ng-repeat="comment in comments">
+                <span class="pull-left">
+                    <img class="media-object" src="../images/Avatar_empty_x1.png" alt="">
+                </span>
+            <div class="media-body">
+                <h4 class="media-heading">{{comment.username}}
+                        <span  ng-if="user.email == comment.email">
+                            <a ng-click="deleteComment(comment._id)">
+                                <span class="glyphicon glyphicon-remove" id="close" aria-hidden="true">
+                                </span>
+                            </a>
+                        </span>
+                </h4>
+                <p class="lead">
+                    {{comment.commentText}}
+                </p>
             </div>
         </div>
-    </div>
-    <div id="overlay-for-contacts2" >
-        <div class="alert alert-danger" id="overlay-for-contacts-inside2">
-            <p><h4>This event would be blacklisted and would appear
-                   no more on your profile.Do you want to continue?</h4></p>
-            <button type="button" class="btn closebutton2 btn-default"   ng-click="dislike()">Continue</button>
-            <button type="button"  class="btn  btn-default closebutton2"  value="Close">Close</button>
         </div>
+
     </div>
+    <!-- /.row -->
+
+    <hr>
+
+    <!-- Footer -->
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <p>Copyright &copy; Your Website 2014</p>
+            </div>
+        </div>
+    </footer>
+
 </div>

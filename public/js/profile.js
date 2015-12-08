@@ -3,31 +3,40 @@ angular.module('angularApp').controller('ProfileController', ['$scope', '$rootSc
     function ($scope, $rootScope, $http, $location,$cookies,$timeout,webservice)
     {
 
-            $scope.loggedin = true;
-            $scope.name = $rootScope.currentUser.fname;
-            $scope.id=$rootScope.currentUser.id;
-            $http.get("/profileinfo/"+ $rootScope.currentUser.id)
-                .success(function (response)
-                {
-                    if (response == 'error') {
+        $http.get('/loggedin').success(function (user) {
+
+            if (user == '0')
+            {
+                $location.url('/login');
+
+            }
+            else
+            {
+                $scope.loggedin = true;
+                $scope.name = $rootScope.currentUser.fname;
+                $scope.id = $rootScope.currentUser.id;
+                $http.get("/profileinfo/" + $rootScope.currentUser.id)
+                    .success(function (response) {
+                        if (response == 'error') {
+                            console.log("Error Occured");
+                        }
+                        else if (response == 'empty') {
+                            $location.url('/set-preferences');
+                        }
+                        else {
+                            console.log(response);
+                            $scope.profile = response;
+                            initializeProfileInfo();
+                            getLikedEvents();
+                        }
+                    })
+                    .error(function (response) {
+
                         console.log("Error Occured");
-                    }
-                    else if (response == 'empty') {
-                        $location.url('/set-preferences');
-                    }
-                    else {
-                        console.log(response);
-                        $scope.profile = response;
-                        initializeProfileInfo();
-                        getLikedEvents();
-                    }
-                })
-                .error(function (response)
-                {
 
-                    console.log("Error Occured");
-
-                });
+                    });
+            }
+        });
 
 
 

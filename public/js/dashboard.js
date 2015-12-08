@@ -226,7 +226,15 @@ angular.module('angularApp').controller('DashboardController',
               },
               function (errorPayload) {
                   $log.error('failure getting location', errorPayload);
+                  console.log("Error getting location");
               });
+
+          /*if(prom==undefined)
+          {
+              $scope.location =  {lat:'42.340112',
+              long: '-71.08970'};
+              requestFinished.resolve();
+          }*/
 
 
           requestFinished.promise.then(function () {

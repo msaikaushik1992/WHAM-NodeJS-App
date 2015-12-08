@@ -40,6 +40,7 @@ exports.updateCategories=function(req,res)
                 {
                     if(!cat.hasOwnProperty(likedEventCategories[i].id))
                     {
+                        likedEventCategories[i].name=likedEventCategories[i].name.replace("&amp;" ,"/");
                         preferences.push({'category':likedEventCategories[i].id,'categoryText':likedEventCategories[i].name});
                     }
 

@@ -101,6 +101,9 @@ angular.module('angularApp')
 
                  // description
                  $scope.eventDescription = payload.data.description;
+
+                 $scope.eventMapAddr = "https://google.com/maps/place/"+payload.data.address+" "+payload.data.city+" "+payload.data.country_abbr;
+
                  if(payload.data.categories){
                      $scope.eventCategories = payload.data.categories.category;
                  }
@@ -117,8 +120,8 @@ angular.module('angularApp')
                  }
                  if (imageObject) {
                      $scope.eventImageUrl = imageObject.medium.url;
-                     $scope.eventImageHeight = imageObject.medium.height;
-                     $scope.eventImageWidth = imageObject.medium.width;
+                     $scope.eventImageHeight = imageObject.medium.height * 2.5;
+                     $scope.eventImageWidth = imageObject.medium.width * 2.5;
                  }
 
                  // cost of event
@@ -129,17 +132,7 @@ angular.module('angularApp')
                  // links to the event's page
                  if (payload.data.links) {
                      $scope.eventLinks = payload.data.links.link;
-                     //console.log("in links " + payload.data.links.link[0].type);
-                     //
-                     //for (var i = 0; i< payload.data.links; i++){
-                     //    if (payload.data.links.link[i].type == "Official Site"){
-                     //        $scope.eventLinkMain = payload.data.links.link[i].url;
-                     //    }
-                     //    if (payload.data.links.link[i].type == "Tickets"){
-                     //        console.log("in links")
-                     //        $scope.eventLinkTicket = payload.data.links.link[i].url;
-                     //    }
-                     //}
+
                  }
 
                  // timing information
@@ -305,7 +298,8 @@ angular.module('angularApp')
                 if (users != 0) {
                     var url = '/likeEvent';
                     var data={'userid':users.id, 'eventid':$routeParams.id,
-                        'categories':$scope.eventCategory,type:'like','title': $scope.eventTitle,'img':$scope.eventImageUrl}
+                        'categories':$scope.eventCategory,type:'like','title': $scope.eventTitle,
+                        'img':$scope.eventImageUrl,'lat':$routeParams.lat,'lon':$routeParams.lon}
                     console.log(url);
                     $http.post(url,data)
                         .success(function (response)
@@ -344,7 +338,8 @@ angular.module('angularApp')
                 if (users != 0) {
                     var url = '/dislikeEvent';
                     var data={'userid':users.id, 'eventid':$routeParams.id,
-                        'categories':$scope.eventCategory,type:'dislike','title': $scope.eventTitle,'img':$scope.eventImageUrl}
+                        'categories':$scope.eventCategory,type:'dislike','title': $scope.eventTitle,
+                        'img':$scope.eventImageUrl,'lat':$routeParams.lat,'lon':$routeParams.lon}
                     console.log(url);
                     $http.post(url,data)
                         .success(function (response)

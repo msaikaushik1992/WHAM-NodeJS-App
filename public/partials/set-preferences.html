@@ -19,22 +19,14 @@
     <br/>
 
 
-            <div class="row">
-                <div class="col-md-6">
-                    <label>City</label>
-                </div>
-
-                <div class="col-md-6">
-                    <select ng-model="pref.city" id="city" required>
-                        <option selected="selected">Boston</option>
-                        <option>New York</option>
-                        <option>San Francisco</option>
-                        <option>Chicago</option>
-                        <option>Seattle</option>
-                    </select>
-                </div>
+        <div class="row">
+            <div class="col-md-6">
+                <label>City</label>
             </div>
-
+            <div class="col-md-6">
+                <input type="text" ng-value="city" ng-model="pref.city" name="loc"  class="textbox city" id="location" required>
+            </div>
+        </div>
     <br/>
 
 
@@ -74,7 +66,7 @@
                         <option id="">Other</option>
                     </select>
 
-                    <button ng-click="addCategory()"><span class="glyphicon glyphicon-plus"></span></button>
+                    <button class="btn btn-primary" ng-click="addCategory()">Add</button>
                 </div>
 
             </div>

@@ -30,11 +30,16 @@ angular.module('angularApp').controller('SignupController', ['$scope','$rootScop
                                $scope.invalid = true;
                            });
                    }
+                  else
+                   {
+                       $scope.duplicate=true;
+                   }
 
               })
                .error(function (response) {
 
-          $location.url('/signup');
+                $location.url('/signup');
+                  $scope.duplicate=true;
            })
 
      }
