@@ -1,148 +1,159 @@
 <div ng-include="'partials/navbar.html'"></div>
-<div class="container center-block">
-        <div class="col-sm-12 col-md-12 col-lg-12 row">
-            <div id="map" class="map col-sm-12 col-md-12 col-lg-12"></div>
-        </div>
-</div>
-
-<div class="container center-block">
-    <div class="col-sm-12 col-md-12 col-lg-12 row form-group">
-        <br/>
-        <div class="col-md-2">
-            <label class="pull-right search-label label label-default form-contol">Search Events:</label>
-        </div>
-       
-        <div class="col-md-3">
-            <input id="searchText" name="searchText" type="text" placeholder="Search Events or Categories" class="form-control input-md" ng-model="search.query">
-        </div>
-    <!--   
-        <div class="col-md-3">
-            <select id="searchCategory" name="searchCategory" class="form-control input-md" ng-model="search.cat">
-                        <option id="art" selected="selected">Art Galleries</option>
-                        <option id="business" selected="selected">Business/Networking</option>
-                        <option id="music">Concerts</option>
-                        <option id="conference">Conferences</option>
-                        <option id="comedy">Comedy</option>
-                        <option id="learning_education">Education</option>
-                        <option id="movies_film">Films</option>
-                        <option id="family_fun_kids">Kids</option>
-                        <option id="festivals_parades">Festivals</option>
-                        <option id="food">Food & Wine</option>
-                        <option id="fundraisers">Fundraising</option>
-                        <option id="holiday">Holiday</option>
-                        <option id="books">Literary/Books</option>
-                        <option id="attractions">Museums and Attractions</option>
-                        <option id="community">Neighbourhood</option>
-                        <option id="singles_social">Nightlife/Singles</option>
-                        <option id="outdoors_recreation">Outdoors/Recreation</option>
-                        <option id="animals">Pets</option>
-                        <option id="religion_spirituality">Religion/Spirituality</option>
-                        <option id="technology">Technology</option>
-                        <option id="sales">Sales</option>
-                        <option id="support">Health/Wellness</option>
-                        <option id="clubs_associations">Organizations</option>
-                        <option id="science">Science</option>
-                        <option id="schools_alumni">University/Alumni</option>
-                        <option id="performing_arts">Performing Arts</option>
-                        <option id="">Other</option>
-                    </select>
-        </div>
-        -->
-        <!-- Text input-->
-        <div class="col-md-3">
-            <input id="Autocomplete" name="searchLocation" ng-autocomplete="result1" 
-            details="details1" options="options1" type="text" placeholder="Search by location" 
-            class="form-control input-md" ng-model="search.loc">
-
-        </div>
-
-        <!-- Button -->
-        <div class="col-md-1">
-            <button id="singlebutton" ng-click="searchEvents(search)" name="singlebutton" class="btn btn-primary">Search</button>
-        </div>
-        <div class="col-md-1" ng-show="searchresult">
-            <button ng-click="loadDash()" class="btn btn-success">Load Dashboard</button> 
+<!-- Page Heading/Breadcrumbs -->
+<div class="mainContainer">
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Welcome to Social Compass!
+            </h1>
         </div>
     </div>
-</div>
-<div class="container center-block" ng-show="searchresult">
-    <img class="loading center-block" ng-if="searchloading" src="../images/gears.gif" height="150" width="150"/>
-    <h3 class="loading-sentence center-block" ng-if="searchloading">Loading search result....</h3>
-</div>
-<div class="container center-block" ng-show="searchresult">
-    <div class="col-sm-12 col-md-12 col-lg-12 row">
+    <!-- /.row -->
 
-        <div ng-repeat = "s in searchDataPerPage"  class="col-sm-3">
-            <div class="card">
-                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
-                <div class="avatar" ng-if="s.image==null">
-                    <img src="../images/no-image.jpg"/>
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Map Column -->
+        <div class="col-md-6">
+            <!-- Embedded Google Map -->
+            <div id="map" class="map"></div>
+        </div>
+        <!-- Contact Details Column -->
+        <div class="col-md-6 col-lg-6">
+            <div class="form-group">    
+                <div class="col-md-4 col-lg-4">
+                    <input id="searchText" name="searchText" type="text" placeholder="Search Events or Categories" class="form-control input-md" ng-model="search.query">
+                </div>
+            <!--   
+                <div class="col-md-3">
+                    <select id="searchCategory" name="searchCategory" class="form-control input-md" ng-model="search.cat">
+                                <option id="art" selected="selected">Art Galleries</option>
+                                <option id="business" selected="selected">Business/Networking</option>
+                                <option id="music">Concerts</option>
+                                <option id="conference">Conferences</option>
+                                <option id="comedy">Comedy</option>
+                                <option id="learning_education">Education</option>
+                                <option id="movies_film">Films</option>
+                                <option id="family_fun_kids">Kids</option>
+                                <option id="festivals_parades">Festivals</option>
+                                <option id="food">Food & Wine</option>
+                                <option id="fundraisers">Fundraising</option>
+                                <option id="holiday">Holiday</option>
+                                <option id="books">Literary/Books</option>
+                                <option id="attractions">Museums and Attractions</option>
+                                <option id="community">Neighbourhood</option>
+                                <option id="singles_social">Nightlife/Singles</option>
+                                <option id="outdoors_recreation">Outdoors/Recreation</option>
+                                <option id="animals">Pets</option>
+                                <option id="religion_spirituality">Religion/Spirituality</option>
+                                <option id="technology">Technology</option>
+                                <option id="sales">Sales</option>
+                                <option id="support">Health/Wellness</option>
+                                <option id="clubs_associations">Organizations</option>
+                                <option id="science">Science</option>
+                                <option id="schools_alumni">University/Alumni</option>
+                                <option id="performing_arts">Performing Arts</option>
+                                <option id="">Other</option>
+                            </select>
+                </div>
+                -->
+                <!-- Text input-->
+                <div class="col-md-4 col-lg-4">
+                    <input id="Autocomplete" name="searchLocation" ng-autocomplete="result1" 
+                    details="details1" options="options1" type="text" placeholder="Search by location" 
+                    class="form-control input-md" ng-model="search.loc">
+
                 </div>
 
-                <div class="avatar" ng-if="s.image!==null">
-                   <img src="{{s.image.medium.url}}"/>
+                <!-- Button -->
+                <div class="col-md-1">
+                    <button id="singlebutton" ng-click="searchEvents(search)" name="singlebutton" class="btn btn-primary  glyphicon glyphicon-search"></button>
                 </div>
-                <div class="content">
-                    <h4>
-                        <a href="/#event/{{s.id}}/{{s.latitude}}/{{s.longitude}}" alt="{{s.title}}">
-                            {{s.title | limitTo: 40}} {{s.title.length > 40 ? '...' : ''}}
-                        </a>
-                    </h4>
-                    <p class="details">Location: {{s.venue_name}}, {{s.city_name}} </p>
-                    <p>
-                        <a href="/#event/{{s.id}}/{{s.latitude}}/{{s.longitude}}"  class="btn btn-default">Go to the Event</a>
-                    </p>
+                <div class="col-md-1" ng-show="searchresult">
+                    <button ng-click="loadDash()" class="btn btn-success">Load Dashboard</button> 
+                </div>
+            </div>
+
+            <div id="eventBoard" class="eventBoard">
+                <div class="center-block" ng-show="searchresult">
+                    <img class="loading center-block" ng-if="searchloading" src="../images/gears.gif" height="150" width="150"/>
+                    <h3 class="loading-sentence center-block" ng-if="searchloading">Loading search result....</h3>
+                </div>
+                <div class="center-block" ng-show="searchresult">
+                    <div class="col-sm-12 col-md-12 col-lg-12 row">
+
+                        <div ng-repeat = "s in searchDataPerPage"  class="col-sm-4">
+                            <div class="card">
+                                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
+                                <div class="avatar" ng-if="s.image==null">
+                                    <img src="../images/no-image.jpg"/>
+                                </div>
+
+                                <div class="avatar" ng-if="s.image!==null">
+                                   <img src="{{s.image.medium.url}}"/>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="/#event/{{s.id}}/{{s.latitude}}/{{s.longitude}}" alt="{{s.title}}">
+                                            {{s.title | limitTo: 40}} {{s.title.length > 40 ? '...' : ''}}
+                                        </a>
+                                    </h4>
+                                    <p class="details">Location: {{s.venue_name}}, {{s.city_name}} </p>
+                                    <p>
+                                        <a href="/#event/{{s.id}}/{{s.latitude}}/{{s.longitude}}"  class="btn btn-default">Go to the Event</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>        
+
+                <div class="center-block" ng-show="searchresult">
+                    <ul class="pagination psrch">
+                        <li ng-repeat="i in searchArray" ng-click="paginateSearch($event,i)"  ng-class="{'active': isSearchActive(i)}"><a>{{i}}</a></li>
+                    </ul>
+                </div>
+                <div class="center-block" ng-show="showdashboard">
+                    <div class="col-sm-12 col-md-12 col-lg-12 row">
+
+                        <div ng-repeat = "e in dataPerPage"  class="col-sm-4">
+                            <div class="card">
+                                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
+                                <div class="avatar" ng-if="e.image==null">
+                                    <img src="../images/no-image.jpg"/>
+                                </div>
+
+                                <div class="avatar" ng-if="e.image!==null">
+                                   <img src="{{e.image.medium.url}}"/>
+                                </div>
+                                <div class="content">
+                                    <h4>
+                                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}" alt="{{e.title}}">
+                                            {{e.title | limitTo: 40}} {{e.title.length > 40 ? '...' : ''}}
+                                        </a>
+                                    </h4>
+                                    <p class="details">Location: {{e.venue_name}}, {{e.city_name}} </p>
+                                    <p>
+                                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}"  class="btn btn-default">Go to the Event</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>        
+
+                <div class="center-block" ng-show="showdashboard">
+                    <ul class="pagination pevent">
+                        <li ng-repeat="i in array" ng-click="paginate($event,i)"  ng-class="isActive(i) ? 'active' : ''"><a>{{i}}</a></li>
+                    </ul>
+                </div>
+                <div class="center-block" ng-show="showdashboard">
+                    
+                    <img class="loading center-block" ng-if="loading" src="../images/gears.gif" height="150" width="150"/>
+                    <h3 class="loading-sentence center-block" ng-if="loading">Please wait.Retreiving events close to you....</h3>
                 </div>
             </div>
         </div>
     </div>
-    
-</div>        
-
-<div class="container center-block" ng-show="searchresult">
-    <ul class="pagination psrch">
-        <li ng-repeat="i in searchArray" ng-click="paginateSearch($event,i)"  ng-class="{'active': isSearchActive(i)}"><a>{{i}}</a></li>
-    </ul>
 </div>
-<div class="container center-block" ng-show="showdashboard">
-    <div class="col-sm-12 col-md-12 col-lg-12 row">
-        <h1 class="page-header">
-            Welcome to Social Compass!
-        </h1>
-        <div ng-repeat = "e in dataPerPage"  class="col-sm-3">
-            <div class="card">
-                <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
-                <div class="avatar" ng-if="e.image==null">
-                    <img src="../images/no-image.jpg"/>
-                </div>
-
-                <div class="avatar" ng-if="e.image!==null">
-                   <img src="{{e.image.medium.url}}"/>
-                </div>
-                <div class="content">
-                    <h4>
-                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}" alt="{{e.title}}">
-                            {{e.title | limitTo: 40}} {{e.title.length > 40 ? '...' : ''}}
-                        </a>
-                    </h4>
-                    <p class="details">Location: {{e.venue_name}}, {{e.city_name}} </p>
-                    <p>
-                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}"  class="btn btn-default">Go to the Event</a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>        
-
-<div class="container center-block" ng-show="showdashboard">
-    <ul class="pagination pevent">
-        <li ng-repeat="i in array" ng-click="paginate($event,i)"  ng-class="isActive(i) ? 'active' : ''"><a>{{i}}</a></li>
-    </ul>
-</div>
-<div class="container center-block" ng-show="showdashboard">
-    
-    <img class="loading center-block" ng-if="loading" src="../images/gears.gif" height="150" width="150"/>
-    <h3 class="loading-sentence center-block" ng-if="loading">Please wait.Retreiving events close to you....</h3>
-</div>
+        
