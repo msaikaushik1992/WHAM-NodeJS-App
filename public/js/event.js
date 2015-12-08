@@ -101,6 +101,14 @@ angular.module('angularApp')
 
                  // description
                  $scope.eventDescription = payload.data.description;
+
+                 if($scope.eventDescription == null){
+                     $scope.eventAlternativeDescription = $scope.eventTitle + " is being held at " + $scope.eventVenue + ". You will love this event if you like ";
+
+
+
+                 }
+
                  if(payload.data.categories){
                      $scope.eventCategories = payload.data.categories.category;
                  }
@@ -117,8 +125,8 @@ angular.module('angularApp')
                  }
                  if (imageObject) {
                      $scope.eventImageUrl = imageObject.medium.url;
-                     $scope.eventImageHeight = imageObject.medium.height;
-                     $scope.eventImageWidth = imageObject.medium.width;
+                     $scope.eventImageHeight = imageObject.medium.height * 2.5;
+                     $scope.eventImageWidth = imageObject.medium.width * 2.5;
                  }
 
                  // cost of event
@@ -129,17 +137,7 @@ angular.module('angularApp')
                  // links to the event's page
                  if (payload.data.links) {
                      $scope.eventLinks = payload.data.links.link;
-                     //console.log("in links " + payload.data.links.link[0].type);
-                     //
-                     //for (var i = 0; i< payload.data.links; i++){
-                     //    if (payload.data.links.link[i].type == "Official Site"){
-                     //        $scope.eventLinkMain = payload.data.links.link[i].url;
-                     //    }
-                     //    if (payload.data.links.link[i].type == "Tickets"){
-                     //        console.log("in links")
-                     //        $scope.eventLinkTicket = payload.data.links.link[i].url;
-                     //    }
-                     //}
+
                  }
 
                  // timing information
