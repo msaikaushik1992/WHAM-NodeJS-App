@@ -1,5 +1,5 @@
 // MODULE
-var angularApp = angular.module('angularApp', ['ngRoute','door3.css','ngCookies']);
+var angularApp = angular.module('angularApp', ['ngRoute','door3.css','ngCookies', 'ngAutocomplete']);
 
 
 
@@ -32,7 +32,7 @@ angularApp.service('webservice',function($http)
         return $http.get("/eventsByLocationAndPreference/"+ JSON.stringify(locationAndPreferences));
     }
 
-    self.getEventsByPreferenceAndQuery = function(locationObj, preferences, searchParams)
+    self.getEventsByLocationPreferenceAndQuery = function(locationObj, preferences, searchParams)
     {
         console.log(preferences);
         console.log(searchParams);
@@ -44,6 +44,40 @@ angularApp.service('webservice',function($http)
         categoryList=categoryList.substring(0,categoryList.length-1);
         var locationPreferencesAndQuery={location:locationObj,categories:categoryList,query:searchParams.query};
         return $http.get("/eventsByLocationPreferenceAndQuery/"+ JSON.stringify(locationPreferencesAndQuery));
+    }
+
+    self.getEventsByLocationAndQuery = function(locationObj, searchParams)
+    {
+        console.log(searchParams);
+        var locationAndQuery={location:locationObj, query:searchParams.query};
+        return $http.get("/eventsByLocationAndQuery/"+ JSON.stringify(locationAndQuery));
+    }
+
+    self.getEventsByPreferenceAndQLocation = function(preferences, locationObj)
+    {
+        var categoryList="";
+        for(var i=0; i<preferences.length;i++)
+        {
+            categoryList+=(preferences[i].category)+",";
+        }
+        categoryList=categoryList.substring(0,categoryList.length-1);
+        var PreferencesAndQLocation={categories:categoryList,location:locationObj};
+        return $http.get("/eventsByPreferenceAndQLocation/"+ JSON.stringify(PreferencesAndQLocation));
+    }
+
+    self.getEventsByQLocation = function(locationObj)
+    {
+        var queLocation={location:locationObj};
+        console.log(queLocation);
+        return $http.get("/eventsByQLocation/"+ JSON.stringify(queLocation));
+    }
+
+    self.getLocationCoordsQuery = function (searchParams) {
+        // body...
+        var locationObj = {loc:searchParams.loc};
+        var val = $http.get("/getLocationCoordsFromCity/"+JSON.stringify(locationObj));
+        console.log(val);
+        return val;
     }
 
     self.checkLoggedIn = new Promise(function (resolve, reject)
@@ -62,7 +96,6 @@ angularApp.service('webservice',function($http)
 
         }
     });
-
 
     self.getLocationCoords = new Promise(function (resolve, reject)
     {

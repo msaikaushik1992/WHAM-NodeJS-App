@@ -1,5 +1,5 @@
 angular.module('angularApp').controller('DashboardController', 
-  ['$scope', '$http', '$location','webservice','$q','$log','$route','$rootScope', 
+  ['$scope', '$http', '$location','webservice','$q','$log','$route','$rootScope',
   function ($scope, $http, $location,webservice,$q,$log,$route,$rootScope) {
     
     $(document).ready(function () {
@@ -10,21 +10,30 @@ angular.module('angularApp').controller('DashboardController',
             console.log("Clicked");
         });
     });
-    $scope.loadDash = function () {
-      // body...
-      window.location.reload();
-    }
+    
+    $scope.result1 = '';
+    $scope.options1 = null;
+    $scope.details1 = '';
+
     $scope.showdashboard=true;
     $scope.loading=true;
     $scope.searchresult=false;
     $scope.searchloading=false;
 
-    $scope.searchEvents= function(search) {
-        // body...
+    // reload the page after the search result is shown
+    $scope.loadDash = function () {
+      // body...
+      window.location.reload();
+    }
 
-        $scope.searchloading=true;
+    // search functions
+    $scope.searchEvents= function(search) {
+        // hide dashboard
         $scope.showdashboard=false;
         $scope.loading=false;
+        
+        // show search results
+        $scope.searchloading=true;
 
         var searchByQuery = ((typeof search.query != "undefined") ? search.query : "");
         var searchByCategory = ((typeof search.cat != "undefined") ? search.cat : "");
@@ -33,30 +42,53 @@ angular.module('angularApp').controller('DashboardController',
 
         if (searchByQuery != "" && searchByLocatioin != "" && searchByCategory != "") {
             console.log("searchByAll");
-        } else if (searchByQuery != "" && searchByLocatioin != "" && searchByCategory == "") {
-            console.log("searchByPreference");
-        } else if (searchByQuery != "" && searchByLocatioin == "" && searchByCategory != "") {
-            console.log("searchByDefaultLocation");
+        } else if (searchByQuery == "" && searchByLocatioin != "" && searchByCategory == "") {
+            $scope.search.loc = searchByLocatioin;
+            $scope.search.query = "";
+            $scope.search.category = "";
+            console.log("searchByLocatioin");
+        } else if (searchByQuery == "" && searchByLocatioin == "" && searchByCategory != "") {
+            console.log("searchByCategory");
+            $scope.search.category = searchByCategory;
+            $scope.search.loc = searchByLocatioin;
+            $scope.search.query = "";
         } else if (searchByQuery == "" && searchByLocatioin != "" && searchByCategory != "") {
             console.log("searchByDefaultLocationPreference");
         } else if (searchByQuery != "" && searchByLocatioin == "" && searchByCategory == "") {
             console.log("searchByDefaultLocationAndPreference");
             $scope.search.query = searchByQuery;
+            $scope.search.loc="";
+            $scope.search.category = "";
         }       
 
+        getSearchResult();
     }
 
+
+    // get search result
     function getSearchResult () {
-        // body...
+    
         if($rootScope.currentUser) {
             console.log($rootScope.currentUser);
             $scope.loggedin = true;
             $scope.name = $rootScope.currentUser.fname;
             $scope.id= $rootScope.currentUser.id;
-            var userPref = loadPreferences($rootScope.currentUser.id);
-            populateSearch(userPref, $scope.search); 
+            $http.get("/preferences/"+ $rootScope.currentUser.id)
+            .success(function (response) {
+                if (response == 'error') {
+                    console.log("Error Occured");
+                } else if(response=='empty') {
+                    $location.url('/set-preferences');
+                } else {
+                    console.log(response);
+                    populateDashboard(response, $scope.search);
+                }
+            })
+            .error(function (response) {
+                console.log("Error Occured");
+            });
         } else {
-          console.log("I am there");
+            console.log($scope.loggedin);
             var loggedInStatus = webservice.checkLoggedIn;
             var populate = $q.defer();
 
@@ -64,12 +96,14 @@ angular.module('angularApp').controller('DashboardController',
                 function (response) 
                 {
                     if (response == '0') {
+                        console.log("this");
                         $scope.loggedin = false;
                         console.log(response);
                         $scope.$apply();
                         $scope.prefs=null;
                         populate.resolve();
                     } else {
+                        console.log("that");
                         $scope.loggedin = true;
                         $scope.name = response.fname;
                         $scope.id = response.id;
@@ -114,8 +148,20 @@ angular.module('angularApp').controller('DashboardController',
             $scope.loggedin = true;
             $scope.name = $rootScope.currentUser.fname;
             $scope.id= $rootScope.currentUser.id;
-            var userPref = loadPreferences($rootScope.currentUser.id);
-            populateDashboard(userPref, $scope.search);
+            $http.get("/preferences/"+ $rootScope.currentUser.id)
+            .success(function (response) {
+                if (response == 'error') {
+                    console.log("Error Occured");
+                } else if(response=='empty') {
+                    $location.url('/set-preferences');
+                } else {
+                    console.log(response);
+                    populateDashboard(response);
+                }
+            })
+            .error(function (response) {
+                console.log("Error Occured");
+            });
         } else {
             console.log("I am there");
             var loggedInStatus = webservice.checkLoggedIn;
@@ -164,31 +210,12 @@ angular.module('angularApp').controller('DashboardController',
         }
    
     }
-
-    function loadPreferences() {
-        $http.get("/preferences/"+ $rootScope.currentUser.id)
-            .success(function (response) {
-                if (response == 'error') {
-                    console.log("Error Occured");
-                } else if(response=='empty') {
-                    $location.url('/set-preferences');
-                } else {
-                    console.log(response);
-                    return response;
-                    //populateDashboard(response, $scope.search);
-                }
-            })
-            .error(function (response) {
-                console.log("Error Occured");
-            });
-    }
     /*Function to populate the dashboard with events.
      Called only when the promise resolves.*/
 
-    function populateDashboard(userPrefs, searchParams) {
+    function populateDashboard(userPrefs) {
 
           console.log("User Preferences:" + userPrefs);
-          console.log("Search: " + searchParams);
           var requestFinished = $q.defer();
 
           var prom = webservice.getLocationCoords;
@@ -207,22 +234,7 @@ angular.module('angularApp').controller('DashboardController',
 
               if (userPrefs !== null) {
 
-                  if (searchParams) {
-                      console.log($scope.location);
-                      var p = webservice.getEventsByPreferenceAndQuery($scope.location, userPrefs, searchParams);
-                      p.then(
-                          function (payload) {
-                              $scope.eventData = payload.data.events.event;
-                              console.log($scope.eventData.length);
-                              requestDone.resolve();
-                          },
-                          function (errorPayload) {
-                              $log.error('failure loading movie', errorPayload);
-                              console.log("Error retrieving events");
-
-                          });
-
-                  } else {
+            
                       console.log($scope.location);
                       var p = webservice.getEventsByPreference($scope.location, userPrefs);
                       p.then(
@@ -237,7 +249,7 @@ angular.module('angularApp').controller('DashboardController',
 
                           });
 
-                  }
+          
               }
               else {
 
@@ -275,6 +287,7 @@ angular.module('angularApp').controller('DashboardController',
                                   }
                               }
 
+
                               $scope.eventData = data;
                               $scope.loading = false;
                               $scope.array = new Array(Math.round($scope.eventData.length / 12));
@@ -306,69 +319,85 @@ angular.module('angularApp').controller('DashboardController',
      Called only when the promise resolves.*/
 
     function populateSearch(userPrefs, searchParams) {
+          $scope.searchresult=true;
+          $scope.searchLoc='';
 
           console.log("User Preferences:" + userPrefs);
           console.log("Search: " + searchParams);
-          var requestFinished = $q.defer();
 
-          var prom = webservice.getLocationCoords;
-          prom.then(
-              function (payload) {
-                  $scope.location = payload;
-                  requestFinished.resolve();
-              },
-              function (errorPayload) {
-                  $log.error('failure getting location', errorPayload);
-              });
+          var searchFinished = $q.defer();
 
+          if (searchParams.loc != '') {
+            console.log("Get location coords");
+            var result = webservice.getLocationCoordsQuery(searchParams);
+            result.then(
+                      function (res) {
+                          console.log("Please: "+res.data.results[0].geometry.location.lat);
+                          $scope.searchLoc = {
+                            lat:res.data.results[0].geometry.location.lat,
+                            long:res.data.results[0].geometry.location.lng,
+                          }
+                          console.log($scope.searchLoc);
+                          searchFinished.resolve();
+                     },
+                      function (errorResult) {
+                          $log.error('failure loading movie', errorResult);
+                          console.log("Error retrieving events");
 
-          requestFinished.promise.then(function () {
-              var requestDone = $q.defer();
+                      });
+             
+          } else if ($scope.location) {
+            searchFinished.resolve();
+          }
+          // var prom = webservice.getLocationCoords;
+          // prom.then(
+          //     function (payload) {
+          //         $scope.location = payload;
+          //         searchFinished.resolve();
+          //     },
+          //     function (errorPayload) {
+          //         $log.error('failure getting location', errorPayload);
+          //     });
 
+          searchFinished.promise.then(function () {
+              var searchDone = $q.defer();
+              var resutls;
               if (userPrefs !== null) {
-
-                  if (searchParams) {
-                      console.log($scope.location);
-                      var p = webservice.getEventsByPreferenceAndQuery($scope.location, userPrefs, searchParams);
-                      p.then(
-                          function (payload) {
-                              $scope.searchData = payload.data.events.event;
-                              console.log($scope.searchData.length);
-                              requestDone.resolve();
-                          },
-                          function (errorPayload) {
-                              $log.error('failure loading movie', errorPayload);
-                              console.log("Error retrieving events");
-
-                          });
-
-                  } else {
-                      console.log($scope.location);
-                      var p = webservice.getEventsByPreference($scope.location, userPrefs);
-                      p.then(
-                          function (payload) {
-                              $scope.searchData = payload.data.events.event;
-                              console.log($scope.searchData.length);
-                              requestDone.resolve();
-                          },
-                          function (errorPayload) {
-                              $log.error('failure loading movie', errorPayload);
-                              console.log("Error retrieving events");
-
-                          });
-
+                  console.log($scope.location);
+                  
+                  if (searchParams.query != '') {
+                    resutls = webservice.getEventsByLocationPreferenceAndQuery($scope.location, userPrefs, searchParams);
+                  } else if (searchParams.loc != '') {
+                    console.log(searchParams.loc);
+                    resutls = webservice.getEventsByPreferenceAndQLocation(userPrefs, $scope.searchLoc);
                   }
+                  resutls.then(
+                      function (result) {
+                          console.log(result.data.total_items);
+                          $scope.datalength = result.data.total_items;
+                          $scope.searchData = result.data.events.event; 
+                          searchDone.resolve();
+                      },
+                      function (errorResult) {
+                          $log.error('failure loading movie', errorResult);
+                          console.log("Error retrieving events");
+
+                      });
               }
               else {
-
                   console.log($scope.location);
-                  var p = webservice.getApiData($scope.location);
-                  p.then(
-                      function (payload) {
-                          console.log(payload);
-                          $scope.searchData = payload.data.events.event;
-                          console.log($scope.searchData.length);
-                          requestDone.resolve();
+
+                  console.log("Search: " + $scope.searchLoc);
+                  if (searchParams.query != '') {
+                    resutls = webservice.getEventsByLocationAndQuery($scope.location, searchParams);
+                  } else if (searchParams.loc != '') {
+                    resutls = webservice.getEventsByQLocation($scope.searchLoc);
+                  }
+                  resutls.then(
+                      function (result) {
+                          $scope.datalength = result.data.total_items;
+                          $scope.searchData = result.data.events.event;
+                          searchDone.resolve();
                       },
                       function (errorPayload) {
                           $log.error('failure loading movie', errorPayload);
@@ -378,18 +407,26 @@ angular.module('angularApp').controller('DashboardController',
 
               }
 
-              requestDone.promise.then(function () {
-                  
-                      $scope.loading = false;
-                      $scope.array = new Array(Math.round($scope.searchData.length / 12));
-                      for (var i = 0; i < $scope.array.length; i++) {
-                          $scope.array[i] = i + 1;
+              searchDone.promise.then(function () {
+                      $scope.searchloading = false;
+                      $scope.searchDataPerPage=[];
+                      console.log($scope.datalength);
+                      if ($scope.datalength > 1) {
+                          $scope.searchArray = new Array(Math.round($scope.searchData.length / 12));
+                          for (var i = 0; i < $scope.searchArray.length; i++) {
+                              $scope.searchArray[i] = i + 1;
+                          }
+                          $scope.searchDataPerPage=$scope.searchData.slice(0,12);
+                            
+                      } else {
+                        console.log("SingleEvent:" + $scope.searchData.title);
+                        $scope.searchDataPerPage=new Array($scope.searchData).slice(0,12);
+                        console.log($scope.searchDataPerPage);
+                          
                       }
-                      $scope.searchDataPerPage=$scope.searchData.slice(0,12);
-                      generateMap($scope);
-                      $scope.isSelected=1;
+                      generateMap($scope, 'search');
+                      $scope.isEventSelected=1;
               });
-
 
           });
 
@@ -414,6 +451,25 @@ angular.module('angularApp').controller('DashboardController',
         generateMap($scope);
     }
 
+    $scope.paginateSearch = function(event,i)
+    {
+        $scope.searchDataPerPage=$scope.searchData.slice((i-1)*12,(i-1)*12+12);
+        console.log($scope.searchDataPerPage);
+        var averageLatitude = 0,averageLongitude = 0;
+        var dpp = $scope.searchDataPerPage;
+        for(var i = 0; i<dpp.length; i++){
+            averageLatitude+=dpp[i].latitude;
+            averageLongitude+=dpp[i].longitude;
+        }
+        averageLatitude/=dpp.length;
+        averageLongitude/=dpp.length;
+        $scope.isSelected=i;
+        $target = $(event.target);
+        $target.addClass('active');
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+        
+      generateMap($scope, 'search');
+    }
 
       $scope.isActive = function(item)
       {
@@ -432,7 +488,7 @@ angular.module('angularApp').controller('DashboardController',
             });
     }
 
-    function generateMap($scope){
+    function generateMap($scope, search){
       $scope.markers = [];
 
       var labels= "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -481,9 +537,14 @@ angular.module('angularApp').controller('DashboardController',
         }
       });
       var bounds = new gm.LatLngBounds();
-
-      for(var i = 0; i<$scope.dataPerPage.length; i++) {
-                var obj = $scope.dataPerPage[i];
+      
+      if (search == 'search') {
+        $scope.eventsPerPage=$scope.searchDataPerPage;
+      } else {
+        $scope.eventsPerPage=$scope.dataPerPage;
+      }
+      for(var i = 0; i<$scope.eventsPerPage.length; i++) {
+                var obj = $scope.eventsPerPage[i];
                 var loc = {lat : Number(obj.latitude), lng: Number(obj.longitude)};
                 var marker = new gm.Marker({
                     position: loc,

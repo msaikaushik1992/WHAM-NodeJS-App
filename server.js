@@ -52,7 +52,29 @@ app.get("/getlikes/:eventid", Rating.getlikes);
 app.delete("/unlike/:evid/:id", Rating.unlike);
 app.get("/getdislikes/:eventid", Rating.getdislikes);
 app.get("/checklike/:evid/:id", Rating.checkLike);
-app.get("/getUserByEmail/:emailid",User.FindUserByEmail)
+app.get("/getUserByEmail/:emailid",User.FindUserByEmail);
+// app.post("/getCityData/", getCityData);
+
+// function getCityData () {
+//     console.log('Here am i');
+//     // body...
+//     requestify.get('http://gomashup.com/json.php?fds=geo/usa/zipcode/state/MA&jsoncallback=')
+//        .then(function(response)
+//    {
+
+//       if(response!==null)
+//       {
+//         console.log(response.getBody());
+//        res.send(response.body);
+//       }
+//       else
+//       {
+//        res.send('error');
+//       }
+
+
+//    });
+// }
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }), function (req, res) {
 
@@ -191,7 +213,6 @@ app.get("/eventsByLocationPreferenceAndQuery/:locationPrefQueryObj",apicache('15
         "&category="+locPrefQueryObj.categories +"&q="+locPrefQueryObj.query+"&sort_order=popularity")
         .then(function(response)
         {
-
             if(response!==null)
             {
                 res.send(response.body);
@@ -201,9 +222,84 @@ app.get("/eventsByLocationPreferenceAndQuery/:locationPrefQueryObj",apicache('15
                 res.send('error');
             }
         });
-
 });
 
+app.get("/eventsByLocationAndQuery/:locationQueryObj",apicache('15 minutes'),function(req,res)
+{
+    var locQueryObj=JSON.parse(req.params.locationQueryObj);
+    requestify.get("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L" +
+        "&location="+locQueryObj.location.lat+","+ locQueryObj.location.long + "&date=Future&within=5&page_size=100" +
+        "&q="+locQueryObj.query+"&sort_order=popularity")
+        .then(function(response)
+        {
+            if(response!==null)
+            {
+                res.send(response.body);
+            }
+            else
+            {
+                res.send('error');
+            }
+        });
+});
+
+app.get("/eventsByPreferenceAndQLocation/:prefQueLocObj",apicache('15 minutes'),function(req,res)
+{
+    var prefQLocationObj=JSON.parse(req.params.prefQueLocObj);
+    requestify.get("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L" +
+        "&date=Future&within=5&page_size=100" +
+        "&category="+prefQLocationObj.categories +
+        "&location="+prefQLocationObj.location.lat+","+ prefQLocationObj.location.long +
+        "&sort_order=popularity")
+        .then(function(response)
+        {
+            if(response!==null)
+            {
+                res.send(response.body);
+            }
+            else
+            {
+                res.send('error');
+            }
+        });
+});
+
+
+app.get("/eventsByQLocation/:queLocationObj",apicache('15 minutes'),function(req,res)
+{
+    var queLocObj=JSON.parse(req.params.queLocationObj);
+    requestify.get("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L" +
+        "&location="+queLocObj.location.lat+","+ queLocObj.location.long +"&date=Future&within=5&page_size=100" +
+        "&sort_order=popularity")
+        .then(function(response)
+        {
+            if(response!==null)
+            {
+                res.send(response.body);
+            }
+            else
+            {
+                res.send('error');
+            }
+        });
+});
+app.get("/getLocationCoordsFromCity/:locObj", function(req, res){
+    var queLoc=JSON.parse(req.params.locObj);
+    requestify.get("https://maps.googleapis.com/maps/api/geocode/json?" + 
+        "address="+queLoc.loc)
+    .then(function(response)
+    {
+        if(response!==null)
+        {
+            res.send(response.body);
+        }
+        else
+        {
+            res.send('error');
+        }
+
+    });
+});
 
 var ip =  '127.0.0.1';
 var port = 8080;

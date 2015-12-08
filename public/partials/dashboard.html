@@ -49,7 +49,10 @@
         </div>
         <!-- Text input-->
         <div class="col-md-3">
-            <input id="searchLocation" name="searchLocation" type="text" placeholder="Search by location" class="form-control input-md" ng-model="search.loc">
+            <input id="Autocomplete" name="searchLocation" ng-autocomplete="result1" 
+            details="details1" options="options1" type="text" placeholder="Search by location" 
+            class="form-control input-md" ng-model="search.loc">
+
         </div>
 
         <!-- Button -->
@@ -58,34 +61,46 @@
         </div>
     </div>
 </div>
+
+<div class="container center-block" ng-show="searchresult">
+    <img class="loading center-block" ng-if="searchloading" src="../images/gears.gif" height="150" width="150"/>
+    <h3 class="loading-sentence center-block" ng-if="loading">Loading search result....</h3>
+</div>
 <div class="container center-block" ng-show="searchresult">
     <div class="col-sm-12 col-md-12 col-lg-12 row">
-        <div ng-repeat = "e in searchDataPerPage"  class="col-sm-3">
+
+        <div ng-repeat = "s in searchDataPerPage"  class="col-sm-3">
             <div class="card">
                 <canvas class="header-bg" width="250" height="70" id="header-blur"></canvas>
-                <div class="avatar" ng-if="e.image==null">
+                <div class="avatar" ng-if="s.image==null">
                     <img src="../images/no-image.jpg"/>
                 </div>
 
-                <div class="avatar" ng-if="e.image!==null">
-                   <img src="{{e.image.medium.url}}"/>
+                <div class="avatar" ng-if="s.image!==null">
+                   <img src="{{s.image.medium.url}}"/>
                 </div>
                 <div class="content">
                     <h4>
-                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}" alt="{{e.title}}">
-                            {{e.title | limitTo: 40}} {{e.title.length > 40 ? '...' : ''}}
+                        <a href="/#event/{{s.id}}/{{s.latitude}}/{{s.longitude}}" alt="{{s.title}}">
+                            {{s.title | limitTo: 40}} {{s.title.length > 40 ? '...' : ''}}
                         </a>
                     </h4>
-                    <p class="details">Location: {{e.venue_name}}, {{e.city_name}} </p>
+                    <p class="details">Location: {{s.venue_name}}, {{s.city_name}} </p>
                     <p>
-                        <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}"  class="btn btn-default">Go to the Event</a>
+                        <a href="/#event/{{s.id}}/{{s.latitude}}/{{s.longitude}}"  class="btn btn-default">Go to the Event</a>
                     </p>
                 </div>
             </div>
         </div>
     </div>
+    
 </div>        
 
+<div class="container center-block" ng-show="searchresult">
+    <ul class="pagination">
+        <li ng-repeat="i in array" ng-click="paginateSearch($event,i)"  ng-class="{'active': isActive(i)}"><a>{{i}}</a></li>
+    </ul>
+</div>
 <div class="container center-block" ng-show="showdashboard">
     <div class="col-sm-12 col-md-12 col-lg-12 row">
         <h1 class="page-header">
@@ -118,7 +133,7 @@
 
 </div>        
 
-<div class="container center-block">
+<div class="container center-block" ng-show="showdashboard">
     <ul class="pagination">
         <li ng-repeat="i in array" ng-click="paginate($event,i)"  ng-class="{'active': isActive(i)}"><a>{{i}}</a></li>
     </ul>
@@ -129,9 +144,5 @@
     <h3 class="loading-sentence center-block" ng-if="loading">Please wait.Retreiving events close to you....</h3>
 </div>
 <div class="container center-block" ng-show="searchresult">
-    <img class="loading center-block" ng-if="searchloading" src="../images/gears.gif" height="150" width="150"/>
-    <h3 class="loading-sentence center-block" ng-if="loading">Loading search result....</h3>
-</div>
-<div class="container center-block" ng-show="searchloading">
     <button ng-click="loadDash()" class="btn btn-default">Load Dashboard</button> 
 </div>
