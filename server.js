@@ -53,28 +53,6 @@ app.delete("/unlike/:evid/:id", Rating.unlike);
 app.get("/getdislikes/:eventid", Rating.getdislikes);
 app.get("/checklike/:evid/:id", Rating.checkLike);
 app.get("/getUserByEmail/:emailid",User.FindUserByEmail);
-// app.post("/getCityData/", getCityData);
-
-// function getCityData () {
-//     console.log('Here am i');
-//     // body...
-//     requestify.get('http://gomashup.com/json.php?fds=geo/usa/zipcode/state/MA&jsoncallback=')
-//        .then(function(response)
-//    {
-
-//       if(response!==null)
-//       {
-//         console.log(response.getBody());
-//        res.send(response.body);
-//       }
-//       else
-//       {
-//        res.send('error');
-//       }
-
-
-//    });
-// }
 
 app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email'] }), function (req, res) {
 

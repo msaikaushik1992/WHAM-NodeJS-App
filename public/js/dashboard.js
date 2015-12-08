@@ -532,10 +532,10 @@ angular.module('angularApp').controller('DashboardController',
               label: labels[labelIndex++ % labels.length],
               icon: iconWithColor(usualColor),
               shadow: shadow,
-              url: "#event/"+obj.id+"/"+Number(obj.latitude)+"/"+obj.longitude
+              url: "#event/"+obj.id+"/"+Number(obj.latitude)+"/"+Number(obj.longitude)
           });
           bounds.extend(marker.position);
-          marker.desc = '<a href="#event/'+obj.id+'/'+obj.latitude+'/'+obj.latitude+'">'+obj.title+'<a>';
+          marker.desc = '<a href="#event/'+obj.id+'/'+obj.latitude+'/'+obj.longitude+'">'+obj.title+'<a>';
           oms.addMarker(marker);
           $scope.markers.push(marker);
           // gm.event.addListener(marker, 'click', function() {
