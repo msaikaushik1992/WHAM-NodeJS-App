@@ -40,55 +40,41 @@ angular.module('angularApp').controller('DashboardController',
         var searchByLocatioin = ((typeof search.loc != "undefined") ? search.loc : "");
         console.log("Query:" +searchByQuery+ " Category:" +searchByCategory+ " Location:" + searchByLocatioin);
 
-        if (searchByQuery != "" && searchByLocatioin != "" && searchByCategory != "") {
-            console.log("searchByAll");
-        } else if (searchByQuery == "" && searchByLocatioin != "" && searchByCategory == "") {
-            $scope.search.loc = searchByLocatioin;
-            $scope.search.query = "";
-            $scope.search.category = "";
-            console.log("searchByLocatioin");
-        } else if (searchByQuery == "" && searchByLocatioin == "" && searchByCategory != "") {
-            console.log("searchByCategory");
-            $scope.search.category = searchByCategory;
-            $scope.search.loc = "";
-            $scope.search.query = "";
-        } else if (searchByQuery == "" && searchByLocatioin != "" && searchByCategory != "") {
-            console.log("searchByDefaultLocationPreference");
-        } else if (searchByQuery != "" && searchByLocatioin == "" && searchByCategory == "") {
-            console.log("searchByDefaultLocationAndPreference");
-            $scope.search.query = searchByQuery;
-            $scope.search.loc="";
-            $scope.search.category = "";
-        }       
-
+        $scope.search.loc = searchByLocatioin;
+        $scope.search.category = searchByCategory;
+        $scope.search.query = searchByQuery;
         getSearchResult();
     }
 
-
-    // get search result
-    function getSearchResult () {
-    
-        if($rootScope.currentUser) {
-            console.log($rootScope.currentUser);
-            $scope.loggedin = true;
-            $scope.name = $rootScope.currentUser.fname;
-            $scope.id= $rootScope.currentUser.id;
-            $http.get("/preferences/"+ $rootScope.currentUser.id)
-            .success(function (response) {
-                if (response == 'error') {
-                    console.log("Error Occured");
-                } else if(response=='empty') {
-                    $location.url('/set-preferences');
-                } else {
-                    console.log(response);
-                    populateDashboard(response, $scope.search);
-                }
-            })
-            .error(function (response) {
+    // helper funtions for generating dashboard or searchboard
+    function loadBoardforCurrentUser (boardName) {
+        // body...
+        console.log($rootScope.currentUser);
+        $scope.loggedin = true;
+        $scope.name = $rootScope.currentUser.fname;
+        $scope.id= $rootScope.currentUser.id;
+        $http.get("/preferences/"+ $rootScope.currentUser.id)
+        .success(function (response) {
+            if (response == 'error') {
                 console.log("Error Occured");
-            });
-        } else {
-            console.log($scope.loggedin);
+            } else if(response=='empty') {
+                $location.url('/set-preferences');
+            } else {
+                console.log(response);
+                if (boardName == 'search') {                     
+                    populateSearch(response, $scope.search); 
+                } else {
+                    populateDashboard(response);
+                }
+            }
+        })
+        .error(function (response) {
+            console.log("Error Occured");
+        });
+    }
+
+    function loadBoardforAllUsers(boardName) {
+      console.log($scope.loggedin);
             var loggedInStatus = webservice.checkLoggedIn;
             var populate = $q.defer();
 
@@ -132,81 +118,35 @@ angular.module('angularApp').controller('DashboardController',
 
             // complete promise
             populate.promise.then(function () {
-                populateSearch($scope.prefs, $scope.search);
+                if (boardName == 'search') {
+                    populateSearch($scope.prefs, $scope.search);
+                } else {
+                    populateDashboard($scope.prefs);
+                }
+                
             });
+    }
+
+    // get search result
+    function getSearchResult () {
+        if($rootScope.currentUser) {
+            loadBoardforCurrentUser('search');
+        } else {
+            loadBoardforAllUsers('search');
         }
     }
 
+
+    // Generating Dashboard
 
     getDashboard();
 
     function getDashboard () {
       // body...
         if($rootScope.currentUser) {
-            console.log("I am here");
-            console.log($rootScope.currentUser);
-            $scope.loggedin = true;
-            $scope.name = $rootScope.currentUser.fname;
-            $scope.id= $rootScope.currentUser.id;
-            $http.get("/preferences/"+ $rootScope.currentUser.id)
-            .success(function (response) {
-                if (response == 'error') {
-                    console.log("Error Occured");
-                } else if(response=='empty') {
-                    $location.url('/set-preferences');
-                } else {
-                    console.log(response);
-                    populateDashboard(response);
-                }
-            })
-            .error(function (response) {
-                console.log("Error Occured");
-            });
+            loadBoardforCurrentUser();
         } else {
-            console.log("I am there");
-            var loggedInStatus = webservice.checkLoggedIn;
-            var populate = $q.defer();
-
-            loggedInStatus.then(
-                function (response) 
-                {
-                    if (response == '0') {
-                        $scope.loggedin = false;
-                        console.log(response);
-                        $scope.$apply();
-                        $scope.prefs=null;
-                        populate.resolve();
-                    } else {
-                        $scope.loggedin = true;
-                        $scope.name = response.fname;
-                        $scope.id = response.id;
-                        console.log($scope.name);
-                        console.log(response.id);
-                        $scope.$apply();
-                        $http.get("/preferences/"+ response.id)
-                            .success(function (response) {
-                                if (response == 'error') {
-                                    console.log("Error Occured");
-                                } else if(response=='empty') {
-                                    $location.url('/set-preferences');
-                                } else {
-                                    console.log(response);
-                                    $scope.prefs=response;
-                                    populate.resolve();
-                                }
-                            }).error(function (response) {
-                                console.log("Error Occured");
-                            });
-                    }
-                },
-                function (errorPayload) {
-                    $log.error('Error checking Log In Status', errorPayload);
-                });
-
-            // complete promise
-            populate.promise.then(function () {
-                populateDashboard($scope.prefs);
-            });
+            loadBoardforAllUsers();
         }
    
     }
@@ -370,7 +310,8 @@ angular.module('angularApp').controller('DashboardController',
           searchFinished.promise.then(function () {
               var searchDone = $q.defer();
               var resutls;
-              if (userPrefs !== null && searchParams.category == "") {
+
+              if (userPrefs !== null) {
                   console.log($scope.location);
                   
                   if (searchParams.query != '') {
@@ -508,6 +449,11 @@ angular.module('angularApp').controller('DashboardController',
         center: new google.maps.LatLng($scope.location.lat,$scope.location.long),
         zoom: 11
       });
+      var marker1 = new google.maps.Marker({
+          position: new google.maps.LatLng($scope.location.lat,$scope.location.long),
+          map: map,
+          title: 'I am here!'
+      });
 
       var iw = new gm.InfoWindow();
       var oms = new OverlappingMarkerSpiderfier(map,
@@ -554,26 +500,28 @@ angular.module('angularApp').controller('DashboardController',
         $scope.eventsPerPage=$scope.dataPerPage;
       }
       for(var i = 0; i<$scope.eventsPerPage.length; i++) {
-                var obj = $scope.eventsPerPage[i];
-                var loc = {lat : Number(obj.latitude), lng: Number(obj.longitude)};
-                var marker = new gm.Marker({
-                    position: loc,
-                    map: map,
-                    title: obj.title,
-                    label: labels[labelIndex++ % labels.length],
-                    icon: iconWithColor(usualColor),
-                    shadow: shadow,
-                    url: "#event/"+obj.id+"/"+Number(obj.latitude)+"/"+obj.longitude
-                });
-                marker.desc = '<a href="#event/'+obj.id+'/'+obj.latitude+'/'+obj.latitude+'">'+obj.title+'<a>';
-                oms.addMarker(marker);
-                $scope.markers.push(marker);
-                // gm.event.addListener(marker, 'click', function() {
-                //     window.location.href = this.url;
-                // });
+          var obj = $scope.eventsPerPage[i];
+          var loc = {lat : Number(obj.latitude), lng: Number(obj.longitude)};
+          var marker = new gm.Marker({
+              position: loc,
+              map: map,
+              title: obj.title,
+              label: labels[labelIndex++ % labels.length],
+              icon: iconWithColor(usualColor),
+              shadow: shadow,
+              url: "#event/"+obj.id+"/"+Number(obj.latitude)+"/"+obj.longitude
+          });
+          bounds.extend(marker.position);
+          marker.desc = '<a href="#event/'+obj.id+'/'+obj.latitude+'/'+obj.latitude+'">'+obj.title+'<a>';
+          oms.addMarker(marker);
+          $scope.markers.push(marker);
+          // gm.event.addListener(marker, 'click', function() {
+          //     window.location.href = this.url;
+          // });
 
-            }
-      $scope.map = map;
       }
+      map.fitBounds(bounds);
+      $scope.map = map;
+    }
 
-    } ]);
+} ]);
