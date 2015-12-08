@@ -130,13 +130,17 @@ legend
     display: block;
     background:#1F2E3D;
     padding-top:1%;
-    margin-top:1%;
+    margin-top:20px;
     padding-bottom:1%;
     position: relative;
 }
 
 
-
+.peopleCarouselImg {
+    width: auto;
+    height: 550px;
+    max-height: 550px;
+}
 
 .well
 {
