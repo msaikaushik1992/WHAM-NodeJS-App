@@ -283,6 +283,28 @@ app.get("/eventsByQLocation/:queLocationObj",apicache('15 minutes'),function(req
             }
         });
 });
+
+app.get("/eventsByQPreference/:quePrefObj",apicache('15 minutes'),function(req,res)
+{
+    var preObj=JSON.parse(req.params.quePrefObj);
+    requestify.get("http://api.eventful.com/json/events/search?app_key=MTbVVjGdhvvx5r5L" +
+        "&location="+preObj.location.lat+","+ preObj.location.long +
+        "&category="+preObj.category +
+        "&date=Future&within=5&page_size=100" +
+        "&sort_order=popularity")
+        .then(function(response)
+        {
+            if(response!==null)
+            {
+                res.send(response.body);
+            }
+            else
+            {
+                res.send('error');
+            }
+        });
+});
+
 app.get("/getLocationCoordsFromCity/:locObj", function(req, res){
     var queLoc=JSON.parse(req.params.locObj);
     requestify.get("https://maps.googleapis.com/maps/api/geocode/json?" + 

@@ -50,7 +50,7 @@ angular.module('angularApp').controller('DashboardController',
         } else if (searchByQuery == "" && searchByLocatioin == "" && searchByCategory != "") {
             console.log("searchByCategory");
             $scope.search.category = searchByCategory;
-            $scope.search.loc = searchByLocatioin;
+            $scope.search.loc = "";
             $scope.search.query = "";
         } else if (searchByQuery == "" && searchByLocatioin != "" && searchByCategory != "") {
             console.log("searchByDefaultLocationPreference");
@@ -370,7 +370,7 @@ angular.module('angularApp').controller('DashboardController',
           searchFinished.promise.then(function () {
               var searchDone = $q.defer();
               var resutls;
-              if (userPrefs !== null) {
+              if (userPrefs !== null && searchParams.category == "") {
                   console.log($scope.location);
                   
                   if (searchParams.query != '') {
@@ -400,6 +400,8 @@ angular.module('angularApp').controller('DashboardController',
                     resutls = webservice.getEventsByLocationAndQuery($scope.location, searchParams);
                   } else if (searchParams.loc != '') {
                     resutls = webservice.getEventsByQLocation($scope.searchLoc);
+                  } else if (searchParams.category != '') {
+                    resutls = webservice.getEventsByQPreference($scope.location, searchParams);
                   }
                   resutls.then(
                       function (result) {

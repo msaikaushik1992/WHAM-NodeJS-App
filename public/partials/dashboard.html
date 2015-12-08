@@ -13,9 +13,9 @@
         </div>
        
         <div class="col-md-3">
-            <input id="searchText" name="searchText" type="text" placeholder="Search Event" class="form-control input-md" ng-model="search.query">
+            <input id="searchText" name="searchText" type="text" placeholder="Search Events or Categories" class="form-control input-md" ng-model="search.query">
         </div>
-       
+    <!--   
         <div class="col-md-3">
             <select id="searchCategory" name="searchCategory" class="form-control input-md" ng-model="search.cat">
                         <option id="art" selected="selected">Art Galleries</option>
@@ -47,6 +47,7 @@
                         <option id="">Other</option>
                     </select>
         </div>
+        -->
         <!-- Text input-->
         <div class="col-md-3">
             <input id="Autocomplete" name="searchLocation" ng-autocomplete="result1" 
@@ -62,6 +63,9 @@
     </div>
 </div>
 
+<div class="container center-block" ng-show="searchresult">
+    <button ng-click="loadDash()" class="btn btn-default">Load Dashboard</button> 
+</div>
 <div class="container center-block" ng-show="searchresult">
     <img class="loading center-block" ng-if="searchloading" src="../images/gears.gif" height="150" width="150"/>
     <h3 class="loading-sentence center-block" ng-if="loading">Loading search result....</h3>
@@ -142,7 +146,4 @@
     
     <img class="loading center-block" ng-if="loading" src="../images/gears.gif" height="150" width="150"/>
     <h3 class="loading-sentence center-block" ng-if="loading">Please wait.Retreiving events close to you....</h3>
-</div>
-<div class="container center-block" ng-show="searchresult">
-    <button ng-click="loadDash()" class="btn btn-default">Load Dashboard</button> 
 </div>

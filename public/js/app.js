@@ -72,6 +72,13 @@ angularApp.service('webservice',function($http)
         return $http.get("/eventsByQLocation/"+ JSON.stringify(queLocation));
     }
 
+    self.getEventsByQPreference = function(locationObj, searchParams)
+    {
+        var queLocation={location:locationObj, category:searchParams.category};
+        console.log(queLocation);
+        return $http.get("/eventsByQLocation/"+ JSON.stringify(queLocation));
+    }
+
     self.getLocationCoordsQuery = function (searchParams) {
         // body...
         var locationObj = {loc:searchParams.loc};
