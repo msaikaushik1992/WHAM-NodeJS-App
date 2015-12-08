@@ -91,6 +91,7 @@
                     <button ng-disabled="frm.$invalid" ng-click="register(user)" class="btn btn-primary">Register</button>
                 </div>
             </form>
+            <span  ng-if="duplicate==true">Account already registered.Please login.</span>
             <h4>Already have an Account?</h4>
             <a  role="button"   href="#login"><h4 style="color: #66D269">Login</h4></a >
             <br/>
