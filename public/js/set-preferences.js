@@ -2,10 +2,19 @@ angular.module('angularApp').controller('SetPreferencesController', ['$scope', '
     function ($scope, $rootScope, $http, $location,$cookies,$timeout,webservice)
 {
 
-    $scope.loggedin = true;
-    $scope.name = $rootScope.currentUser.fname;
-    $scope.id=$rootScope.currentUser.id;
+    $http.get('/loggedin').success(function (user) {
 
+        if (user == '0') {
+            $location.url('/login');
+
+        }
+        else {
+
+            $scope.loggedin = true;
+            $scope.name = user.fname;
+            $scope.id = user.id;
+        }
+    });
 
     $scope.pref={gender:"Male",city:"Boston"};
 
