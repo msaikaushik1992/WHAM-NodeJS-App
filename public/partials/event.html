@@ -30,34 +30,19 @@
             <br/>
             <!--like dislike share-->
             <div class="center-block">
-                <div class="container">
-                    <div class="left col-md-1">
-                        <div class="row">
-                            <a ng-click="like()">
-                                <img src="../images/Like.jpg" class="icon-myStyle iconDetails" />
-                            </a>
-                            <div style='margin-left:60px;'>
-                                <h4>{{numLike}}</h4>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <a  style='margin-right:50px;'ng-if="unlike==true" ng-click="unlikeEvent()">Unlike</a>
-                        </div>
+                <div class="pull-left col-md-6">
+                    <button type="button" class="btn btn-success" ng-click="like()" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>&nbsp;
+                        <span>{{numLike}}</span>
+                    </button>
 
-                    </div>
-                    <div class="col-md-1">
-                        <div class="row">
-                            <a ng-click="displayAlert()">
-                                <img src="../images/Dislike.jpg" class="icon-myStyle iconDetails" />
-                            </a>
-                            <div style='margin-left:60px;'>
-                                <h4>{{numDislike}}</h4>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <br/>
+                    <button type="button" class="btn btn-danger" ng-click="displayAlert()" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>&nbsp;
+                        <span>{{numDislike}}</span>
+                    </button>
+                    
+                 </div>
+                
 
                 <div class="right col-md-5">
                     <span class='st_facebook_large' displayText='Facebook'></span>
@@ -67,6 +52,9 @@
                 </div>
 
                 <br/>
+                    <div class="row">
+                            <a  style='margin-right:50px;'ng-if="unlike==true" ng-click="unlikeEvent()">Unlike</a>
+                    </div>
 
 
             </div>
@@ -82,10 +70,10 @@
             <!-- Event Content -->
 
             <!-- Event description -->
-            <p class="lead" ng-if="eventDescription!==null">
+            <p ng-if="eventDescription!==null">
                 <div ng-bind-html="eventDescriptionFormatted()">{{eventDescription}}</div>
             </p>
-            <p class="lead" ng-if="eventDescription==null">
+            <p ng-if="eventDescription==null">
                 {{eventTitle}} is being held at {{eventVenue}}.<br/>
             </p>
 
@@ -192,3 +180,7 @@
     </div>
 
 </div>
+
+<footer>
+            <p>Developed by Team Domination for CS-5500 (Fall 2015)</p>
+        </footer>

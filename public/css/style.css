@@ -273,6 +273,8 @@ a:hover {
 
 .cat-label{
     margin-right: 5px;
+    font-weight: normal;
+    font-size: 0.5em;
 }
 
 .search-label {
