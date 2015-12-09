@@ -29,21 +29,21 @@ angular.module('angularApp').controller('DashboardController',
     // search functions
     $scope.searchEvents= function(search) {
         // hide dashboard
+        var searchByQuery = ((typeof search.query != "undefined") ? search.query : "");
+        var searchByLocatioin = ((typeof search.loc != "undefined") ? search.loc : "");
+
+        $scope.search.loc = searchByLocatioin;
+        $scope.search.query = searchByQuery;
+
         $scope.showdashboard=false;
         $scope.loading=false;
         
         // show search results
         $scope.searchloading=true;
+        $('#singlebutton').prop({'disabled':'disabled'});
 
-        var searchByQuery = ((typeof search.query != "undefined") ? search.query : "");
-        var searchByCategory = ((typeof search.cat != "undefined") ? search.cat : "");
-        var searchByLocatioin = ((typeof search.loc != "undefined") ? search.loc : "");
-        console.log("Query:" +searchByQuery+ " Category:" +searchByCategory+ " Location:" + searchByLocatioin);
-
-        $scope.search.loc = searchByLocatioin;
-        $scope.search.category = searchByCategory;
-        $scope.search.query = searchByQuery;
         getSearchResult();
+    
     }
 
     // helper funtions for generating dashboard or searchboard
@@ -313,12 +313,10 @@ angular.module('angularApp').controller('DashboardController',
               var searchDone = $q.defer();
               var resutls;
 
-              if (userPrefs !== null) {
+              if (userPrefs !== null && searchParams.query == '') {
                   console.log($scope.location);
                   
-                  if (searchParams.query != '') {
-                    resutls = webservice.getEventsByLocationPreferenceAndQuery($scope.location, userPrefs, searchParams);
-                  } else if (searchParams.loc != '') {
+                  if (searchParams.loc != '') { // this works for location
                     console.log(searchParams.loc);
                     resutls = webservice.getEventsByPreferenceAndQLocation(userPrefs, $scope.searchLoc);
                   }
@@ -339,13 +337,14 @@ angular.module('angularApp').controller('DashboardController',
                   console.log($scope.location);
 
                   console.log("Search: " + $scope.searchLoc);
-                  if (searchParams.query != '') {
+                  if (searchParams.query != '' && searchParams.loc == '') {
                     resutls = webservice.getEventsByLocationAndQuery($scope.location, searchParams);
-                  } else if (searchParams.loc != '') {
+                  } else if (searchParams.loc != '' && searchParams.query == '') { // these works for location
                     resutls = webservice.getEventsByQLocation($scope.searchLoc);
-                  } else if (searchParams.category != '') {
-                    resutls = webservice.getEventsByQPreference($scope.location, searchParams);
+                  } else if (searchParams.loc != '' && searchParams.query != '') {
+                    resutls = webservice.getEventsByLocationAndQuery($scope.searchLoc, searchParams);
                   }
+
                   resutls.then(
                       function (result) {
                           $scope.datalength = result.data.total_items;

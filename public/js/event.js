@@ -1,5 +1,6 @@
 angular.module('angularApp')
-    .controller('EventController', ['$scope', '$http', 'webservice', '$routeParams', '$q', '$log', '$rootScope', function ($scope, $http, webservice, $routeParams, $q, $log, $rootScope) {
+    .controller('EventController', ['$scope', '$http', 'webservice', '$routeParams', '$q', '$log', '$rootScope', '$sce', 
+      function ($scope, $http, webservice, $routeParams, $q, $log, $rootScope, $sce) {
 
         if(window.stButtons){
             stButtons.locateElements();
@@ -11,6 +12,12 @@ angular.module('angularApp')
 
         });
 
+        $scope.eventDescriptionFormatted = function() {
+            return $sce.trustAsHtml($scope.eventDescription);
+        }
+        $scope.eventCategoryFormatted = function(category) {
+            return $sce.trustAsHtml(category); 
+        }
 
         $(".closebutton2").click(function (e) {
             e.preventDefault();
@@ -102,7 +109,7 @@ angular.module('angularApp')
                  $scope.eventCategory=payload.data.categories.category;
                  $scope.eventTitle = payload.data.title;
 
-                 // description
+                 // description 
                  $scope.eventDescription = payload.data.description;
 
                  $scope.eventMapAddr = "https://google.com/maps/place/"+payload.data.address+" "+payload.data.city+" "+payload.data.country_abbr;

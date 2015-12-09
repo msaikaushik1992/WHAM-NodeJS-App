@@ -29,35 +29,24 @@
             <br/>
             <br/>
             <!--like dislike share-->
-            <div class="container">
-                <div class="left col-md-1">
-                    <a ng-click="like()">
-                        <img src="../images/Like.jpg" class="icon-myStyle iconDetails" />
-                    </a>
-                    <div style='margin-left:60px;'>
-                        <h4>{{numLike}}</h4>
-                    </div>
-                    <div class="row">
-                        <a  style='margin-right:50px;'ng-if="unlike==true" ng-click="unlikeEvent()">Unlike</a>
-                    </div>
+            <div class="center-block">
+                <div class="pull-left col-md-6">
+                    <button type="button" class="btn btn-success" ng-click="like()" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span>&nbsp;
+                        <span>{{numLike}}</span>
+                    </button>
 
-                </div>
-                <div class="right col-md-1">
-                    <a ng-click="displayAlert()">
-                        <img src="../images/Dislike.jpg" class="icon-myStyle iconDetails" />
-                    </a>
-                    <div style='margin-left:60px;'>
-                        <h4>{{numDislike}}</h4>
-                    </div>
+                    <button type="button" class="btn btn-danger" ng-click="like()" aria-label="Left Align">
+                        <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span>&nbsp;
+                        <span>{{numDislike}}</span>
+                    </button>
                 </div>
 
-                <div>
-                    <span class="right">
-                        <span class='st_facebook_large' displayText='Facebook'></span>
-                        <span class='st_twitter_large' displayText='Tweet'></span>
-                        <span class='st_googleplus_large' displayText='Google +'></span>
-                        <span class='st_email_large' displayText='Email'></span>
-                    </span>
+                <div class="col-md-6">
+                    <span class='st_facebook_large' displayText='Facebook'></span>
+                    <span class='st_twitter_large' displayText='Tweet'></span>
+                    <span class='st_googleplus_large' displayText='Google +'></span>
+                    <span class='st_email_large' displayText='Email'></span>
                 </div>
 
 
@@ -67,14 +56,16 @@
 
             <h3>
                 <span class="label label-primary cat-label" ng-repeat="c in eventCategories">
-                    {{c.id}}
+                    <span ng-bind-html="eventCategoryFormatted(c.name)"> </span>
                 </span>
             </h3>
 
             <!-- Event Content -->
 
             <!-- Event description -->
-            <p class="lead" ng-if="eventDescription!==null">{{eventDescription}}</p>
+            <p class="lead" ng-if="eventDescription!==null">
+                <div ng-bind-html="eventDescriptionFormatted()">{{eventDescription}}</div>
+            </p>
             <p class="lead" ng-if="eventDescription==null">
                 {{eventTitle}} is being held at {{eventVenue}}.<br/>
             </p>

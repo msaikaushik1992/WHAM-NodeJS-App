@@ -22,39 +22,6 @@
                 <div class="col-md-4 col-lg-4">
                     <input id="searchText" name="searchText" type="text" placeholder="Search Events or Categories" class="form-control input-md" ng-model="search.query">
                 </div>
-            <!--   
-                <div class="col-md-3">
-                    <select id="searchCategory" name="searchCategory" class="form-control input-md" ng-model="search.cat">
-                                <option id="art" selected="selected">Art Galleries</option>
-                                <option id="business" selected="selected">Business/Networking</option>
-                                <option id="music">Concerts</option>
-                                <option id="conference">Conferences</option>
-                                <option id="comedy">Comedy</option>
-                                <option id="learning_education">Education</option>
-                                <option id="movies_film">Films</option>
-                                <option id="family_fun_kids">Kids</option>
-                                <option id="festivals_parades">Festivals</option>
-                                <option id="food">Food & Wine</option>
-                                <option id="fundraisers">Fundraising</option>
-                                <option id="holiday">Holiday</option>
-                                <option id="books">Literary/Books</option>
-                                <option id="attractions">Museums and Attractions</option>
-                                <option id="community">Neighbourhood</option>
-                                <option id="singles_social">Nightlife/Singles</option>
-                                <option id="outdoors_recreation">Outdoors/Recreation</option>
-                                <option id="animals">Pets</option>
-                                <option id="religion_spirituality">Religion/Spirituality</option>
-                                <option id="technology">Technology</option>
-                                <option id="sales">Sales</option>
-                                <option id="support">Health/Wellness</option>
-                                <option id="clubs_associations">Organizations</option>
-                                <option id="science">Science</option>
-                                <option id="schools_alumni">University/Alumni</option>
-                                <option id="performing_arts">Performing Arts</option>
-                                <option id="">Other</option>
-                            </select>
-                </div>
-                -->
                 <!-- Text input-->
                 <div class="col-md-4 col-lg-4">
                     <input id="Autocomplete" name="searchLocation" ng-autocomplete="result1" 
@@ -78,7 +45,7 @@
                     <img class="loading center-block" ng-if="searchloading" src="../images/gears.gif" height="150" width="150"/>
                     <h3 class="loading-sentence center-block" ng-if="searchloading">Loading search result....</h3>
                 </div>
-                <div class="center-block" ng-show="searchresult">
+                <div class="center-block searchBoard" ng-show="searchresult">
                     <div class="col-sm-12 col-md-12 col-lg-12 row">
 
                         <div ng-repeat = "s in searchDataPerPage"  class="col-sm-4">
