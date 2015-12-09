@@ -201,12 +201,14 @@ a:hover {
     border-radius: 8px;
     text-align: center;
     padding: 0;
+    font-size: 0.9em;
     background-color: #f2f2f2;
     margin-bottom: 20px;
 }
 .card h4 {
     color: #007acc;
     font-weight: normal;
+    font-size: 1.1em;
     height: 40px;
 }
 .card p.details {
@@ -290,7 +292,14 @@ a:hover {
   margin: 0 2px;
 }
 .eventBoard {
-height: 75vh;
+height: 63vh;
 width: 100%;
 overflow: auto;
+}
+
+footer {
+    height: 20px;
+    font-size: .8em;
+    margin: 10px 30px 0px 30px;
+    border-top: 1px solid #f2f2f2;
 }

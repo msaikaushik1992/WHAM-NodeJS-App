@@ -99,7 +99,7 @@ h4
 }
 
 .map{
-    height: 75vh;
+    height: 74vh;
     overflow: auto;
     white-space: nowrap;
     position: fixed;

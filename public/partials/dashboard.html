@@ -61,7 +61,7 @@
                                 <div class="content">
                                     <h4>
                                         <a href="/#event/{{s.id}}/{{s.latitude}}/{{s.longitude}}" alt="{{s.title}}">
-                                            {{s.title | limitTo: 40}} {{s.title.length > 40 ? '...' : ''}}
+                                            {{s.title | limitTo: 40}} {{s.title.length > 30 ? '...' : ''}}
                                         </a>
                                     </h4>
                                     <p class="details">Location: {{s.venue_name}}, {{s.city_name}} </p>
@@ -96,7 +96,7 @@
                                 <div class="content">
                                     <h4>
                                         <a href="/#event/{{e.id}}/{{e.latitude}}/{{e.longitude}}" alt="{{e.title}}">
-                                            {{e.title | limitTo: 40}} {{e.title.length > 40 ? '...' : ''}}
+                                            {{e.title | limitTo: 40}} {{e.title.length > 30 ? '...' : ''}}
                                         </a>
                                     </h4>
                                     <p class="details">Location: {{e.venue_name}}, {{e.city_name}} </p>
@@ -109,18 +109,18 @@
                     </div>
 
                 </div>        
-
-                <div class="center-block" ng-show="showdashboard">
-                    <ul class="pagination pevent">
-                        <li ng-repeat="i in array" ng-click="paginate($event,i)"  ng-class="isActive(i) ? 'active' : ''"><a>{{i}}</a></li>
-                    </ul>
-                </div>
                 <div class="center-block" ng-show="showdashboard">
                     
                     <img class="loading center-block" ng-if="loading" src="../images/gears.gif" height="150" width="150"/>
                     <h3 class="loading-sentence center-block" ng-if="loading">Please wait.Retreiving events close to you....</h3>
                 </div>
             </div>
+            <div class="center-block" ng-show="showdashboard">
+                <ul class="pagination pevent">
+                    <li ng-repeat="i in array" ng-click="paginate($event,i)"  ng-class="isActive(i) ? 'active' : ''"><a>{{i}}</a></li>
+                </ul>
+            </div>
+                
         </div>
     </div>
 </div>
